@@ -5,9 +5,8 @@
 \usepackage{bm}
 \usepackage{relsize}
 \usepackage{parskip}
-\usepackage{NotesTeX}
-\usepackage{nomencl}
-\makenomenclature
+\usepackage{esint}
+\usepackage{../NotesTeX}
 
 \everymath{\displaystyle}
 
@@ -15,7 +14,67 @@
 \date{}
 
 \begin{document}
-    \maketitle
-    \nomenclature{\(c\)}{Speed of light in a vacuum}
-    \printnomenclature
+\maketitle
+
+\part{Electric Current}
+\section{Current and Current Density}
+
+Electric charge in motion constitutes an electric current. In the steady flow of
+charge in a wire of cross-sectional area $A$, the total charge passing through this
+area in unit time is defined to be the electric current $I$ at this place. If a total
+charge $q$ flows through this area in time $t$, the current $I$ is given by:
+\begin{equation}
+I = \frac{q}{t}
+.\end{equation}
+
+where $I$ is measured in Ampere. Sometimes it is also convenient to look at the density of the current we're observing over a certain area $A$ called \emph{current density}
+
+\begin{equation}
+J=\frac{I}{A}
+.\end{equation}
+
+If the area in which the current is running through changes at points  1 and 2, the current between those 2 points remain constant ($I_1=I_2$) while the current density changes to become 
+\[
+\frac{J_1}{J_2}=\frac{A_2}{A_1}
+.\] 
+If a positively charged cloud of $n$ particles moves through a space with speed $v$ and charge $q$, we find that\sidenote{$q$ can be positive or negative} 
+
+\begin{equation}
+    \va{J}=nq\va{v}=\varrho_\tau \va{v}
+.\end{equation}
+
+The total current through a \emph{slice} of space mentioned prior it calculated using
+\begin{equation}
+    I=\iint_A \va{J}\dd{A}
+.\end{equation} 
+The volume element here is $\va{v}\dd {A}\dd {t}=\dd {\tau}$
+
+\section{Continuity Law}
+The continuity law for current is
+\begin{equation}
+    \div(\va{J}+\va{J}_c)=-\pdv{\varrho_\tau}{t} 
+.\end{equation} 
+Where
+\begin{description}
+    \item[$\va{J}$ ] is the conduction current density.
+    \item[$\va{J}_c=\varrho_\tau\va{v}_\tau$ ] is the convection current density.
+    \item [$\va{v}_\tau$] is the velocity of the volume containing the particles.
+\end{description}
+
+There are 2 particular cases for the equation above
+\begin{enumerate}
+    \item The volume is not moving ($\va{v}_\tau=0 \implies \va{J}_c=0$). The continuity law of static structures is
+        \begin{equation}
+            \div{\va{J}}=-\pdv{\varrho_\tau}{t} 
+        .\end{equation} 
+        \item The volume is not moving and we are in a steady state, so the charge density of the particles doesn't change much as they are static so $\pdv*{\varrho_\tau}{t}=0 $ so
+            \begin{equation}
+            \oiint \va{J}\dd {A}=0
+            .\end{equation} 
+\end{enumerate}
+
+
+
+
+
 \end{document}
