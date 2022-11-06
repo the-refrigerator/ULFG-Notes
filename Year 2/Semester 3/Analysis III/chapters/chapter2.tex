@@ -7,7 +7,7 @@
     .\] 
 \end{definition}
 
-\section{Reminder: Convergence of a Series}
+\section{Convergence of a Numerical Series}
 In order to prove a series of functions converge we have to prove that it converges for all fixed $x$.
 \begin{theorem}
     Suppose there exists a sequence $a_n$ such that $\forall x,n \; |f_n|\le a_n$. The Weierstrass test states that if $\sum a_n$ converges then $\sum f_n(x)$ converges uniformly and absolutely
@@ -61,6 +61,6 @@ Some important expansions to keep in mind are
 \begin{array}{l|l|l}
     e^x=\sum_{n=0}^{\infty} \frac{x^n}{n!}\quad & \sin(x)=\sum_{n=0}^{\infty} (-1)^n \frac{x^{2n+1}}{(2n+1)!}&\cos(x)=\sum_{n=0}^{\infty} (-1)^n \frac{x^{2n}}{(2n)!}\\
             \frac{1}{1-x}=\sum_{n=0}^{\infty} x^n&\sinh(x)=\sum_{n=0}^{\infty} \frac{x^{2n+1}}{(2n+1)!}&\cosh(x)=\sum_{n=0}^{\infty} \frac{x^{2n}}{(2n)!}\\
-            \ln(1+x)=\sum_{n=0}^{\infty} (-1)^{n-1}\frac{x^n}{n}&\ln(1-x)=\sum_{n=0}^{\infty} \frac{x^n}{n}&(1+x)^\alpha=\sum_{n=0}^{\infty} \frac{\prod_{k=0}^{n+1}(\alpha-k)  }{n!}x^n
+            \ln(1+x)=\sum_{n=1}^{\infty} (-1)^{n-1}\frac{x^n}{n}&\ln(1-x)=\sum_{n=1}^{\infty} -\frac{x^n}{n}&(1+x)^\alpha=\sum_{n=0}^{\infty} \frac{\prod_{k=0}^{n+1}(\alpha-k)  }{n!}x^n
 \end{array}
 \]
