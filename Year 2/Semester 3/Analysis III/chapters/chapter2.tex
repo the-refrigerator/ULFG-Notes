@@ -1,0 +1,66 @@
+\part{Series of Functions}
+
+\begin{definition}
+    Let $f_n(x)$ be sequence of functions defined on $I\subset\mathbb{R}$, we define the series $S(x)$ to be 
+    \[
+    S(x)=\sum_{n=0}^{\infty} f_n(x)
+    .\] 
+\end{definition}
+
+\section{Reminder: Convergence of a Series}
+In order to prove a series of functions converge we have to prove that it converges for all fixed $x$.
+\begin{theorem}
+    Suppose there exists a sequence $a_n$ such that $\forall x,n \; |f_n|\le a_n$. The Weierstrass test states that if $\sum a_n$ converges then $\sum f_n(x)$ converges uniformly and absolutely
+\end{theorem}
+
+\begin{theorem}
+    Let $a_n$ be a sequence of numbers, if $\left| \frac{a_{n+1}}{a_n} \right| =l$ then the sequence is a geometric Series
+    \[
+        \sum_{n=0}^\infty a_n \begin{cases} \text{converges}&\text{if } |l|<1\\
+        \text{diverges}&\text{if }|l|\ge 1\end{cases} 
+    .\] 
+\end{theorem}
+
+\begin{theorem}
+    A harmonic series is defined to be $a_n=\frac{1}{n^p}$
+    \[
+        \sum_{n=0}^\infty \frac{1}{n^p} \begin{cases} \text{converges}&\text{if } p>1\\
+        \text{diverges}&\text{if }p\le 1\end{cases} 
+    .\] 
+
+\end{theorem}
+
+
+\begin{theorem}
+    Let $a_n$ be a sequence of numbers. The 2 series $\sum_{n=0}^{\infty} a_n$ and $\sum_{n=0}^{\infty} 2^na_n$ are simultaneously convergent/divergent.
+\end{theorem}
+
+
+\begin{theorem}
+    The sequence $\sum_{n=0}^{\infty} (-1)^na_n$ is convergent if $a_n$ is decreasing and $\lim_{n \to \infty}a_n =0$.
+\end{theorem}
+
+\begin{theorem}
+    Consider the series $S=\sum_{n=0}^{\infty} a_n$
+    \[
+        \lim_{n \to \infty}\sqrt[n]{|a_n|} = l\qq{such that} \begin{cases}l<1& \text{if $S$ converges}\\
+        l>1& \text{if $S$ diverges}\\
+l=1& \text{this test cannot help us}\\
+\end{cases} 
+.\]
+        \end{theorem}
+\section{Finite Expansion}
+The general formula for the finite expansion (Taylor-young formula) is 
+
+\[
+    f(x) = f(x-a)+ \frac{x}{1!}f'(x-a)+\frac{x^2}{2!}f''(x-a)+\cdots+\frac{x^n}{n!}f^{(n)}(x-a)+x^no(1) \quad x\to a
+.\]
+ 
+Some important expansions to keep in mind are
+\[\renewcommand{\arraystretch}{1.75}
+\begin{array}{l|l|l}
+    e^x=\sum_{n=0}^{\infty} \frac{x^n}{n!}\quad & \sin(x)=\sum_{n=0}^{\infty} (-1)^n \frac{x^{2n+1}}{(2n+1)!}&\cos(x)=\sum_{n=0}^{\infty} (-1)^n \frac{x^{2n}}{(2n)!}\\
+            \frac{1}{1-x}=\sum_{n=0}^{\infty} x^n&\sinh(x)=\sum_{n=0}^{\infty} \frac{x^{2n+1}}{(2n+1)!}&\cosh(x)=\sum_{n=0}^{\infty} \frac{x^{2n}}{(2n)!}\\
+            \ln(1+x)=\sum_{n=0}^{\infty} (-1)^{n-1}\frac{x^n}{n}&\ln(1-x)=\sum_{n=0}^{\infty} \frac{x^n}{n}&(1+x)^\alpha=\sum_{n=0}^{\infty} \frac{\prod_{k=0}^{n+1}(\alpha-k)  }{n!}x^n
+\end{array}
+\]
