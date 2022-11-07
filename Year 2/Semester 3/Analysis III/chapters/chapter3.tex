@@ -1,0 +1,32 @@
+\part{Power Series}
+
+A power series is just a series in the following formula
+\begin{align*}
+	f(x) & =\sum_{n=0}^{\infty} a_n(x-x_0)^n \\
+	     & =\sum_{n=0}^{\infty} U_n
+	.\end{align*}
+
+\section{Radius of Convergence}
+
+For some values of $x$ a power series can either diverge or converge, to determine the interval of convergence we employ the ratio test
+
+\begin{theorem}
+	Let $r$ be the radius of convergence and $I$ be the domain of convergence. If we compute the limit
+	\[
+		\Gamma = \lim_{n \to \infty}\left| \frac{U_{n+1}}{U_n} \right|
+		.\]
+	The ratio test states that
+	\[
+		\begin{cases}
+			\qif* \Gamma = 0      & \qthen* r=\infty\qand I=\mathbb{R} \\
+			\qif* \Gamma = \infty & \qthen* r=0\qand I=\{0\}           \\
+		\end{cases}
+		.\]
+	In the case that $\Gamma$ isn't 0 or $\infty$ we set $\Gamma<1$ and then we find $|x|<R$, finally we can say that $r=R$ and $I=]-R,R[$. A special case need to be done for the points  $-R$ and $R$ to determine if they belong in  $I$.
+\end{theorem}
+
+\begin{remark}
+	The power series $f(x)$ is continous and will always uniformly converge in the interval of convergence $I$
+\end{remark}
+
+
