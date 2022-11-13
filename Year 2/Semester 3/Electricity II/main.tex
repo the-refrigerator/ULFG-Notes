@@ -10,13 +10,19 @@
 \usepackage[siunitx, RPvoltages]{circuitikz}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{cancel}
 
 \everymath{\displaystyle}
 
 \title{Electricity 2}
 \date{}
 
-\newcommand{\comma}{, }
+\DeclareCaptionLabelFormat{empty}{#1}
+
+\newcommand{\comma}{, } %Simply here so I can put commas in tikz labels
+\newcommand{\ohm}{\,\Omega}
+\newcommand{\volt}{\,\text{V}}
+\newcommand{\amp}{\,\text{A}}
 
 \begin{document}
 \maketitle
@@ -226,6 +232,253 @@ All formulas for generators are the same as loads with the exception of the effi
 \[
 	\eta = 1-\frac{r'I}{U}
 	.\]
+
+
+\part{Circuits Analysis Techniques}
+Terminology:
+\begin{description}
+	\item[Node] A point where two or more circuit elements join.
+	\item[Essential node] A node where three or more circuit elements join.
+	\item[Branch]  A path that connects two nodes
+	\item[Loop] A path whose last node is the same as the starting node
+	\item[Mesh] A loop that does not enclose any other loops
+\end{description}
+
+\begin{itemize}
+	\item \textbf{KVL}: the algebraic sum of all the voltages around any closed path in a circuit equals zero.
+	\item \textbf{KCL}: the algebraic sum of all the currents at any node in a circuit equals zero.
+\end{itemize}
+
+To use Kirchhoff's current law, an algebraic sign corresponding to a reference
+direction must be assigned to every current at the node. Assigning a positive sign to
+a current leaving a node requires assigning a negative sign to a current entering a
+node.
+
+\begin{figure}[h]
+	\centering
+	\scalebox{1.2}{
+		\begin{circuitikz}[american]
+			\draw (2,2) to[short,i_=$+$,*-] (0.5,0.5);
+			\draw[dashed] (0.5,0.5) -- (0,0);
+
+			\draw (2,0.5) to[short,i=$-$] (2,2);
+			\draw[dashed] (2,0.5) -- (2,0);
+
+			\draw (0.5,2) to[short,i=$-$] (2,2);
+			\draw[dashed] (0.5,2) -- (0,2);
+		\end{circuitikz}
+	}
+\end{figure}
+
+\section{Wye-Delta and Delta-Wye Transformations}
+This transformation of a set of resistors configured in the shape of the letter $\Delta $ to a configuration of a shape of the letter Y.
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{0.4\linewidth}
+		\resizebox{!}{0.7\linewidth}{
+			\begin{circuitikz}
+				%coordinates
+				\coordinate (a) at (0,0);
+				\coordinate (b) at (3,5.196);
+				\coordinate (c) at (6,0);
+				\coordinate (d) at (3,1.732);
+				%labels
+				\draw (a) node[left] {a};
+				\draw (b) node[above] {b};
+				\draw (c) node[right] {c};
+				%\Delta
+				\draw (a) to[R=$R_b$,*-*] (c);
+				\draw (a) to[R=$R_c$] (b);
+				\draw (b) to[R=$R_a$,*-] (c);
+			\end{circuitikz}
+		}
+	\end{subfigure}
+	\begin{subfigure}{0.4\linewidth}
+		\resizebox{!}{0.7\linewidth}{
+			\begin{circuitikz}
+				%coordinates
+				\coordinate (a) at (0,0);
+				\coordinate (b) at (3,5.196);
+				\coordinate (c) at (6,0);
+				\coordinate (d) at (3,1.732);
+				%labels
+				\draw (a) node[left] {a};
+				\draw (b) node[above] {b};
+				\draw (c) node[right] {c};
+				% Y
+				\draw (d) to[R=$R_1$,*-] (a);
+				\draw (d) to[R=$R_2$] (b);
+				\draw (d) to[R=$R_3$] (c);
+			\end{circuitikz}
+		}
+	\end{subfigure}
+\end{figure}
+To find the equivalent resistances we apply
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}
+		\coordinate (a) at (0,0);
+		\coordinate (b) at (3,5.196);
+		\coordinate (c) at (6,0);
+		\coordinate (d) at (3,1.732);
+		%\Delta
+		\draw (a) node[left] {a} to[R=$R_b$,*-*] (c) node[right] {c};
+		\draw (a) to[R=$R_c$] (b) node[above] {b};
+		\draw (b) to[R=$R_a$,*-] (c);
+		% Y
+		\draw (d) to[R=$R_1$,*-] (a);
+		\draw (d) to[R=$R_2$] (b);
+		\draw (d) to[R=$R_3$] (c);
+	\end{circuitikz}
+\end{figure}
+
+\begin{minipage}{0.4\linewidth}
+	\begin{align*}
+		R_1 & =\frac{R_bR_c}{R_a+R_b+R_c} \\
+		R_2 & =\frac{R_aR_c}{R_a+R_b+R_c} \\
+		R_3 & =\frac{R_aR_b}{R_a+R_b+R_c}
+	\end{align*}
+
+\end{minipage}
+\hfill
+\begin{minipage}{0.4\linewidth}
+	\begin{align*}
+		R_a & =\frac{R_1R_2 + R_2R_3 + R_3R_1}{R_1} \\
+		R_b & =\frac{R_1R_2 + R_2R_3 + R_3R_1}{R_2} \\
+		R_c & =\frac{R_1R_2 + R_2R_3 + R_3R_1}{R_3}
+	\end{align*}
+\end{minipage}
+
+\section{Divider Circuits}
+\subsection{Voltage Divider}
+At times—especially in electronic circuits—developing more than one voltage level from a single voltage supply is necessary. One way of doing this is by using a voltage-divider circuit.
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[battery1,l=$v_\text{s}$] (0,3) to[R=$R_1$] (2,3) to[R=$R_2$] (4,3);
+		\draw[dashed] (4,3) -- (5,3);
+		\draw (5,3) to[R=$R_i$] (5,0);
+		\draw[dashed] (5,0) -- (4,0);
+		\draw (4,0) to[R=$R_{n-1}$] (2,0) to[R=$R_n$] (0,0);
+	\end{circuitikz}
+	\caption*{An $n$ resistor voltage divider}
+\end{figure}
+
+\[
+	v_i = v_\text{s} \frac{R_i}{\sum_{j=1}^{n} R_j}
+	.\]
+\subsection{Current Divider}
+
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}[american]
+		\draw (0,0) to[isource=$i_\text{s}$] (0,3) to[short] (4,3);
+		\draw (2,3) to[R=$R_1$,*-*] (2,0);
+		\draw (4,3) to[R=$R_2$,*-*] (4,0);
+		\draw[dashed] (4,3) -- (6,3);
+		\draw[dashed] (4,0) -- (6,0);
+		\draw (6,3) to[R=$R_i$,*-*] (6,0);
+		\draw[dashed] (6,3) -- (8,3);
+		\draw[dashed] (6,0) -- (8,0);
+		\draw (8,3) to[R=$R_{n-1}$,*-*] (8,0);
+		\draw (10,3) to[R=$R_n$,*-*] (10,0);
+		\draw (8,3) -- (10,3);
+		\draw (8,0) -- (10,0);
+		\draw (4,0) -- (0,0);
+	\end{circuitikz}
+	\caption*{An $n$ resistor current divider}
+\end{figure}
+
+\[
+	i_i = i_\text{s} \frac{R_\text{Eq}}{R_i}
+	.\]
+\section{Node Voltage Method}
+We introduce the node-voltage method by using the essential nodes of the circuit.\\
+To better understand node voltage method, we will apply directly on a circuit. Consider the following circuit:
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}[american]
+		\draw (0,0) to[battery1,l=$10\volt$] (0,3) to[R=$1\ohm$] (2,3) to[R=$2\ohm$] (4,3) to[R=$10\ohm$,*-*] (4,0) to[short] (0,0);
+		\draw (2,3) to[R=$5\ohm$,*-*] (2,0);
+		\draw (4,3) to[short] (6,3) to[isource,l=$2\amp$,invert] (6,0) to[short] (4,0);
+	\end{circuitikz}
+\end{figure}
+
+To find the voltages across the resistors are
+\begin{enumerate}
+	\item Assign the essential nodes (nodes with 3 or more branches):
+	      \begin{figure}[h]
+		      \centering
+		      \begin{circuitikz}[american]
+			      \node[label={\small 1}] at (2,3) [circle, draw=blue] {};
+			      \node[label={\small 2}] at (4,3) [circle, draw=blue] {};
+			      \node[label={\small 3}] at (3,0) [circle, draw=blue] {};
+			      \draw (0,0) to[battery1,l=$10\volt$] (0,3) to[R=$1\ohm$] (2,3) to[R=$2\ohm$] (4,3) to[R=$10\ohm$,*-*] (3,0) to[short] (0,0);
+			      \draw (2,3) to[R=$5\ohm$,*-*] (3,0);
+			      \draw (4,3) to[short] (6,3) to[isource,l=$2\amp$,invert] (6,0) to[short] (3,0);
+		      \end{circuitikz}
+	      \end{figure}
+	\item Choose a reference node: select one of the essential nodes to be a reference. Usually we choose the lowest node. The assign voltages to the other nodes.
+	      \begin{figure}[h]
+		      \centering
+		      \begin{circuitikz}[american]
+			      \node[above] at (2,3) {$V_1$};
+			      \node[above] at (4,3) {$V_2$};
+			      \draw (3,0) node[ground] {};
+			      \draw (0,0) to[battery1,l=$10\volt$] (0,3) to[R=$1\ohm$] (2,3) to[R=$2\ohm$] (4,3) to[R=$10\ohm$,*-*] (3,0) to[short] (0,0);
+			      \draw (2,3) to[R=$5\ohm$,*-*] (3,0);
+			      \draw (4,3) to[short] (6,3) to[isource,l=$2\amp$,invert] (6,0) to[short] (3,0);
+		      \end{circuitikz}
+	      \end{figure}
+	\item Apply KCL at each node to determine the voltage. For example let's look at node 1:\\
+	      Assume that there are currents leaving the node from all directions and that carry the voltage $V_1$ with them
+	      \begin{figure}[h]
+		      \centering
+		      \begin{circuitikz}
+			      \draw (3,3) to[short,i=$I_1$,*-] (2,3);
+			      \draw (3,3) to[short,i=$I_2$] (4,3);
+			      \draw (3,3) to[short,i=$I_3$] (3,2);
+		      \end{circuitikz}
+	      \end{figure}
+	      where by KCL
+	      \[
+		      I_1+I_2+I_3=0
+		      .\]
+	      We let these currents carry our voltage $V_1$ with them, now we find the values of the currents.
+	      \begin{figure}[h]
+		      \centering
+		      \begin{circuitikz}
+			      \draw (0,3) to[short, i=$10\volt$] (0.75,3) to[R=$1\ohm$] (2,3);
+			      \draw (3,3) to[short,i=$V_1$,*-] (2,3);
+
+			      \draw (3,3) to[short,i=$V_1$] (4,3);
+			      \draw (6,3) to[short,i=$V_2$] (5.25,3) to[R=$2\ohm$] (4,3);
+
+			      \draw (3,0) to[short,i=$0\volt$] (3,0.75) to[R=$5\ohm$] (3,2);
+			      \draw (3,3) to[short,i=$V_1$] (3,2);
+		      \end{circuitikz}
+	      \end{figure}
+	      So the equation for node 1 is
+	      \[
+		      \frac{V_1-10}{1}+\frac{V_2}{5}+\frac{V_1-V_2}{2}=0
+		      .\]
+	      Similarly for node 2
+	      \[
+		      \frac{V_2-V_1}{2}+\frac{V_2}{10}-2=0
+		      .\]
+	      By simply solving the equations we get
+	      \begin{align*}
+		      V_1 & =9.09\volt  \\
+		      V_2 & =10.91\volt
+	      \end{align*}
+\end{enumerate}
+
+\section{Mesh Current Method}
+
+We introduce the mesh current method by using the meshes of the circuit.\\
+To better understand mesh current method, we will apply directly on a circuit. Consider the following circuit:
+
 
 
 \end{document}
