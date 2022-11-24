@@ -1,0 +1,106 @@
+\part{Laplace Transforms}
+The Laplace transform of a function is defined as
+\[
+    F(p)=\La{f(t)} = \int_0^\infty e^{-pt} f(t) \dd{t}
+.\] 
+
+It only exists if the integral above converges.\\
+
+\section{Transforms of some functions}
+
+\subsection{Unit step function}
+
+Also known as Heaviside's unit step function, it is defined as 
+\[
+    u(t) = \begin{cases} 1 &\qif t\ge 0\\
+    0&\qif t<0\end{cases}
+.\] 
+
+\[
+    \La{u(t)} = \frac{1}{p} \qfor \Re(p) >0
+.\] 
+
+\subsection{Dirac Delta Function}
+The Dirac Delta function 
+\[
+    \delta(t) = \begin{cases} \infty &\qif t= 0\\
+    0&\qif t\neq 0\end{cases}
+.\] 
+
+\[
+    \La{\delta(t)} = 1
+.\] 
+\subsection{Usual Elementary functions}
+
+\begin{tasks}(2)
+    \task $\La{1} = \frac{1}{p}$ 
+    \task $\La{t} = \frac{1}{p^2}$ 
+    \task $\La{t^n} = \frac{n!}{p^{n+1}}$
+    \task $\La{\sin \omega t} = \frac{\omega}{p^2+\omega^2}$
+    \task $\La{\cos \omega t} = \frac{p}{p^2+\omega^2}$
+    \task $\La{\sinh \omega t} = \frac{\omega}{p^2-\omega^2}$
+    \task $\La{\cosh \omega t} = \frac{p}{p^2-\omega^2}$
+    \task $\La{e^{at}} = \frac{1}{p-a}$
+\end{tasks}
+
+\section{Properties of the Transform}
+
+\begin{enumerate}
+    \item Linearity:
+        \[
+            \La{\lambda f + \mu g} = \lambda \La{f} + \mu \La{g}
+        .\] 
+    \item Homothety:
+        \[
+            \La{f(kt)} = \frac{1}{k} F(\frac{p}{k})
+        .\] 
+    \item Derivation:
+        \begin{align*}
+            \La{f'(t)} &= p \La{f(t)}-f(0^+)\\
+            \La{f''(t)} &= p^2\La{f(t)} - pf(0^+) - f'(0^+)\\
+            \La{f^{(n)}(t)} &= p^{n}\La{f(t)}-\sum_{k=1}^{n}p^{n-k}f^{(k-1)}(0^{+})
+        \end{align*}
+    \item Integration:
+        \[
+            \La{\int_0^t f(u)\dd {u}} = \frac{F(p)}{p} 
+        .\] 
+    \item Initial value theorem:
+        \[
+            f(0^+) = \lim_{p \to \infty} p \La{f(t)} 
+        .\] 
+    \item Final value theorem:
+        \[
+            f(\infty) = \lim_{p \to 0} p \La{f(t)} 
+        .\] 
+\end{enumerate}
+
+\begin{remark}
+    \begin{align*}
+        \La{tf(t)} &= -\dv{}{p} F(p)\\
+        \La{t^2f(t)} &= \dv[2]{}{p} F(p)\\
+        \La{t^nf(t)} &= (-1)^n \dv[n]{}{p} F(p)
+    \end{align*}
+\end{remark}
+
+\begin{remark}
+    Convolution over a domain $I\subset \mathbb{R}$ is defined as 
+    \[
+        f(t)*g(t) = \int_I f(\tau)g(t-\tau)\dd {\tau} = \int_I f(t-\tau)g(\tau)\dd {\tau}
+    .\]
+    and it's trasform is
+    \[
+        \La{f(t)*g(t)} = F(p)\cdot G(p)
+    .\] 
+\end{remark}
+
+\section{Translation}
+In the time domain:
+\[
+    \La{f(t-a)} = e^{-ap} F(p)
+.\] 
+
+In the $p$-domain:
+ \[
+     \La{e^{at} f(t)} = F(p+a)
+.\] 
+
