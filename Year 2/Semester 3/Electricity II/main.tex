@@ -540,5 +540,136 @@ V_s = RI_s
 .\] 
 \section{Superposition}
 
+The principle of superposition allows us to find the currents within a circuit by analyzing 2 different circuits and adding the algebraic of the calculated currents.\\
+The first circuit is obtained by \emph{replacing volatge sources with a short circuit}, then finding $i_1,i_2,\ldots,i_n$.\\
+The second circuit is obtained by \emph{replacing current sources with an open circuit}, then finding $i'_1,i'_2,\ldots,i'_n$.\\
+
+Then finally taking their sum.
+\section{Thevenin and Norton Equivalents}
+
+Thevenin equivalent circuit is an independent voltage source $V_\text{Th}$ in series with a resistor $R_\text{Th}$, which replaces an interconnection of sources and resistors
+
+This series combination of  $V_\text{Th}$ and $R_\text{Th}$ is equivalent to the original circuit in the sense that, if we connect the same load across the terminals a,b of each circuit, we get the same voltage and current at the terminals of the load.
+
+A Thevenin equivalent circuit looks like
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \draw (3,0) node[right] {b} to[short,*-] (0,0) to[battery1,l=$V_\text{Th}$] (0,3) to [R=$R_\text{Th}$,-*] (3,3) node[right] {a};
+    \end{circuitikz}
+\end{figure}
+
+First, we note that if the load resistance is infinitely large, we have an open-circuit condition. The open-circuit voltage at the terminals a,b is $V_\text{Th}$. By hypothesis, this must be the same as the open-circuit voltage at the terminals a,b in the original circuit. Therefore, to calculate the Thevenin voltage $V_\text{Th}$,we simply calculate the open-circuit voltage in the original circuit.\\
+Finding $R_\text{Th}$:\\
+\textbf{Method 1}:\\ 
+We replace the terminals of ab with short circuit and find the current across it. then
+\[
+I_\text{sc} = \frac{V_\text{Th}}{I_\text{Th}}
+.\] 
+\textbf{Method 2}:\\
+First deactivate all sources\sn{replace volatge sources with short circuits and current ones with open circuits} then find the resistance seen looking through ab.
+
+\section{Capacitors}
+
+\begin{remark}
+    \[
+    u_c = \frac{q}{C}
+    .\] 
+    \[
+    i=C \dv{u_c}{t} 
+    .\] 
+\end{remark}
+
+Consider the following circuit 
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \ctikzset{bipoles/cuteswitch/thickness=0.5}
+        \draw (2,3.5) node[cute spdt mid arrow,rotate=90] (Sw) {}; 
+        \draw (Sw.in) to[capacitor=$C$] (2,1.75) to[R=$R$] (2,0);
+        \draw (Sw.out 1) to[short] (0,3.85) to[battery1,l=$E$] (0,0) to[short] (4,0) to[short] (4,3.85) to[short] (Sw.out 2);
+        \draw (Sw.out 1) node[above left] {1};
+        \draw (Sw.out 2) node[above right] {2};
+    \end{circuitikz}
+\end{figure}
+
+\newpage
+\subsection{Charging}
+
+At $t=0$,the switch is in position 1, the capacitor is fully discharged $q_{t_0}=0$.
+
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \ctikzset{bipoles/cuteswitch/thickness=0.5}
+        \draw (2,3.5) node[cute spdt up arrow,rotate=90] (sw) {}; 
+        \draw (sw.in) to[capacitor=$C$] (2,1.75) to[R=$R$] (2,0);
+        \draw (sw.out 1) to[short] (0,3.85) to[battery1,l=$E$] (0,0) to[short] (4,0) to[short] (4,3.85) to[short] (sw.out 2);
+        \draw (sw.out 1) node[above left] {1};
+        \draw (sw.out 2) node[above right] {2};
+    \end{circuitikz}
+\end{figure}
+
+\begin{align*}
+    E&= v_R + v_c\\
+     &= Ri + \frac{q}{C}\\
+    \frac{E}{R} &= \dv{q}{t} +\frac{q}{RC}
+\end{align*}
+
+General solution to the DE 
+\[
+    q=Ke^{-\frac{t}{RC}} + EC
+.\] 
+
+\[
+    i=\dv{q}{t} =\frac{E}{R} e^{-\frac{t}{RC}}
+.\] 
+$\tau=RC$ is the time constant of the RC circuit.\\
+
+At $t=0, \: q=0, \: i=\frac{E}{R}$, the capacitor acts as a short circuit.\\
+At $t \to \infty, \: q=EC, \: i=0$, the capacitor acts as a open circuit.\\
+
+The energy dissipated by the resistor is 
+\[
+    W=\int_0^\infty Ri^2 \dd{t} = \cdots = \frac{1}{2}E^2C
+.\] 
+
+The energy stored in the capacitor is
+\[
+W =\frac{1}{2}E^2C
+.\] 
+The total energy delivered by the source 
+\[
+W_\text{Total} = E^2C
+.\] 
+
+\newpage
+\subsection{Discharging}
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        \ctikzset{bipoles/cuteswitch/thickness=0.5}
+        \draw (2,3.5) node[cute spdt down arrow,rotate=90] (sw) {}; 
+        \draw (sw.in) to[capacitor=$C$] (2,1.75) to[R=$R$] (2,0);
+        \draw (sw.out 1) to[short] (0,3.85) to[battery1,l=$E$] (0,0) to[short] (4,0) to[short] (4,3.85) to[short] (sw.out 2);
+        \draw (sw.out 1) node[above left] {1};
+        \draw (sw.out 2) node[above right] {2};
+    \end{circuitikz}
+\end{figure}
+
+\begin{align*}
+    v_c - v_R&=0\\
+    \frac{q}{C}-Ri&=0\\
+    \dv{q}{t} + \frac{q}{RC}&=0
+\end{align*}
+
+The solution of the DE is
+\[
+    q=ECe^{-\frac{t}{RC}}
+.\] 
+\[
+i=-\dv{q}{t} =\frac{E}{R}e^{-\frac{t}{RC}}
+.\] 
+For $t\to \infty:\:q=0,\: i=0$. The capacitor is fully charged after $\approx 5\tau$.
 
 \end{document}
