@@ -6,7 +6,11 @@
 \usepackage{relsize}
 \usepackage{parskip}
 \usepackage{{../NotesTeX}}
+\usepackage{pgfplots}
+\usepackage{slashbox}
 \everymath{\displaystyle}
+
+\pgfplotsset{compat=1.18}
 
 \DeclareMathOperator{\projection}{proj}
 \newcommand{\dotp}[2]{\left\langle #1,#2 \right\rangle}
@@ -201,5 +205,177 @@ If a one of variables is missing in the equation then the surface is said to be 
 
 \part{Parametric Curves}
 
+A vector function/parametric curve is a function of the form
+
+\begin{align*}
+	\va{F}: \mathbb{R} & \longrightarrow \mathbb{R}^2        \\
+	t                  & \longmapsto \va{F}(t) = (x(t),y(t))
+	.\end{align*}
+
+With a domain of definition $\mathbb{D}_{\va{F}} = \mathbb{D}_x \cap \mathbb{D}_y$
+
+\begin{remark}
+    The length of a curve when $t\in[a,b]$ is 
+    \[
+        \int^b_a\sqrt{{y'}^2(t)+{x'}^2(t)} \dd {t} 
+    .\] 
+
+\end{remark}
+
+\section{Symmetry}
+
+Consider the domain of definition to be $\mathbb{R}$.
+
+If a function is is even($f(-x)=f(x)$) or odd($f(-x)=-f(x)$) the domain of study $ \mathbb{D}_S$ is only $[0,+\infty[$, and it is symmetric with respect to some axis.(refer to the table)\\
+
+If a curve $x(t+T)=x(t)$ and $y(t+T)=y(t)$ then the curve is  $T$-periodic. Then the domain if study $\mathbb{D}_S = [0,T]\cap\mathbb{D}_{\va{F}}$ or $=\left[-\frac{T}{2},\frac{T}{2}\right]\cap\mathbb{D}_{\va{F}}$.\\
+\begin{margintable}
+	\begin{tabular}{|l||l|l|}
+		\hline
+		\backslashbox{$y$}{$x$} & Even     & Odd        \\
+		\hline\hline
+		Even                    & None     & $y$-axis   \\
+		\hline
+		Odd                     & $x$-axis & Center $O$ \\
+		\hline
+	\end{tabular}
+	\caption{Axis of symmetry of $\va{F}(t)$ depending on the nature of $x$ and $y$.}
+\end{margintable}
+
+\begin{remark}
+	The tangent line of a curve at $t=t_0$ is
+	\[
+		-y'(t_0)(x-x(t_0)) + x'(t_0)(y-y(t_0))=0
+		.\]
+	and the normal is
+	\[
+		x'(t_0)(x-x(t_0))+y'(t_0)(y-y(t_0))=0
+		.\]
+\end{remark}
+
+\section{Particular Points}
+
+A point is said to be stationary if $\va{F}'(t) = 0$, regular if $\va{F}'(t)=0$, and biregular if $\det(\va{F}'(t),\va{F}''(t))\neq 0$.\\
+
+The first non zero vector in the set $\{\va{F}'(t),\va{F}''(t),\va{F}'''(t),\ldots,\va{F}^{(k)}(t)\} $ is $\va{F}^{(p)}$ is used to define the tangent vector to the curve
+\[
+	\va{T}(t) = \frac{\va{F}^{(p)}(t)}{\left\| \va{F}^{(p)}(t) \right\| }
+	.\]
+
+\[
+	(T):y=\frac{y^{(p)}(t)}{x^{(p)}(t)}(x-x(t)) + y(t)
+	.\]
+\newpage
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\backslashbox{$q$}{$p$} & Even                       & Odd \\
+		\hline\hline
+		Even                    &
+		\begin{tikzpicture}[>=latex]
+			\begin{axis}[
+					axis x line=center,
+					axis y line=center,
+					xtick={-3,-2,...,3},
+					ytick={-3,-2,...,3},
+					xlabel={$x$},
+					ylabel={$y$},
+					xlabel style={below right},
+					ylabel style={above left},
+					xmin=-3.5,
+					xmax=3.5,
+					ymin=-3.5,
+					ymax=3.5]
+				\addplot [mark=none,samples=100,domain=0:3.5] {x^2};
+				\addplot [mark=none,samples=100,domain=0:3.5] {0.5*x^2};
+				\filldraw[red] (0,0) circle (2pt);
+			\end{axis}
+			\draw (3,-1) node {Reflection point of the second kind};
+		\end{tikzpicture}
+		                        & \begin{tikzpicture}[>=latex]
+			\begin{axis}[
+					axis x line=center,
+					axis y line=center,
+					xtick={-3,-2,...,3},
+					ytick={-3,-2,...,3},
+					xlabel={$x$},
+					ylabel={$y$},
+					xlabel style={below right},
+					ylabel style={above left},
+					xmin=-3.5,
+					xmax=3.5,
+					ymin=-3.5,
+					ymax=3.5]
+				\addplot [mark=none,samples=100,domain=-3.5:3.5] {0.1*x^2};
+				\filldraw[red] (0,0) circle (2pt);
+			\end{axis}
+			\draw (3,-1) node {Normal shape point};\end{tikzpicture}       \\
+		\hline
+		Odd                     &
+		\begin{tikzpicture}[>=latex]
+			\begin{axis}[
+					axis x line=center,
+					axis y line=center,
+					xtick={-3,-2,...,3},
+					ytick={-3,-2,...,3},
+					xlabel={$x$},
+					ylabel={$y$},
+					xlabel style={below right},
+					ylabel style={above left},
+					xmin=-3.5,
+					xmax=3.5,
+					ymin=-3.5,
+					ymax=3.5]
+				\addplot [mark=none,samples=100,domain=-3.5:3.5] ({x^2},{x^2-x^3});
+				\filldraw[red] (0,0) circle (2pt);
+			\end{axis}
+			\draw (3,-1) node {Reflection point of the first kind};\end{tikzpicture}
+		                        & \begin{tikzpicture}[>=latex]
+			\begin{axis}[
+					axis x line=center,
+					axis y line=center,
+					xtick={-3,-2,...,3},
+					ytick={-3,-2,...,3},
+					xlabel={$x$},
+					ylabel={$y$},
+					xlabel style={below right},
+					ylabel style={above left},
+					xmin=-3.5,
+					xmax=3.5,
+					ymin=-3.5,
+					ymax=3.5]
+                    \addplot [mark=none,samples=100,domain=-3.5:3.5] {0.05*x^3};
+				\filldraw[red] (0,0) circle (2pt);
+			\end{axis}
+			\draw (3,-1) node {Inflection point};\end{tikzpicture}       \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\begin{remark}
+	\begin{itemize}
+		\item $\va{F}'(t_0)=0\implies t=t_0$ is a stationary point (reflection point of 1/2 kind).
+		\item $\va{F}'(t_0) \neq  0\implies t=t_0$ is an inflection point or normal shape point.
+		\item $\det(\va{F}'(t_0),\va{F}''(t_0))=0\implies t=t_0$ is a reflection or inflection point (not biregular).
+	\end{itemize}
+\end{remark}
+
+\section{Infinite Branches}
+
+\begin{itemize}
+	\item If $\lim_{t \to t_0} x(t)= \pm \infty \qand \lim_{t \to t_0}y(t)=y_0$ then the line $y=y_0$ is a horizontal asymptote.
+	\item If $\lim_{t \to t_0} x(t)= x_0 \qand \lim_{t \to t_0}y(t)=\pm \infty$ then the line $x=x_0$ is a vertical asymptote.
+	\item If $\lim_{t \to t_0} x(t)= \pm \infty \qand \lim_{t \to t_0}y(t)=\pm \infty$ then we study $\frac{y(t)}{x(t)}$
+	      \begin{itemize}
+		      \item If $\lim_{t \to t_0}  \frac{y(t)}{x(t)}=\pm \infty$ then the curve admits a parabolic directed by $(Oy)$.
+		      \item If $\lim_{t \to t_0}  \frac{y(t)}{x(t)}=0$ then the curve admits a parabolic directed by $(Ox)$.
+		      \item If $\lim_{t \to t_0}  \frac{y(t)}{x(t)}=a\in \mathbb{R}^*$ then we study $y(t)-ax(t)$
+		            \begin{itemize}
+			            \item If $\lim_{t \to t_0} y(t)-ax(t)=b\in \mathbb{R} $ then the curve admits an oblique asymptote $y=ax+b$
+			            \item If $\lim_{t \to t_0} y(t)-ax(t)=\pm \infty$ then the curve admits an asymptotic direction $y=ax$
+		            \end{itemize}
+	      \end{itemize}
+\end{itemize}
 
 \end{document}
