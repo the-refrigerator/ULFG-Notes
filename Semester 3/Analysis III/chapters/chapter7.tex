@@ -1,0 +1,43 @@
+\part{Definition of a system of DEs}
+
+Suppose we have a vector of functions $\va{x}=\mqty(x_1(t)\\x_2(t)\\\vdots\\x_n(t))$ we say that $\va{x}$ verifies a DE of order $n$ if
+\[
+	\dv{\va{x}}{t} = \vb{f}(\va{x},t)
+	.\]
+ie
+\[
+	\begin{cases}
+		\dv{x_1}{t} =f_1(x_1,x_2,\ldots,x_n,t) \\
+		\dv{x_2}{t} =f_2(x_1,x_2,\ldots,x_n,t) \\
+		\vdots                                 \\
+		\dv{x_n}{t} =f_n(x_1,x_2,\ldots,x_n,t) \\
+	\end{cases}
+	.\]
+
+Suppose that $\va{x}$ verifies the equation
+\[
+	\dv[n]{x}{t} =f\left( x,\dv{x}{t}, \dv[2]{x}{t}, \cdots, \dv[n]{x}{t}, t  \right)
+	.\]
+We can transform the above equation to a vector system by taking
+\begin{align*}
+	x              & = x_1  \\
+	\dv{x}{t}      & = x_2  \\
+	\dv[2]{x}{t}   & = x_3  \\
+	               & \vdots \\
+	\dv[n-1]{x}{t} & = x_n
+\end{align*}
+
+\begin{theorem}
+	A mapping $\vb{g}$ satisfies the Lip{\Huge shit}z condition if
+	\[
+		\exists k>0 / \forall \va{u},\va{v}\in D \qq{} \left\| \vb{g}(\va{u}) - \vb{g}(\va{v}) \right\| \le k \left\| \va{u}-\va{v} \right\|
+		.\]
+\end{theorem}
+
+\begin{theorem}
+	A mapping $\vb{f}$ of the system
+	\[
+		\dv{\va{x}}{t} =\vb{f}(\va{x},t)
+		.\]
+	admits a unique solution given an initial condition if \emph{it satisfies the Lip{\Huge shit}z condition.}
+\end{theorem}
