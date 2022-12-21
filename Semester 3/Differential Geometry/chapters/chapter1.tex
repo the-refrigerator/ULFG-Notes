@@ -1,0 +1,110 @@
+\part{Conics and Quadrics}
+
+\section{Conics}
+We define a quadric form to be a mapping $q$
+\begin{align*}
+	q: \mathbb{R}^n & \longrightarrow \mathbb{R}                                                                                  \\
+	\va{u}          & \longmapsto q(\va{u}) = \mqty[\rule{5mm}{0.4pt} & ^{\mathsmaller T}\va{u} & \rule{5mm}{0.4pt}]A\mqty[\vline \\\va{u}\\\vline]
+	.\end{align*}
+Where the matrix $A$ is a symmetric matrix.\mn{symmetric matrices ($A=^{\mathsmaller T}A$) is always diagonalizable}
+
+The conics under study are
+\begin{align*}
+	 & \frac{x^2}{a^2}+\frac{y^2}{b^2}=1 \quad & \text{ellipse (circle if \(a=b\))}                \\
+	 & \frac{x^2}{a^2}+\frac{y^2}{b^2}=-1      & \text{imaginary ellipse}                          \\
+	 & \frac{x^2}{a^2}-\frac{y^2}{b^2}=\pm1    & \text{hyperbola with asymptote }y=\pm\frac{b}{a}x \\
+	 & \begin{rcases}
+		y^2=\pm 2px \quad p>0\\
+		x^2=\pm 2py \quad p>0
+	\end{rcases}               & \text{parabolas}                                  \\
+	 & \frac{x^2}{a^2}-\frac{y^2}{b^2}=0       & \text{union of two straight lines}                \\
+	 & \begin{rcases}
+		x=\text{const}\\
+		y=\text{const}
+	\end{rcases}               & \text{straight lines}
+\end{align*}
+
+\subsection{Identification of the conics}
+Let the general equation of all conics be:
+\[
+	\Gamma: ax^2+2bxy+cy^2+2dx+2ey+f=0
+	.\]
+\begin{itemize}
+	\item \boxed{\text{if } b=0}: then we simply group together the terms $x^2$ and $x$ as well as $y^2$ and $y$ followed by completing the square to get an equation of a conic.
+	\item \boxed{\text{if } b\neq 0}: in this case we have to introduce a new system of reference which eliminates the existence of $xy$\\
+	      We do this by first defining a quadratic form $q(x,y)=ax^2+2bxy+cy^2$ using a matrix
+	      \[
+		      q(x,y) = \mqty(x&y)\mqty(a&b\\b&c)\mqty(x\\y)
+		      .\]
+	      which we diagonalize in to an or tho normal age-basis which we project our equation in to in order to get rid of the $xy$ term\\
+
+\end{itemize}
+\begin{example}
+
+	Find the nature of the conic
+	\[
+		\Gamma: 5x^2-4xy+8y^2+\frac{20}{\sqrt{5} }x-\frac{80}{\sqrt{5} }y+4=0
+		.\]
+	\\
+	Let $q(x,y)=5x^2-4xy+8y^2 = \smqty(x&y)\smqty(5&-2\\-2&8)\smqty(x\\y)=^{\mathsmaller T}\va{u}A\va{u}$. We find that the matrix $A$ has eigenvalues  $\lambda_1=4$ and $\lambda_2=9$ with eigenvalues $\va{u}_1=\smqty(2\\1)$ and $\va{u}_2=\smqty(1\\-2)$, the age vectors are already orthogonal so we just find $\va{e}_1=\frac{1}{\sqrt{5}} \smqty(2\\1) $ and $\va{e}_2=\frac{1}{\sqrt{5} }\smqty(1\\-2)$, finally
+	\[
+		P=\mqty(\frac{2}{\sqrt{5} }&-\frac{1}{\sqrt{5} }\\\frac{1}{\sqrt{5} }&\frac{2}{\sqrt{5} })\quad D=\mqty(\dmat{4,9})
+		.\]
+	We define $\smqty(\alpha\\\beta)$ to be any vector with basis $\{\va{e}_1,\va{e}_2\} $
+	\[
+		\mqty(x\\y) = P \mqty(\alpha\\\beta)
+		.\]
+
+	\begin{align*}
+		x & =\frac{2}{\sqrt{5} }\alpha-\frac{1}{\sqrt{5} }\beta = \frac{1}{\sqrt{5} }(2\alpha-\beta) \\
+		y & =\frac{1}{\sqrt{5} }\alpha+\frac{2}{\sqrt{5} }\beta = \frac{1}{\sqrt{5} }(\alpha+2\beta)
+	\end{align*}
+
+	now we substitute $x$ and $y$ with $\alpha$ and $\beta$ into $\Gamma$ and we manipulate the expression until we get
+	\[
+		\frac{(x-1)^2}{9}+\frac{(y-2)^2}{4}=1
+		.\]
+
+	$\therefore$ $\Gamma$ is an ellipse.
+\end{example}
+
+\subsection{Tangent to a conic at point $B$ }
+\begin{theorem}
+	The normal to vector to a conic $\Gamma$
+	\[
+		\Gamma: ax^2+2bxy+cy^2+2dx+2ey+f=0
+		.\]
+	at a point $B\in\Gamma$ is defined to be
+	\[
+		\nabla  f(B) = \mqty(\pdv{f}{x} \Big|_{(x_B,y_B)}\\\pdv{f}{y} \Big|_{(x_B,y_B)})
+		.\]
+	where $f(x,y)=ax^2+2bxy+cy^2+2dx+2ey+f=0
+	$
+\end{theorem}
+
+The equation of a tangent to a conic at a point $B$ is
+\[
+	a(x-x_B)+b(y-y_B)=0
+	.\]
+where $a$ and $b$ are respectively the $x$ and $y$ components of the normal vector at $B$
+
+
+\section{Quadrics}
+
+\begin{definition}
+	A quadric is any surface in 3D space with an equation of the form:
+	\[
+		\underbrace{ax^2+by^2+cz^2+2dyz+2exy+2fxy}_{q(x,y,z):\text{quadratic form of 3 variables}}+\underbrace{gx+hy+iz}_{\text{linear part}}+\underbrace{j}_{\text{constant}}=0
+		.\]
+\end{definition}
+The quadrics under study are\mn{if $a=b$ the surface is a surface of revolution of axis $(Oz)$}
+\begin{align*}
+	 & \frac{x^2}{a^2}+\frac{y^2}{b^2}+\frac{z^2}{c^2}=1   & \text{Ellipsoid}                \\
+	 & \frac{x^2}{a^2}+\frac{y^2}{b^2}-\frac{z^2}{c^2}=1   & \text{Hyperboliod of one sheet} \\
+	 & \frac{x^2}{a^2} +\frac{y^2}{b^2}-\frac{z^2}{c^2}=-1 & \text{Hyperboliod of 2 sheets}  \\
+	 & \frac{x^2}{a^2}+\frac{y^2}{b^2}-\frac{z^2}{c^2}=0   & \text{Asymptote cone}           \\
+	 & \frac{x^2}{a^2}-\frac{y^2}{b^2}=2pz                 & \text{Hyperbolic paraboloid}    \\
+	 & \frac{x^2}{a^2}+\frac{y^2}{b^2}=z^2                 & \text{Elliptic cone}
+\end{align*}
+
+If a one of variables is missing in the equation then the surface is said to be "(Conic name)-ic Cylinder". For example "Hyperbolic cylinder", "Circular cylinder", and "Elliptical cylinder"

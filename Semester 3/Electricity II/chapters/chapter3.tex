@@ -1,0 +1,437 @@
+\part{Circuits Analysis Techniques}
+Terminology:
+\begin{description}
+	\item[Node] A point where two or more circuit elements join.
+	\item[Essential node] A node where three or more circuit elements join.
+	\item[Branch]  A path that connects two nodes
+	\item[Loop] A path whose last node is the same as the starting node
+	\item[Mesh] A loop that does not enclose any other loops
+\end{description}
+
+\begin{itemize}
+	\item \textbf{KVL}: the algebraic sum of all the voltages around any closed path in a circuit equals zero.
+	\item \textbf{KCL}: the algebraic sum of all the currents at any node in a circuit equals zero.
+\end{itemize}
+
+To use Kirchhoff's current law, an algebraic sign corresponding to a reference
+direction must be assigned to every current at the node. Assigning a positive sign to
+a current leaving a node requires assigning a negative sign to a current entering a
+node.
+
+\begin{figure}[h]
+	\centering
+	\scalebox{1.2}{
+		\begin{circuitikz}[american]
+			\draw (2,2) to[short,i_=$+$,*-] (0.5,0.5);
+			\draw[dashed] (0.5,0.5) -- (0,0);
+
+			\draw (2,0.5) to[short,i=$-$] (2,2);
+			\draw[dashed] (2,0.5) -- (2,0);
+
+			\draw (0.5,2) to[short,i=$-$] (2,2);
+			\draw[dashed] (0.5,2) -- (0,2);
+		\end{circuitikz}
+	}
+\end{figure}
+
+\section{Wye-Delta and Delta-Wye Transformations}
+This transformation of a set of resistors configured in the shape of the letter $\Delta $ to a configuration of a shape of the letter Y.
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{0.4\linewidth}
+		\resizebox{!}{0.7\linewidth}{
+			\begin{circuitikz}
+				%coordinates
+				\coordinate (a) at (0,0);
+				\coordinate (b) at (3,5.196);
+				\coordinate (c) at (6,0);
+				\coordinate (d) at (3,1.732);
+				%labels
+				\draw (a) node[left] {a};
+				\draw (b) node[above] {b};
+				\draw (c) node[right] {c};
+				%\Delta
+				\draw (a) to[R=$R_b$,*-*] (c);
+				\draw (a) to[R=$R_c$] (b);
+				\draw (b) to[R=$R_a$,*-] (c);
+			\end{circuitikz}
+		}
+	\end{subfigure}
+	\begin{subfigure}{0.4\linewidth}
+		\resizebox{!}{0.7\linewidth}{
+			\begin{circuitikz}
+				%coordinates
+				\coordinate (a) at (0,0);
+				\coordinate (b) at (3,5.196);
+				\coordinate (c) at (6,0);
+				\coordinate (d) at (3,1.732);
+				%labels
+				\draw (a) node[left] {a};
+				\draw (b) node[above] {b};
+				\draw (c) node[right] {c};
+				% Y
+				\draw (d) to[R=$R_1$,*-] (a);
+				\draw (d) to[R=$R_2$] (b);
+				\draw (d) to[R=$R_3$] (c);
+			\end{circuitikz}
+		}
+	\end{subfigure}
+\end{figure}
+To find the equivalent resistances we apply
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}
+		\coordinate (a) at (0,0);
+		\coordinate (b) at (3,5.196);
+		\coordinate (c) at (6,0);
+		\coordinate (d) at (3,1.732);
+		%\Delta
+		\draw (a) node[left] {a} to[R=$R_b$,*-*] (c) node[right] {c};
+		\draw (a) to[R=$R_c$] (b) node[above] {b};
+		\draw (b) to[R=$R_a$,*-] (c);
+		% Y
+		\draw (d) to[R=$R_1$,*-] (a);
+		\draw (d) to[R=$R_2$] (b);
+		\draw (d) to[R=$R_3$] (c);
+	\end{circuitikz}
+\end{figure}
+
+\begin{minipage}{0.4\linewidth}
+	\begin{align*}
+		R_1 & =\frac{R_bR_c}{R_a+R_b+R_c} \\
+		R_2 & =\frac{R_aR_c}{R_a+R_b+R_c} \\
+		R_3 & =\frac{R_aR_b}{R_a+R_b+R_c}
+	\end{align*}
+
+\end{minipage}
+\hfill
+\begin{minipage}{0.4\linewidth}
+	\begin{align*}
+		R_a & =\frac{R_1R_2 + R_2R_3 + R_3R_1}{R_1} \\
+		R_b & =\frac{R_1R_2 + R_2R_3 + R_3R_1}{R_2} \\
+		R_c & =\frac{R_1R_2 + R_2R_3 + R_3R_1}{R_3}
+	\end{align*}
+\end{minipage}
+
+\section{Divider Circuits}
+\subsection{Voltage Divider}
+At times—especially in electronic circuits—developing more than one voltage level from a single voltage supply is necessary. One way of doing this is by using a voltage-divider circuit.
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[battery1,l=$v_\text{s}$] (0,3) to[R=$R_1$] (2,3) to[R=$R_2$] (4,3);
+		\draw[dashed] (4,3) -- (5,3);
+		\draw (5,3) to[R=$R_i$] (5,0);
+		\draw[dashed] (5,0) -- (4,0);
+		\draw (4,0) to[R=$R_{n-1}$] (2,0) to[R=$R_n$] (0,0);
+	\end{circuitikz}
+	\caption*{An $n$ resistor voltage divider}
+\end{figure}
+
+\[
+	v_i = v_\text{s} \frac{R_i}{\sum_{j=1}^{n} R_j}
+	.\]
+\subsection{Current Divider}
+
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}[american]
+		\draw (0,0) to[isource=$i_\text{s}$] (0,3) to[short] (4,3);
+		\draw (2,3) to[R=$R_1$,*-*] (2,0);
+		\draw (4,3) to[R=$R_2$,*-*] (4,0);
+		\draw[dashed] (4,3) -- (6,3);
+		\draw[dashed] (4,0) -- (6,0);
+		\draw (6,3) to[R=$R_i$,*-*] (6,0);
+		\draw[dashed] (6,3) -- (8,3);
+		\draw[dashed] (6,0) -- (8,0);
+		\draw (8,3) to[R=$R_{n-1}$,*-*] (8,0);
+		\draw (10,3) to[R=$R_n$,*-*] (10,0);
+		\draw (8,3) -- (10,3);
+		\draw (8,0) -- (10,0);
+		\draw (4,0) -- (0,0);
+	\end{circuitikz}
+	\caption*{An $n$ resistor current divider}
+\end{figure}
+
+\[
+	i_i = i_\text{s} \frac{R_\text{Eq}}{R_i}
+	.\]
+\section{Node Voltage Method}
+We introduce the node-voltage method by using the essential nodes of the circuit.\\
+To better understand node voltage method, we will apply directly on a circuit. Consider the following circuit:
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}[american]
+		\draw (0,0) to[battery1,l=$10\volt$] (0,3) to[R=$1\ohm$] (2,3) to[R=$2\ohm$] (4,3) to[R=$10\ohm$,*-*] (4,0) to[short] (0,0);
+		\draw (2,3) to[R=$5\ohm$,*-*] (2,0);
+		\draw (4,3) to[short] (6,3) to[isource,l=$2\amp$,invert] (6,0) to[short] (4,0);
+	\end{circuitikz}
+\end{figure}
+
+To find the voltages across the resistors are
+\begin{enumerate}
+	\item Assign the essential nodes (nodes with 3 or more branches):
+	      \begin{figure}[h]
+		      \centering
+		      \begin{circuitikz}[american]
+			      \node[label={\small 1}] at (2,3) [circle, draw=blue] {};
+			      \node[label={\small 2}] at (4,3) [circle, draw=blue] {};
+			      \node[label={\small 3}] at (3,0) [circle, draw=blue] {};
+			      \draw (0,0) to[battery1,l=$10\volt$] (0,3) to[R=$1\ohm$] (2,3) to[R=$2\ohm$] (4,3) to[R=$10\ohm$,*-*] (3,0) to[short] (0,0);
+			      \draw (2,3) to[R=$5\ohm$,*-*] (3,0);
+			      \draw (4,3) to[short] (6,3) to[isource,l=$2\amp$,invert] (6,0) to[short] (3,0);
+		      \end{circuitikz}
+	      \end{figure}
+	\item Choose a reference node: select one of the essential nodes to be a reference. Usually we choose the lowest node. The assign voltages to the other nodes.
+	      \begin{figure}[h]
+		      \centering
+		      \begin{circuitikz}[american]
+			      \node[above] at (2,3) {$V_1$};
+			      \node[above] at (4,3) {$V_2$};
+			      \draw (3,0) node[ground] {};
+			      \draw (0,0) to[battery1,l=$10\volt$] (0,3) to[R=$1\ohm$] (2,3) to[R=$2\ohm$] (4,3) to[R=$10\ohm$,*-*] (3,0) to[short] (0,0);
+			      \draw (2,3) to[R=$5\ohm$,*-*] (3,0);
+			      \draw (4,3) to[short] (6,3) to[isource,l=$2\amp$,invert] (6,0) to[short] (3,0);
+		      \end{circuitikz}
+	      \end{figure}
+	\item Apply KCL at each node to determine the voltage. For example let's look at node 1:\\
+	      Assume that there are currents leaving the node from all directions and that carry the voltage $V_1$ with them
+	      \begin{figure}[h]
+		      \centering
+		      \begin{circuitikz}
+			      \draw (3,3) to[short,i=$I_1$,*-] (2,3);
+			      \draw (3,3) to[short,i=$I_2$] (4,3);
+			      \draw (3,3) to[short,i=$I_3$] (3,2);
+		      \end{circuitikz}
+	      \end{figure}
+	      where by KCL
+	      \[
+		      I_1+I_2+I_3=0
+		      .\]
+	      We let these currents carry our voltage $V_1$ with them, now we find the values of the currents.
+	      \begin{figure}[h]
+		      \centering
+		      \begin{circuitikz}
+			      \draw (0,3) to[short, i=$10\volt$] (0.75,3) to[R=$1\ohm$] (2,3);
+			      \draw (3,3) to[short,i=$V_1$,*-] (2,3);
+
+			      \draw (3,3) to[short,i=$V_1$] (4,3);
+			      \draw (6,3) to[short,i=$V_2$] (5.25,3) to[R=$2\ohm$] (4,3);
+
+			      \draw (3,0) to[short,i=$0\volt$] (3,0.75) to[R=$5\ohm$] (3,2);
+			      \draw (3,3) to[short,i=$V_1$] (3,2);
+		      \end{circuitikz}
+	      \end{figure}
+	      So the equation for node 1 is
+	      \[
+		      \frac{V_1-10}{1}+\frac{V_2}{5}+\frac{V_1-V_2}{2}=0
+		      .\]
+	      Similarly for node 2
+	      \[
+		      \frac{V_2-V_1}{2}+\frac{V_2}{10}-2=0
+		      .\]
+	      By simply solving the equations we get
+	      \begin{align*}
+		      V_1 & =9.09\volt  \\
+		      V_2 & =10.91\volt
+	      \end{align*}
+\end{enumerate}
+
+\section{Mesh Current Method}
+
+We introduce the mesh current method by using the meshes of the circuit.\\
+To better understand mesh current method, we will apply directly on a circuit. Consider the following circuit:
+
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[battery1,l=$40\volt $] (0,3) to[R=$2\ohm$] (2,3) to[R= $6\ohm$] (4,3) to[R= $4\ohm$] (6,3) to[battery1,invert,l=$20\volt$] (6,0) to[short] (0,0);
+		\draw (2,3) to[R=$8\ohm$,*-*] (2,0);
+		\draw (4,3) to[R=$6\ohm$,*-*] (4,0);
+	\end{circuitikz}
+\end{figure}
+Steps:
+\begin{enumerate}
+	\item Assign the meshes (loop with no other loop inside): We have 3 meshes: a, b, and  c
+	\item Define a current running in each mesh to be flowing in the counter clock wise direction.
+	\item Apply KVL in each mesh to find the currents.
+\end{enumerate}
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}
+		\draw (1,1.5) node {$\circlearrowleft$};
+		\draw (3,1.5) node {$\circlearrowleft$};
+		\draw (5,1.5) node {$\circlearrowleft$};
+		\draw (1,1.5) node {\tiny a};
+		\draw (3,1.5) node {\tiny b};
+		\draw (5,1.5) node {\tiny c};
+		\draw (0,0) to[battery1,l=$40\volt $] (0,3) to[R=$2\ohm$] (2,3) to[R= $6\ohm$] (4,3) to[R= $4\ohm$] (6,3) to[battery1,invert,l=$20\volt$] (6,0) to[short] (0,0);
+		\draw (2,3) to[R=$8\ohm$,*-*] (2,0);
+		\draw (4,3) to[R=$6\ohm$,*-*] (4,0);
+	\end{circuitikz}
+\end{figure}
+\begin{itemize}
+	\item Mesh a: $-40+2I_a+8(I_a-I_b)=0$
+	\item Mesh b: $8(I_b-I_a) +6I_b+6(I_b-I_c)=0$
+	\item Mesh c:$6(I_c-I_b)+4I_c+20=0$
+\end{itemize}
+By solving the equations we get that
+\[
+	\begin{array}{l}
+		I_a=5.6\amp \\
+		I_b=2\amp   \\
+		I_c=-0.8\amp
+	\end{array}
+	.\]
+\section{Source Transformations}
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[b]{0.4\linewidth}
+		\begin{circuitikz}
+			\draw (3,0) to[short,*-] (0,0) to[battery1,l=$V_s$] (0,3) to[R=$R$,-*] (3,3);
+		\end{circuitikz}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.4\linewidth}
+		\begin{circuitikz}[american]
+			\draw (3,0) to[short,*-] (0,0) to[isource,i=$I_s$] (0,3) to[short,-*] (3,3);
+			\draw (1.5,0) to[R=$R$,*-*] (1.5,3);
+		\end{circuitikz}
+	\end{subfigure}
+\end{figure}
+\[
+	V_s = RI_s
+	.\]
+\section{Superposition}
+
+The principle of superposition allows us to find the currents within a circuit by analyzing 2 different circuits and adding the algebraic of the calculated currents.\\
+The first circuit is obtained by \emph{replacing volatge sources with a short circuit}, then finding $i_1,i_2,\ldots,i_n$.\\
+The second circuit is obtained by \emph{replacing current sources with an open circuit}, then finding $i'_1,i'_2,\ldots,i'_n$.\\
+
+Then finally taking their sum.
+\section{Thevenin and Norton Equivalents}
+
+Thevenin equivalent circuit is an independent voltage source $V_\text{Th}$ in series with a resistor $R_\text{Th}$, which replaces an interconnection of sources and resistors
+
+This series combination of  $V_\text{Th}$ and $R_\text{Th}$ is equivalent to the original circuit in the sense that, if we connect the same load across the terminals a,b of each circuit, we get the same voltage and current at the terminals of the load.
+
+A Thevenin equivalent circuit looks like
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}
+		\draw (3,0) node[right] {b} to[short,*-] (0,0) to[battery1,l=$V_\text{Th}$] (0,3) to [R=$R_\text{Th}$,-*] (3,3) node[right] {a};
+	\end{circuitikz}
+\end{figure}
+
+First, we note that if the load resistance is infinitely large, we have an open-circuit condition. The open-circuit voltage at the terminals a,b is $V_\text{Th}$. By hypothesis, this must be the same as the open-circuit voltage at the terminals a,b in the original circuit. Therefore, to calculate the Thevenin voltage $V_\text{Th}$,we simply calculate the open-circuit voltage in the original circuit.\\
+Finding $R_\text{Th}$:\\
+\textbf{Method 1}:\\
+We replace the terminals of ab with short circuit and find the current across it. then
+\[
+	I_\text{sc} = \frac{V_\text{Th}}{I_\text{Th}}
+	.\]
+\textbf{Method 2}:\\
+First deactivate all sources\sn{replace volatge sources with short circuits and current ones with open circuits} then find the resistance seen looking through ab.
+
+\section{Capacitors}
+
+\begin{remark}
+	\[
+		u_c = \frac{q}{C}
+		.\]
+	\[
+		i=C \dv{u_c}{t}
+		.\]
+\end{remark}
+
+Consider the following circuit
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}
+		\ctikzset{bipoles/cuteswitch/thickness=0.5}
+		\draw (2,3.5) node[cute spdt mid arrow,rotate=90] (Sw) {};
+		\draw (Sw.in) to[capacitor=$C$] (2,1.75) to[R=$R$] (2,0);
+		\draw (Sw.out 1) to[short] (0,3.85) to[battery1,l=$E$] (0,0) to[short] (4,0) to[short] (4,3.85) to[short] (Sw.out 2);
+		\draw (Sw.out 1) node[above left] {1};
+		\draw (Sw.out 2) node[above right] {2};
+	\end{circuitikz}
+\end{figure}
+
+\newpage
+\subsection{Charging}
+
+At $t=0$,the switch is in position 1, the capacitor is fully discharged $q_{t_0}=0$.
+
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}
+		\ctikzset{bipoles/cuteswitch/thickness=0.5}
+		\draw (2,3.5) node[cute spdt up,rotate=90] (sw) {};
+		\draw (sw.in) to[capacitor=$C$] (2,1.75) to[R=$R$] (2,0);
+		\draw (sw.out 1) to[short] (0,3.85) to[battery1,l=$E$] (0,0) to[short] (4,0) to[short] (4,3.85) to[short] (sw.out 2);
+		\draw (sw.out 1) node[above left] {1};
+		\draw (sw.out 2) node[above right] {2};
+	\end{circuitikz}
+\end{figure}
+
+\begin{align*}
+	E           & = v_R + v_c               \\
+	            & = Ri + \frac{q}{C}        \\
+	\frac{E}{R} & = \dv{q}{t} +\frac{q}{RC}
+\end{align*}
+
+General solution to the DE
+\[
+	q=Ke^{-\frac{t}{RC}} + EC
+	.\]
+
+\[
+	i=\dv{q}{t} =\frac{E}{R} e^{-\frac{t}{RC}}
+	.\]
+$\tau=RC$ is the time constant of the RC circuit.\\
+
+At $t=0, \: q=0, \: i=\frac{E}{R}$, the capacitor acts as a short circuit.\\
+At $t \to \infty, \: q=EC, \: i=0$, the capacitor acts as a open circuit.\\
+
+The energy dissipated by the resistor is
+\[
+	W=\int_0^\infty Ri^2 \dd{t} = \cdots = \frac{1}{2}E^2C
+	.\]
+
+The energy stored in the capacitor is
+\[
+	W =\frac{1}{2}E^2C
+	.\]
+The total energy delivered by the source
+\[
+	W_\text{Total} = E^2C
+	.\]
+
+\newpage
+\subsection{Discharging}
+\begin{figure}[h]
+	\centering
+	\begin{circuitikz}
+		\ctikzset{bipoles/cuteswitch/thickness=0.5}
+		\draw (2,3.5) node[cute spdt down,rotate=90] (sw) {};
+		\draw (sw.in) to[capacitor=$C$] (2,1.75) to[R=$R$] (2,0);
+		\draw (sw.out 1) to[short] (0,3.85) to[battery1,l=$E$] (0,0) to[short] (4,0) to[short] (4,3.85) to[short] (sw.out 2);
+		\draw (sw.out 1) node[above left] {1};
+		\draw (sw.out 2) node[above right] {2};
+	\end{circuitikz}
+\end{figure}
+
+\begin{align*}
+	v_c - v_R                & =0 \\
+	\frac{q}{C}-Ri           & =0 \\
+	\dv{q}{t} + \frac{q}{RC} & =0
+\end{align*}
+
+The solution of the DE is
+\[
+	q=ECe^{-\frac{t}{RC}}
+	.\]
+\[
+	i=-\dv{q}{t} =\frac{E}{R}e^{-\frac{t}{RC}}
+	.\]
+For $t\to \infty:\:q=0,\: i=0$. The capacitor is fully charged after $\approx 5\tau$.

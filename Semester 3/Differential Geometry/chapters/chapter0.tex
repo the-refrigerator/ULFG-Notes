@@ -1,0 +1,69 @@
+\part{Prerequisites}
+\section{Matrices}
+\begin{theorem}
+	To prove a system of vectors $\{\va{u}_1,\va{u}_2,\ldots,\va{u}_n\} $ is free we prove:
+	\[
+		\det \mqty[\vline&\vline&\vline&&\vline\\\va{u}_1&\va{u}_2&\va{u}_3&\cdots&\va{u}_1\\\vline&\vline&\vline&&\vline] \neq  0
+		.\]
+\end{theorem}
+
+\begin{theorem}
+	A transition matrix $P_{B\to B'}$\marginnote{transition matrices are always square and invertible ($\det P \neq 0$)}between 2 basis $B=\{\va{u}_1,\va{u}_2,\va{u}_3\} $ and $B'=\{\va{v}_1,\va{v}_2,\va{v}_3\} $ we start by solving the system
+	\[
+		\mqty[\vline&\vline&\vline&&\vline\\\va{u}_1&\va{u}_2&\va{u}_3&\cdots&\va{u}_n\\\vline&\vline&\vline&&\vline] \mqty[\alpha_n\\\beta_n\\\gamma_n] = \mqty[\vline\\\va{v}_n\\\vline]
+		.\]
+	or in other words finding
+	\[
+		\begin{cases}
+			\va{v}_1 & =\alpha_1\va{u}_1+\beta_1\va{u}_2+\gamma_1\va{u}_3 \\
+			\va{v}_2 & =\alpha_2\va{u}_1+\beta_2\va{u}_2+\gamma_2\va{u}_3 \\
+			\va{v}_3 & =\alpha_3\va{u}_1+\beta_3\va{u}_2+\gamma_3\va{u}_3 \\
+		\end{cases}
+		.\]
+	Finally we say that
+	\[
+		P_{B\to B'} = \mqty[\alpha_1&\alpha_2&\alpha_3\\\beta_1&\beta_2&\beta_3\\\gamma_1&\gamma_2&\gamma_3]
+		.\]
+\end{theorem}
+\begin{remark}
+	To find the transition matrix in the inverse direction (from $B'$ to $B$ ) we simply do
+	\[
+		P_{B'\to B} = {P_{B\to B'}}^{-1}
+		.\]
+\end{remark}
+\section{Vectors}
+\begin{definition}
+	We define an operation called the scalar product (dot product)
+	\begin{align*}
+		\dotp{\cdot}{\cdot}: \mathbb{R}^n \times \mathbb{R}^n & \longrightarrow \mathbb{R}                                     \\
+		\va{u},\va{v}                                         & \longmapsto \dotp{\va{u}}{\va{v}} =\sum_{n=1}^{n} v_i\cdot u_i
+		.\end{align*}
+\end{definition}
+
+\begin{definition}
+	We define the usual norm on $\mathbb{R}$ to be
+	\begin{align*}
+		\|\cdot \|: \mathbb{R}^n & \longrightarrow \mathbb{R}                            \\
+		\va{u}                   & \longmapsto \|\va{u}\| = \sqrt{\dotp{\va{u}}{\va{u}}}
+		.\end{align*}
+\end{definition}
+\begin{theorem}
+	The projection of a vector $\va{u}$ on to another vector $\va{v}$ is
+	\[
+		\proj{\va{v}}{\va{u}} = \frac{\dotp{\va{u}}{\va{v}}}{\|\va{v}\|^2}\va{v}
+		.\]
+\end{theorem}
+
+\subsection{Gram–Schmidt process}
+The aim of this process is to find a new basis $\Gamma=\{\vu{e}_1,\vu{e}_2,\ldots,\vu{e}_n\} $ derived from a basis $B=\{\va{v}_1,\va{v}_2,\ldots,\va{v}_n\} $ such that it is orthonormal or in other words
+\[
+	\forall \vu{x},\vu{y}\in \Gamma: \dotp{\vu{x}}{\vu{y}}=0 \qq{and} \|\vu{x}\|=1
+	.\]
+We find it as follows
+\begin{align*}
+	\va{u}_1 & = \va{v}_1 \quad                                                                                    & \vu{e}_1 = \frac{\va{u}_1}{\|\va{u}_1\|} \\
+	\va{u}_2 & = \va{v}_2-\proj{\va{u}_1}{\va{v}_2}                                                                & \vu{e}_2 = \frac{\va{u}_2}{\|\va{u}_2\|} \\
+	\va{u}_3 & = \va{v}_3-\proj{\va{u}_1}{\va{v}_3}-\proj{\va{u}_2}{\va{v}_3}                                      & \vu{e}_3 = \frac{\va{u}_3}{\|\va{u}_3\|} \\
+	\vdots   &                                                                                                     &                                          \\
+	\va{u}_n & = \va{v}_n-\proj{\va{u}_1}{\va{v}_n}-\proj{\va{u}_2}{\va{v}_n}-\ldots-\proj{\va{u}_{n-1}}{\va{v}_n} & \vu{e}_n= \frac{\va{u}_n}{\|\va{u}_n\|}  \\
+\end{align*}
