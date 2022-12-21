@@ -1,4 +1,31 @@
 \part{Biot-Savart Law}
+
+The Lorentz force law states that
 \[
-	\va{B} = \frac{\mu_0}{4\pi}\int_{C}\frac{I \dd{\va{\ell}}\times \va{r} }{ \| \va{r} \| ^3}
+	\va{F} = q\left( \va{v}\cross\va{B} \right)
+	.\]
+
+and the magnitude is
+\[
+	\left\|\va{F}\right\| = |q|\left\|\va{v}\right\| \left\|\va{B}\right\|\sin\theta
+	.\]
+
+The magnetic field of a steady line current is given by the Biot-Savart law:
+\[
+	\va{B}(\vb{r}) =  \frac{\mu_0}{4\pi}\int_{C}\frac{I \dd{\va{\ell}}\times \vu{r} }{ \| \va{r} \| ^2} = \frac{\mu_0}{4\pi}\int_{C}\frac{I \dd{\va{\ell}}\times \va{r} }{ \| \va{r} \| ^3}
+	.\]
+
+The integration is along the current path, in the direction of the flow; $\dd{\ell} $ is an element of length along the wire, and $\va{r}$ is the vector from the source to the point $\vb{r}$. The constant $\mu_0$ is called the permeability of free space
+\[
+	\mu_0=4\pi\times 10^{-7}
+	.\]
+The flux $\Phi$ across a surface $S$ is
+\[
+	\Phi=\oiint_S \va{B}\dd{\va{S}} = \iiint_V \div{\va{B}}\dd{v} =0
+	.\]
+
+
+The induction vector derives from a vector potential
+\[
+	\va{B}=\curl{\va{A}}\qq{where}\va{A}=\frac{\mu_0I}{2\pi}\int \frac{1}{r}\dd{\va{\ell}}
 	.\]
