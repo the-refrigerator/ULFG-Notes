@@ -1,4 +1,5 @@
-\part{Biot-Savart Law}
+\part{Magnetostatics}
+\section{Biot-Savart Law}
 
 The Lorentz force law states that
 \[
@@ -28,4 +29,19 @@ The flux $\Phi$ across a surface $S$ is
 The induction vector derives from a vector potential
 \[
 	\va{B}=\curl{\va{A}}\qq{where}\va{A}=\frac{\mu_0I}{2\pi}\int \frac{1}{r}\dd{\va{\ell}}
+	.\]
+\section{Ampère's circuital law}
+Ampère's law is defined \emph{in a closed loop} to be
+\[
+	\oint \va{B} \dd{\va{\ell}} = \mu_0 I_\text{enc}
+	.\]
+
+Recall Coulomb's law and Gauss's law from the previous semester and notice the pattern
+\[
+	\left\{
+	\begin{aligned}
+		 & \text{Electrostatics:} & \text{Coulomb}     & \rightarrow\text{Gauss}  \\
+		 & \text{Magnetostatics:} & \text{Biot-Savart} & \rightarrow\text{Ampère}
+	\end{aligned}
+	\right.
 	.\]
