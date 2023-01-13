@@ -1,30 +1,107 @@
-\part{Homogeneous Systems of Linear DEs}
+\part{Systems of Differential Equations}
 
-A linear Differential equation is an equation of the form:
-\[
-	a_n(t)x^{(n)} + \cdots + a_1(t)x' + a_0(t)x = f(t)
-	.\]
-
-The equation becomes homogeneous when $f(t)=0$.\\\\
-A system of linear DEs would be in the form:\sn{We assume that all $a_{ij}$ are continuous on the interval of study}
-
+Consider a system of first order differential equations $(S)$
 \[
 	\begin{cases}
-		\dv{x_1}{t} = a_{11}(t)x_1+a_{12}(t)x_2+\cdots+a_{1n}(t)x_n \\
-		\dv{x_2}{t} = a_{21}(t)x_1+a_{22}(t)x_2+\cdots+a_{2n}(t)x_n \\
-		\vdots                                                      \\
-		\dv{x_n}{t} = a_{n1}(t)x_1+a_{n2}(t)x_2+\cdots+a_{nn}(t)x_n \\
+		\dv{x_1}{t} = a_{11}(t)x_1+a_{12}(t)x_2+\cdots+a_{1n}(t)x_n + b_1(t) \\
+		\dv{x_2}{t} = a_{21}(t)x_1+a_{22}(t)x_2+\cdots+a_{2n}(t)x_n + b_2(t) \\
+		\vdots                                                               \\
+		\dv{x_n}{t} = a_{n1}(t)x_1+a_{n2}(t)x_2+\cdots+a_{nn}(t)x_n + b_n(t) \\
 	\end{cases}
 	.\]
-In vector form the system is expressed as
+
+in matrix form the equation can be written as
 \[
-	\dv{\va{x}}{t} =\mqty(a_{11}&a_{12}&\cdots&a_{1n}\\ a_{21}&a_{22}&\cdots&a_{2n} \\\vdots&&\ddots& \\a_{n1}&a_{n2}&\cdots&a_{nn})\va{x}\qq{where}\va{x}=\mqty(x_1\\x_2\\\vdots\\x_n)\qgiven \va{x}_0(t_0) = \mqty(c_1\\c_2\\\vdots\\c_n)
+	\dv{\va{x}}{t} = A\va{x} + \va{b}
 	.\]
 
+and the initial condition can be written as
+\[
+	\va{x}_0(t_0) = \mqty(c_1\\c_2\\\vdots\\c_n)
+	.\]
+
+\section{Solving The System of DEs}
+There 3 main ways of solving systems of DEs:
+\begin{enumerate}
+	\item Laplace Transform
+	\item Change of Basis
+	\item Solving Matrix Formula
+\end{enumerate}
+
 \begin{remark}
-	An interesting fact about homogeneous linear DEs is that if the initial condition is ever zero ($\va{x}(t_0)=\va{0}$) then $\va{x}(t) = \va{0}$ is a solution to that DE and in fact the only solution due to the uniqueness theorem.
+	Let $A$ be a diagonalizable matrix
+	\[
+		A=PDP^{-1}
+		.\]
+	so we define that
+	\[
+		e^{At}=Pe^{Dt}P^{-1}
+		.\]
+	or in other words
+	\[
+		e^{At}=P\mqty(\dmat[0]{e^{\lambda_1t},e^{\lambda_2t},\ddots,e^{\lambda_nt}})P^{-1}
+		.\]
 \end{remark}
 
+\subsection{Change of Basis}
+
+We consider a new system of DEs to be
+\[
+	\dv{\va{y}}{t} = P^{-1}AP\va{y}+ P^{-1}\va{b}
+	.\]
+which simplifies to
+\[
+	\dv{\va{y}}{t} = D\va{y}+ \va{B}
+	.\]
+
+in this new system we can solve for $\va{y}$
+\[
+	\begin{cases}
+		\dv{y_1}{t} = \lambda_1y_1 + B_1 \\
+		\dv{y_2}{t} = \lambda_2y_2 + B_2 \\
+		\vdots                           \\
+		\dv{y_n}{t} = \lambda_ny_n + B_n \\
+	\end{cases}
+	.\]
+
+
+\begin{remark}
+	The solution to a differential equation of the form
+	\[
+		\dv{y}{t} = \alpha y + \beta
+		.\]
+	is
+	\[
+		y = c_1 e^{\alpha t} - \frac{\beta}{\alpha}
+		.\]
+\end{remark}
+
+after we find the solution to the new system, we can simply obtain the solution to the original system by
+\[
+	\va{x} = P\va{y}
+	.\]
+and by substituting $t_0$ in $\va{x}$ we can solve for the constant terms $(c_1,c_2,\ldots,c_n)$ using $\va{x}_0$.
+
+\subsection{Solving Matrix Formula}
+
+The formula for a system of first order equations is
+\[
+	\va{x} = \va{x}_h + \va{x}_p
+	.\]
+
+Where
+\begin{align*}
+	\va{x}_h & = V(t,t_0)\va{x}_0                    \\
+	\va{x}_p & = \int_{t_0}^t V(t,u)\va{b}(u) \dd{u}
+\end{align*}
+where
+\[
+	V(t,t_0) = X(t)X^{-1}(t_0)
+	.\]
+if $t=0$ then the formula becomes
+\[
+	\va{x} = e^{At}\va{x}_0 + \int_0^t e^{A(t-u)}\va{b}(u) \dd{u}
+	.\]
 
 \section{Fundamental Solutions}
 For any given system of homogeneous linear DEs there exists a set of $n$ functions such they for a linearly independent basis for a general solution of said DEs, in other words for a given DE there exists a set of vector functions $(\va*{\zeta}_1,\va*{\zeta}_2,\ldots, \va*{\zeta}_n)$ such that
@@ -62,7 +139,7 @@ When dealing with DEs the concept of a Wronskian can be applied to \emph{non-vec
 	W(\phi_1,\phi_2,\cdots,\phi_n)=\mqty|\phi_1& \phi_2&\cdots& \phi_n\\ \phi'_1& \phi'_2&\cdots& \phi'_n \\\vdots&&\ddots& \\ \phi_1^{(n-1)}& \phi_2^{(n-1)}&\cdots& \phi_n^{(n-1)}|
 	.\]
 
-\section{$n$-the order Homogeneous Linear DE}
+\section{Solving $n$-th order Homogeneous Linear DE}
 We define the notation $\D[n]{x}=\dv[n]{x}{t} $.
 
 An $n$-the order linear DE is any equation of the form:
@@ -105,3 +182,5 @@ Given a set of fundamental solutions $(\zeta_1,\zeta_2,\ldots,\zeta_{n})$, due t
 		\implies & x''-\omega^2x=0
 		.\end{align*}
 \end{example}
+
+\subsection{Method of Variation of constants}

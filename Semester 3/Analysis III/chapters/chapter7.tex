@@ -1,16 +1,12 @@
 \part{Definition of a system of DEs}
 
-Suppose we have a vector of functions $\va{x}=\mqty(x_1(t)\\x_2(t)\\\vdots\\x_n(t))$ we say that $\va{x}$ verifies a DE of order $n$ if
-\[
-	\dv{\va{x}}{t} = \vb{f}(\va{x},t)
-	.\]
-ie
+Suppose we have a vector of functions $\va{x}=\mqty(x_1(t)\\x_2(t)\\\vdots\\x_n(t))$, a differential of $\va{x}$ is
 \[
 	\begin{cases}
-		\dv{x_1}{t} =f_1(x_1,x_2,\ldots,x_n,t) \\
-		\dv{x_2}{t} =f_2(x_1,x_2,\ldots,x_n,t) \\
-		\vdots                                 \\
-		\dv{x_n}{t} =f_n(x_1,x_2,\ldots,x_n,t) \\
+		\dv{x_1}{t} = a_{11}(t)x_1+a_{12}(t)x_2+\cdots+a_{1n}(t)x_n+b_1(t) \\
+		\dv{x_2}{t} = a_{21}(t)x_1+a_{22}(t)x_2+\cdots+a_{2n}(t)x_n+b_2(t) \\
+		\vdots                                                             \\
+		\dv{x_n}{t} = a_{n1}(t)x_1+a_{n2}(t)x_2+\cdots+a_{nn}(t)x_n+b_n(t) \\
 	\end{cases}
 	.\]
 
@@ -26,18 +22,3 @@ We can transform the above equation to a vector system by taking
 	               & \vdots \\
 	\dv[n-1]{x}{t} & = x_n
 \end{align*}
-
-\begin{theorem}
-	A mapping $\vb{g}$ satisfies the Lip{\Huge shit}z condition if
-	\[
-		\exists k>0 / \forall \va{u},\va{v}\in D \qq{} \left\| \vb{g}(\va{u}) - \vb{g}(\va{v}) \right\| \le k \left\| \va{u}-\va{v} \right\|
-		.\]
-\end{theorem}
-
-\begin{theorem}
-	A mapping $\vb{f}$ of the system
-	\[
-		\dv{\va{x}}{t} =\vb{f}(\va{x},t)
-		.\]
-	admits a unique solution given an initial condition if \emph{it satisfies the Lip{\Huge shit}z condition.}
-\end{theorem}

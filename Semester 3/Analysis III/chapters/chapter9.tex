@@ -1,0 +1,82 @@
+\part{Non-Homogeneous Systems of Linear DEs}
+
+A system of Non-homogeneous DE is a system of the form
+
+\[
+	\begin{cases}
+		\dv{x_1}{t} = a_{11}(t)x_1+a_{12}(t)x_2+\cdots+a_{1n}(t)x_n + b_1(t) \\
+		\dv{x_2}{t} = a_{21}(t)x_1+a_{22}(t)x_2+\cdots+a_{2n}(t)x_n + b_2(t) \\
+		\vdots                                                               \\
+		\dv{x_n}{t} = a_{n1}(t)x_1+a_{n2}(t)x_2+\cdots+a_{nn}(t)x_n + b_n(t) \\
+	\end{cases}
+	.\]
+
+or in matrix form
+\[
+	\dv{\va{x}}{t} = A \va{x} + \va{b}
+	.\]
+
+
+\section{General Solution Formula}
+The general formula for a non-homogeneous DE is given by the general solution and the particular solution
+\[
+	\va{x} = \va{x}_g(t) + \va{x}_p(t)
+	.\]
+
+\marginnote{$\va{x}_g(t)$ is the solution to the DE if $\va{b}(t)=0$}
+Where
+\begin{align*}
+	\va{x}_g(t) & = X(t)\va{k}                                    \\
+	\va{x}_p(t) & = X(t) \int_{t_0}^t  X^{-1}(u) \va{b}(u) \dd{u} \\
+\end{align*}
+
+Where $X$ is the solution to
+\[
+	\dv{\va{x}}{t} =A\va{x}
+	.\]
+
+Let us denote
+\[
+	X(t)X^{-1}(t_0)=V(t,t_0)
+	.\]
+We can prove that
+\[
+	X(t) = V(t,t_0)
+	.\]
+\begin{remark}
+	\begin{enumerate}
+		\item $V(t_1,t_2)V(t_2,t_3)=V(t_1,t_3)$
+		\item $V(t_1,t_1)=I$
+	\end{enumerate}
+\end{remark}
+
+Thus we can write the solution to be
+\[
+	\va{x}(t) = V(t,t_0)\va{x}(t_0) +\int_{t_0}^t V(t,u)\va{b}(u) \dd{u}
+	.\]
+
+The solution of the equation of the form
+\[
+	\sum_{k=0}^n a_k(t) \D[n-k]{x} = b(t)
+	.\]
+along with its homogeneous form ($b(t)=0$) with initial conditions $x(t_0)=c_1,\D{x}=c_2,\ldots,\D[n-1]{x}(t_0)=c_n$ have a solution given by the formula
+\[
+	x(t) = u_1(t,t_0)x(t_0) + u_2(t,t_0) \D{x(t_0)}+\cdots+u_n\D[n-1]{x(t_0)}
+	.\]
+
+Where $(u_1,u_2,\ldots,u_n)$ are the fundamental solutions to the homogeneous equation verifying $\D[j-1]{u_i(t_0,t_0)}=\delta_{ij}$.\marginnote{$\delta_{ij}=\begin{cases}
+			0 & \text{if }i \neq j \\
+			1 & \text{if }i=j
+		\end{cases}$}
+
+
+
+\section{Method of Variation of Constant}
+In this method we look for solutions of the equation of the form
+\[
+	x = z_1x_1 + z_2x_2 + \cdots + z_nx_n
+	.\]
+Where $z_i$ are a function of $t$. We are looking for a solution verifying $\sum_{i=1}^n \D{z_i}\D[j]{x_i}=0$ for $j = 0,1,\ldots,n-2$\\
+
+At this point the course become extremely useless and redundant so I'll just cut to the chase here.
+\section{}
