@@ -1,0 +1,243 @@
+\part{Systems of Differential Equations}
+
+Consider a system of first order differential equations $(S)$
+\[
+	\begin{cases}
+		\dv{x_1}{t} = a_{11}(t)x_1+a_{12}(t)x_2+\cdots+a_{1n}(t)x_n + b_1(t) \\
+		\dv{x_2}{t} = a_{21}(t)x_1+a_{22}(t)x_2+\cdots+a_{2n}(t)x_n + b_2(t) \\
+		\vdots                                                               \\
+		\dv{x_n}{t} = a_{n1}(t)x_1+a_{n2}(t)x_2+\cdots+a_{nn}(t)x_n + b_n(t) \\
+	\end{cases}
+	.\]
+
+in matrix form the equation can be written as
+\[
+	\dv{\va{x}}{t} = A\va{x} + \va{b}
+	.\]
+
+and the initial condition can be written as
+\[
+	\va{x}_0(t_0) = \mqty(c_1\\c_2\\\vdots\\c_n)
+	.\]
+
+\section{Solving The System of DEs}
+There 3 main ways of solving systems of DEs:
+\begin{enumerate}
+	\item Laplace Transform
+	\item Change of Basis
+	\item Solving Matrix Formula
+\end{enumerate}
+
+\begin{remark}
+	Let $A$ be a diagonalizable matrix
+	\[
+		A=PDP^{-1}
+		.\]
+	so we define that
+	\[
+		e^{At}=Pe^{Dt}P^{-1}
+		.\]
+	or in other words
+	\[
+		e^{At}=P\mqty(\dmat[0]{e^{\lambda_1t},e^{\lambda_2t},\ddots,e^{\lambda_nt}})P^{-1}
+		.\]
+\end{remark}
+
+\subsection{Change of Basis}
+
+We consider a new system of DEs to be
+\[
+	\dv{\va{y}}{t} = P^{-1}AP\va{y}+ P^{-1}\va{b}
+	.\]
+which simplifies to
+\[
+	\dv{\va{y}}{t} = D\va{y}+ \va{B}
+	.\]
+
+in this new system we can solve for $\va{y}$
+\[
+	\begin{cases}
+		\dv{y_1}{t} = \lambda_1y_1 + B_1 \\
+		\dv{y_2}{t} = \lambda_2y_2 + B_2 \\
+		\vdots                           \\
+		\dv{y_n}{t} = \lambda_ny_n + B_n \\
+	\end{cases}
+	.\]
+
+
+\begin{remark}
+	The solution to a differential equation of the form
+	\[
+		\dv{y}{t} = \alpha y + \beta
+		.\]
+	is
+	\[
+		y = c_1 e^{\alpha t} - \frac{\beta}{\alpha}
+		.\]
+\end{remark}
+
+after we find the solution to the new system, we can simply obtain the solution to the original system by
+\[
+	\va{x} = P\va{y}
+	.\]
+and by substituting $t_0$ in $\va{x}$ we can solve for the constant terms $(c_1,c_2,\ldots,c_n)$ using $\va{x}_0$.
+
+\subsection{Solving Matrix Formula}
+
+The formula for a system of first order equations is
+\[
+	\va{x} = \va{x}_h + \va{x}_p
+	.\]
+
+Where
+\begin{align*}
+	\va{x}_h & = V(t,t_0)\va{x}_0                    \\
+	\va{x}_p & = \int_{t_0}^t V(t,u)\va{b}(u) \dd{u}
+\end{align*}
+where
+\[
+	V(t,t_0) = X(t)X^{-1}(t_0)
+	.\]
+if $t=0$ then the formula becomes
+\[
+	\va{x} = e^{At}\va{x}_0 + \int_0^t e^{A(t-u)}\va{b}(u) \dd{u}
+	.\]
+
+\section{Fundamental Solutions}
+For any given system of homogeneous linear DEs there exists a set of $n$ functions such they for a linearly independent basis for a general solution of said DEs, in other words for a given DE there exists a set of vector functions $(\va*{\zeta}_1,\va*{\zeta}_2,\ldots, \va*{\zeta}_n)$ such that
+\[
+	\va{x}(t) = c_1\va*{\zeta}_1(t) + c_2\va*{\zeta}_2(t) +\cdots+c_n\va*{\zeta}_n(t) \qq{where} c_{1,2,\ldots,n}\in \mathbb{R}
+	.\]
+We define the fundamental matrix of the system
+\[
+	X = \mqty(\va*{\zeta}_1&\va*{\zeta}_2&\ldots& \va*{\zeta}_n) = \mqty(\zeta_{11}& \zeta_{12}&\cdots& \zeta_{1n}\\ \zeta_{21}& \zeta_{22}&\cdots& \zeta_{2n} \\\vdots&&\ddots& \\ \zeta_{n1}& \zeta_{n2}&\cdots& \zeta_{nn})
+	.\]
+The system can be written in terms of $X$ as
+\[
+	\dv{X}{t} =AX
+	.\]
+\begin{remark}
+	The fundamental solutions are linearly independent $\implies \det(X)\neq 0$
+\end{remark}
+
+\subsection{Wronskian of vector functions}
+Consider the vector functions:
+\[
+	\va*{\phi}_1(t) = \mqty(\phi_{11}(t)\\\phi_{21}(t)\\\vdots\\\phi_{n1}(t))\quad\cdots\quad\va*{\phi}_n(t) = \mqty(\phi_{1n}(t)\\\phi_{2n}(t)\\\vdots\\\phi_{nn}(t))
+	.\]
+The Wronskian is defined to the determinant:
+\[
+	W(\va*{\phi}_1,\va*{\phi}_2,\cdots,\va*{\phi}_n)=\mqty|\phi_{11}& \phi_{12}&\cdots& \phi_{1n}\\ \phi_{21}& \phi_{22}&\cdots& \phi_{2n} \\\vdots&&\ddots& \\ \phi_{n1}& \phi_{n2}&\cdots& \phi_{nn}|
+	.\]
+
+
+If the Wronskian $=0$ then the functions $(\va*{\phi}_1,\va*{\phi}_2,\ldots,\va*{\phi}_n)$ are said to be linearly independent.
+
+When dealing with DEs the concept of a Wronskian can be applied to \emph{non-vector functions} as follows
+
+\[
+	W(\phi_1,\phi_2,\cdots,\phi_n)=\mqty|\phi_1& \phi_2&\cdots& \phi_n\\ \phi'_1& \phi'_2&\cdots& \phi'_n \\\vdots&&\ddots& \\ \phi_1^{(n-1)}& \phi_2^{(n-1)}&\cdots& \phi_n^{(n-1)}|
+	.\]
+
+\section{Solving $n$-th order Homogeneous Linear DE}
+We define the notation $\D[n]{x}=\dv[n]{x}{t} $.
+
+An $n$-the order linear DE is any equation of the form:
+\[
+	\D[n]{x}+a_1(t)\D[n-1]{x}+\cdots+a_{n-1}(t)\D{x}+a_n(t)x=0
+	.\]
+
+We can then write the equation in vector form
+\begin{align*}
+	x          & = x_1                              \\
+	\D{x}      & = x_2                              \\
+	\D[2]{x}   & = x_3                              \\
+	           & \vdots                             \\
+	\D[n-1]{x} & = x_n                              \\
+	\D[n]{x}   & = -a_nx_1-a_{n-1}x_2-\cdots-a_1x_n
+\end{align*}
+and we take
+\[
+	\va{x} = \mqty(x_1\\x_2\\\vdots\\x_n) = \mqty(x\\\D{x}\\\vdots\\\D[n-1]{x})
+	.\]
+
+then we can write the system as
+\[
+	\dv{\va{x}}{t} =A\va{x}\qq{where} A=\mqty(0&1&0&\cdots&0\\0&0&1&\cdots&0\\\vdots&&&\ddots&\\0&0&0&\cdots&1\\-a_n&-a_{n-1}&\cdots&\cdots&-a_1)
+	.\]
+
+
+\subsection{DE from a Set of Fundamental Solutions}
+
+Given a set of fundamental solutions $(\zeta_1,\zeta_2,\ldots,\zeta_{n})$, due to the uniqueness theorem those solutions only satisfy one DE. To find that DE we simply compute
+\[
+	W(x,\zeta_1,\zeta_2,\ldots,\zeta_n) = \mqty|x&\zeta_1&\cdots&\zeta_n\\\D{x}&\D{\zeta_1}&\cdots&\D{\zeta_n}\\\vdots&&\ddots&\\\D[n]{x}&\D[n]{\zeta_1}&\cdots&\D[n]{\zeta_n}| = 0
+	.\]
+
+\begin{example}
+	Given the fundamental set of solutions $(e^{\omega t},e^{-\omega t})$, find the second order homogeneous equation for that set of solutions:
+	\begin{align*}
+		         & W(x,e^{\omega t},e^{-\omega t})=0                                \\
+		\implies & \mqty|x                           & e^{\omega t} & e^{-\omega t} \\x'&\omega e^{\omega t}&-\omega e^{-\omega t}\\x''&\omega^2e^{\omega t}&\omega^2e^{-\omega t}|=0\\
+		\implies & x''-\omega^2x=0
+		.\end{align*}
+\end{example}
+
+\subsection{Method of Variation of constants}
+
+Consider a non-homogeneous linear DE
+\[
+	x^{(n)}(t)+\sum_{i=0}^{n-1}a_i(t)x^{(i)}(t) = b(t)
+	.\]
+and let $(x_1,x_2,\ldots,x_n)$ be a solution to the corresponding homogeneous differential equation. Then the particular solution to the equation is given by
+\[
+	x_p = \sum_{i=0}^{n}z_i(t)x_i(t)
+	.\]
+
+such that $z_i(t)$ satisfies the condition
+\[
+	\sum_{i=1}^{n}z_i'(t)x^{(j)}(t)=0 \qfor j=0,1,\ldots,n-2
+	.\]
+We substitute $x_p$ in to the original DE, and along with the previous condition, we obtain a linear system of equations dependent on $z_i'$. Then we simply find $z_i'$ and integrate to get back $z_i$ then finally obtain a general solution to the non-homogeneous DE.\\
+
+The formula for $z_1$ and $z_2$ are given for 2nd order DEs of the form
+\[
+	x''+P(t)x'+Q(t)x=g(x)
+	.\]
+
+\begin{align*}
+	z_1 & =-\int\frac{x_2g}{W(x_1,x_2)}\dd{t} \\
+	z_2 & =-\int\frac{x_1g}{W(x_1,x_2)}\dd{t}
+\end{align*}
+
+\begin{example}
+	Solve:
+	\[
+		x''+x=\sec(t)=\frac{1}{\cos(x)}
+		.\]
+
+	We know the solution to the homogeneous equation is $x_h = c_1\cos(t)+c_2\sin(t)$ (refer to the next chapter for a method for solving the homogeneous equation)\marginnote{Not sure why we're solving systems of DEs before we solve DEs in general, besides half the course is basically redundant}\\
+	We substitute the constants with our parameters
+	\[
+		x = z_1\cos(t) + z_2\sin(t)
+		.\]
+	Our condition for the parameters becomes
+	\[
+		z_1'\cos(t) + z_2'\sin(t)=0
+		.\]
+	and substituting $x$ in the original DE we obtain
+	\[
+		-z_1'\sin(t)+z_2'\cos(t) = \sec(t)
+		.\]
+	Solving the system
+	\[
+		\begin{cases}
+			z_1' = -\tan(t) & \Rightarrow z_1 = \ln{|\cos(t)|} + c_1 \\
+			z_2' = 1        & \Rightarrow z_2=t+c_2
+		\end{cases}
+		.\]
+	Finally
+	\[
+		x = (\ln{|\cos(t)|}+c_1)\cos(t) + (t+c_2)\sin(t)
+		.\]
+\end{example}
