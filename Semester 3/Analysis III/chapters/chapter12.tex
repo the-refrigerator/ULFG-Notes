@@ -1,0 +1,43 @@
+\part{Non-Linear DEs}
+\section{Equations of the Form $F(x,y,y',y'')=0$}
+\begin{itemize}
+	\item $y$ doesn't appear explicitly in the equation. Let $z=y'$, the equation becomes $F(x,z,z')=0$
+	\item $y$ appears in the equation. Let $z=y'$, the equation becomes $F(y,z,z\dv{dz}{dy})=0$
+\end{itemize}
+
+\begin{remark}
+	Let $y'=f(x,y)$ such that $f(x,y) = f(1,\frac{y}{x})$.\\
+	Let $t=\frac{y(x)}{x}\implies y=zx\implies \dv{y}{x}=z+x\dv{z}{x}$, The differential equation becomes
+	\[
+		\frac{\dd{x}}{x} = \frac{\dd{z}}{f(1,z)-1}
+		.\]
+\end{remark}
+
+\section{Bernoulli Equation}
+\marginnote{$m\in\mathbb{R}^*-\{1\}$}
+\[
+	y' + P(x)y = Q(x)y^m
+	.\]
+Let $z=y^{1-m}\implies z'=(1-m)\frac{y'}{y^m}$. Dividing the equation by $y^m$.
+\[
+	\frac{z'}{1-m}+P(x)z = Q(x)
+	.\]
+
+\section{Riccati Equation}
+\[
+	y'=A(x)y^2+B(x)y+C(x)
+	.\]
+If we know one solution $y_1$ to the DE, we look for another solution $y=y_1 + u$. With some algebra that I couldn't be bothered to type the equation becomes
+\[
+	u'=A(x)u^2+(2A(x)y_1 + B(x))u
+	.\]
+which is a Bernoulli equation $m=2$. Let $z=\frac{1}{u}$
+\[
+	-z'=\left[2A(x)y_0+B(x)\right]z + A(x)
+	.\]
+
+\section{Clairaut's equation}
+\[
+	xy'-y=\varphi(y')
+	.\]
+Let $y=cx+k$ by algebra $k=-\varphi$, therefore $y=cx-\varphi(c)$ is general solution of the DE.
