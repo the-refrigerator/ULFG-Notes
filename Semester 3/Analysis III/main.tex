@@ -6,11 +6,18 @@
 \usepackage{relsize}
 \usepackage{parskip}
 \usepackage{tasks}
+\usepackage{graphicx}
 \usepackage{{../NotesTeX}}
 \everymath{\displaystyle}
 
+\DeclareRobustCommand{\hamboola}{{\ensuremath{%
+  \mathchoice{\includegraphics[height=2ex]{hamboola.png}}
+    {\includegraphics[height=2ex]{hamboola.png}}
+    {\includegraphics[height=1.5ex]{hamboola.png}}
+{\includegraphics[height=1ex]{hamboola.png}}}}}
 \newcommand{\La}[1]{\mathcal{L} \left\{ #1 \right\}}
-\newcommand{\D}[2][]{\mathrm{D}^{#1}\,#2\;}
+\newcommand{\D}[2][]{\mathrm{D}^{#1}\,#2\,}
+\renewcommand{\P}{\mathbb{L}} % This was originally P, hence the command name, but then I decided to change it's name. The set is usually denoted by just a non-mathbb R but I decided on L to avoid confusion.(and the course uses L)
 
 \title{Analysis 3}
 \date{}

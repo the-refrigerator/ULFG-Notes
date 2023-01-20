@@ -1,0 +1,132 @@
+\part{Linear Differential Equations}
+
+Let the notation denote
+
+\[
+	\D[n]{x} = \dv[n]{x}{t}
+	.\]
+
+\section{Differential Operators}
+\subsection{Definition}
+Let's call the set of differential operators $\P$, a differential operator $A\in\P$ is defined to be
+\[
+	A = a_0\D[0]{} + a_1\D[1]{} + a_2\D[2]{} + \cdots + a_n\D[n]{}
+	.\]
+
+The order of a linear operator is the highest power of D denoted
+\[
+	\gamma(A) = \max(\text{Power of D})
+	.\]
+
+Differential operators form a ring $(\P,+,\cdot)$.\marginnote{They behave just like normal polynomials with the exception of $A\cdot B \neq B\cdot A$ which also has the exception of being equal if $a_k=$ cnst and $b_k=$ cnst}\\
+
+\subsection{Differential Operators as DEs}
+
+We can use differential operators to write DEs in the form
+\[
+	Ax=b(t)
+	.\]
+
+Let $A,B\in\P$ and $\gamma(B)\leq\gamma(A)$ we can prove that $\exists Q,R\in\P\;A=QB+R$ ($Q$: quotient, $R$: remainder)\marginnote{Algebra 1 long division, yum}
+
+\begin{remark}
+	When dealing with differential operators, treat D as a variable. Thus differential operators can be though of as polynomials of D.
+\end{remark}
+
+If the operators $A$ and $B$ each correspond to a \emph{homogeneous} DE then we can compute $\gcd(A,B)$
+\begin{itemize}
+	\item $\gcd(A,B)= 1$ then the differential equations do not have a common solution between them.
+	\item $\gcd(A,B)\neq 1$ then the differential equations have a common solution, which is the solution to the DE corresponding to $R=\gcd(A,B)$
+\end{itemize}
+
+\subsubsection{Case of known $k$ solutions}
+If we have a homogeneous DE, whose corresponding operator is $A$ of order $n$, that we know $k$ solutions of we can construct an operator $B$ of order $k$ whose solutions is said $k$ solutions. Then the remaining $n-k$ solutions are the solutions are the solutions for $\gcd(A,B)$. We can construct $B$ using
+\[
+	W(x,x_1,x_2,\ldots,x_k)=0
+	.\]
+
+
+\subsection{Linear Equations with Constant Coefficients}
+
+The characteristic polynomial of a homogeneous DE is the polynomial where D is substituted with $r$, it is denoted as $P(r)$ and its solutions can help find the solutions to the DE.
+
+If $P(r)$ has a solution in the reals ($\mathbb{R}$) then the solution of the associated DE is
+\[
+	P(r) = (r-\alpha)^\hamboola =0  \Rightarrow x = C_{\hamboola - 1}e^{\alpha t} \\
+	.\]
+
+On the other hand if the solutions to $P(r)$ were complex then the solutions become\marginnote{$\hamboola$ is the order of the root of the polynomial}
+\[
+	P(r) = \left((r-\omega)(r-\bar{\omega})\right)^\hamboola = 0 \Rightarrow x = e^{\Re(\omega)t}\left( U_{\hamboola -1}\cos(\Im(\omega)t) + i\,V_{\hamboola-1}\sin(\Im(\omega)t) \right)
+	.\]
+
+where $C_n$, $U_n$, and $V_n$ are polynomials with constant coefficients $(c_1,c_2,\ldots,c_n)$ and degree $n$. $\left( \sum_{i=0}^{n}c_i t^i \right)$
+
+\begin{remark}
+	The principle of super position states that for a linear differential equation of the form
+	\[
+		Ax=\underbrace{b(t)}_{b_1(t)+b_2(t)}
+		.\]
+	the particular solutions of the equations with $b_1$ and $b_2$, being $x_1$ and $x_2$ respectively, add up to form the particular solution of the original equation
+\end{remark}
+
+Generally, we find the solutions to the homogeneous equations then use variation of parameters/constants to find the particular solution.
+
+\section{Particular Forms of $b(t)$}
+\begin{itemize}
+	\setlength\itemsep{1em}
+	\item $Ax = ke^{\beta t}$: Let $\alpha_1,\alpha_2,\ldots,\alpha_n$ be the roots of the associated $P(r)$ and $\hamboola_1,\hamboola_2,\ldots,\hamboola_n$ be the respective order of those roots.
+	      \begin{itemize}
+		      \item If $\beta \neq \alpha_i$, then we look for a particular solution of the form $x_p=ce^{\beta t}$ where $c$ is a constant to be determined.
+		      \item If $\beta = \alpha_i$, then we look for a particular solution of the form $x_p=ct^{\hamboola_i}e^{\beta t}$ where $c$ is a constant to be determined.
+	      \end{itemize}
+	\item $a_0x'' +a_1x' + a_2x = k$: We look for a particular solution of the form $x_p=c$
+	      \begin{itemize}
+		      \item If $a_2=0$ we look for a particular solution of the form $x_p=ct$
+		      \item If $a_1=a_2=0\implies x_p=ct^2$
+	      \end{itemize}
+	\item $a_0x'' +a_1x' + a_2x = I_n$ (Polynomial of degree $n$): We look for a particular solution of the form $x_p=Q_n$ (another polynomial of degree $n$)
+	      \begin{itemize}
+		      \item If $a_2=0$ we look for a particular solution of the form $x_p=Q_{n+1}$
+		      \item If $a_1=a_2=0\implies x_p=Q_{n+2}$
+	      \end{itemize}
+	\item $a_0x'' +a_1x' + a_2x = I_n e^{\beta t}$:
+	      \begin{itemize}
+		      \item If $P(\beta)\neq0$ we look for a particular solution of the form $x_p=Q_ne^{\beta t}$
+		      \item If $P(\beta)=0$ and the order of $\beta=1$ we look for a particular solution of the form $x_p=Q_{n+1}e^{\beta t}$
+		      \item If $P(\beta)=0$ and the order of $\beta=2$ we look for a particular solution of the form $x_p=Q_{n+2}e^{\beta t}$
+	      \end{itemize}
+	\item $a_0x'' +a_1x' + a_2x = k\sin(\beta t)+h\cos(\beta t)$:
+	      \begin{itemize}
+		      \item If $P(\pm i\beta)\neq0$ we look for $x_p=c_1\sin(\beta t)+c_2\cos(\beta t)$
+		      \item If $P(\pm i\beta)=0$ we look for $x_p=t\left[c_1\sin(\beta t)+h\cos(\beta t)\right]$
+	      \end{itemize}
+	\item $a_0x'' +a_1x' + a_2x = e^{\lambda t}\left[k\sin(\beta t)+h\cos(\beta t)\right]$:
+	      \begin{itemize}
+		      \item If $P(\lambda \pm i\beta)\neq0$ we look for $x_p=e^{\lambda t}\left[c_1\sin(\beta t)+h\cos(\beta t)\right]$
+		      \item If $P(\lambda \pm i\beta)=0$ we look for $x_p=te^{\lambda t}\left[k\sin(\beta t)+h\cos(\beta t)\right]$
+	      \end{itemize}
+	\item $a_0x'' +a_1x' + a_2x = I_n\sin(\beta t)+Q_n\cos(\beta t)$:
+	      \begin{itemize}
+		      \item If $P(\pm i\beta)\neq0$ we look for $x_p=R_n\sin(\beta t)+S_n\cos(\beta t)$
+		      \item If $P(\pm i\beta)=0$ we look for $x_p=R_{n+1}\sin(\beta t)+S_{n+1}\cos(\beta t)$
+	      \end{itemize}
+\end{itemize}
+
+\section{Euler's Equations}
+Euler's DE is a DE of the form\marginnote{$a_i\in\mathbb{R}$}
+\[
+	a_0t^n\D[n]{x}+a_1t^{n-1}\D[n-1]{x} + \cdots + a_nx = 0
+	.\]
+
+\begin{itemize}
+	\item \textbf{Method One}:\\
+	      We assume that $x=t^r$, by substituting $x$ in the equation we get a new equation of the form $I(r)t^r=0$ where $I(r)$ is a polynomial of degree $n$. The solutions to $I(r)$ are $q$ real solutions $r_1,r_2,\ldots,r_n$, thus $x = c_1t^{r_1} + c_2t^{r_2} + \cdots + c_n t^{r_n}$.
+	\item \textbf{Method Two}:\\
+	      We let $t=e^u$ and $\Delta = \dv{}{u}$. We can prove that
+	      \[
+		      \D[p]{x} = e^{-p u}\Delta(\Delta-1)\cdots(\Delta-(p+1))
+		      .\]
+	      After doing this substitution, the equation is transformed in to linear equation with constant coefficients.
+\end{itemize}
+
