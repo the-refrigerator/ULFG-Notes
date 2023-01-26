@@ -1,0 +1,97 @@
+\part{Parametric Curves and Surfaces in 3D}
+\section{3D Curves}
+
+A parametric is defined using a vector function
+\[
+	\va{F}(t) = \mqty(x(t)\\y(t)\\z(t))
+	.\]
+The rules of limits, continuity, and differentiability are all hold if they also hold on the individual components $(x(t),y(t),z(t))$\\
+
+\[
+	\dd{\va{F}(t)} = \dv{x}{t}\vu{i} + \dv{y}{t}\vu{j} + \dv{z}{t} \vu{k}
+	.\]
+
+\begin{remark}
+	If $\left\| \va{F}(t) \right\| = $ cnst then $\va{F}(t) \perp \dv{\va{F}(t)}{t}$ for all $t$
+\end{remark}
+
+\subsection{Tangent and Normal Vectors}
+The tangent $(T_0)$ to a curve at a point $t=t_0$ is directed by
+\[
+	\dv{\va{F}(t)}{t} =  \mqty(\dv*{x}{t}\\\dv*{y}{t}\\\dv*{z}{t})
+	.\]
+
+The normal plane of a curve is the plane who is perpendicular to the tangent plane. The normal vector of this plane is the directing vector the to the tangent plane.
+
+\subsection{Osculating Plane}
+The osculating plane to a curve $\Gamma$ is the plane $(\pi)$ directed by the 2 vectors $\va{F}^{(p)}(t_0)$ and $\va{F}^{(q)}(t_0)$ where
+\[
+	\begin{cases}
+		\va{F}^{(p)}(t) & \text{first non-zero derivative vector}                                                              \\
+		\va{F}^{(q)}(t) & \text{first non-zero derivative vector which isn't collinear to } \va{F}^{(p)}(t) \text{ where } q>p
+	\end{cases}
+	.\]
+
+The plane has an equation at a point $M_0(x_0,y_0,z_0)$
+\[
+	\det(\overrightarrow{M_0\va{F}}(t),\va{F}^{(p)}(t),\va{F}^{(q)}(t)) = \mqty|x-x_0&a&d\\y-y_0&b&e\\z-z_0&c&f| = \alpha(x-x_0)+\beta(y-y_0)+\gamma(z-z_0)=0
+	.\]
+where
+\[
+	\va{F}^{(p)}(t)\cross\va{F}^{(q)}(t) = \mqty(\alpha\\\beta\\\gamma)
+	.\]
+
+
+\subsection{Infinite Branches}
+
+A curve $\Gamma$ is said to have an infinite branch at $t_0$ if
+\[
+	\lim_{t \to t_0} \left\|\va{F}(t)\right\| = +\infty
+	.\]
+
+If
+\[
+	\lim_{t \to t_0} = \frac{\va{F}(t)}{\left\|\va{F}(t)\right\|} = \va{n} = \mqty(a\\b\\c)
+	.\]
+
+Then the curve admits a parabolic branch at $t_0$ directed by $\va{n}$\\
+
+Now let $(\Delta_t)$ a straight line passing through a point on the curve $M(t)$ and directed by $\va{n}$. Let $m(t)$ be the point where $(\Delta_t)$ intersects with the $(xy)$ plane
+\begin{itemize}
+	\item if $\lim_{t \to t_0} \left\| \overrightarrow{Om}(t) \right\| = +\infty$ then the curve admits a parabolic branch directed by $\va{n}$.
+	\item  if $\lim_{t \to t_0} m(t) = A$ then the curve admits an asymptote passing through $A$ and directed by $\va{n}$
+\end{itemize}
+
+\section{Parametric Surfaces}
+We call a vector function of 3 variables, a mapping of the form
+\[
+	\va{F}(u,v) = \mqty(x(u,v)\\y(u,v)\\z(u,v))
+	.\]
+
+Partial derivatives of the vector function
+\[
+	\pdv{\va{F}}{u} = \va{F}_u(u,v) = \mqty(\pdv{x}{u}\\\pdv{z}{u}\\\pdv{z}{u})
+	.\]
+
+\[
+	\pdv{\va{F}}{v} = \va{F}_v(u,v) = \mqty(\pdv{x}{v}\\\pdv{z}{v}\\\pdv{z}{v})
+	.\]
+
+The tangent vector at a point is
+\[
+	\va{T} = \va{F}_u\cdot u'(t) + \va{F}_u\cdot v'(t)
+	.\]
+
+The normal vector at a point is
+\[
+	\va{n} = \va{F}_u \cross \va{F}_v
+	.\]
+
+The curve has a tangent plane at a point $M_0(x_0,y_0,z_0)$ given by
+\[
+	\det(\overrightarrow{M_0\va{F}}(u,v),\va{F}_u,\va{F}_v) = \mqty|x-x_0&a&d\\y-y_0&b&e\\z-z_0&c&f| = \alpha(x-x_0)+\beta(y-y_0)+\gamma(z-z_0)=0
+	.\]
+where
+\[
+	\va{F}_u\cross\va{F}_v = \mqty(\alpha\\\beta\\\gamma)
+	.\]

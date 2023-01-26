@@ -48,6 +48,23 @@ If a curve $x(t+T)=x(t)$ and $y(t+T)=y(t)$ then the curve is  $T$-periodic. Then
 		.\]
 \end{remark}
 
+\section{Infinite Branches}
+
+\begin{itemize}
+	\item If $\lim_{t \to t_0} x(t)= \pm \infty \qand \lim_{t \to t_0}y(t)=y_0$ then the line $y=y_0$ is a horizontal asymptote.
+	\item If $\lim_{t \to t_0} x(t)= x_0 \qand \lim_{t \to t_0}y(t)=\pm \infty$ then the line $x=x_0$ is a vertical asymptote.
+	\item If $\lim_{t \to t_0} x(t)= \pm \infty \qand \lim_{t \to t_0}y(t)=\pm \infty$ then we study $\frac{y(t)}{x(t)}$
+	      \begin{itemize}
+		      \item If $\lim_{t \to t_0}  \frac{y(t)}{x(t)}=\pm \infty$ then the curve admits a parabolic directed by $(Oy)$.
+		      \item If $\lim_{t \to t_0}  \frac{y(t)}{x(t)}=0$ then the curve admits a parabolic directed by $(Ox)$.
+		      \item If $\lim_{t \to t_0}  \frac{y(t)}{x(t)}=a\in \mathbb{R}^*$ then we study $y(t)-ax(t)$
+		            \begin{itemize}
+			            \item If $\lim_{t \to t_0} y(t)-ax(t)=b\in \mathbb{R} $ then the curve admits an oblique asymptote $y=ax+b$
+			            \item If $\lim_{t \to t_0} y(t)-ax(t)=\pm \infty$ then the curve admits an asymptotic direction $y=ax$
+		            \end{itemize}
+	      \end{itemize}
+\end{itemize}
+
 \section{Particular Points}
 
 A point is said to be stationary if $\va{F}'(t) = 0$, regular if $\va{F}'(t)=0$, and biregular if $\det(\va{F}'(t),\va{F}''(t))\neq 0$.\\
@@ -60,6 +77,13 @@ The first non zero vector in the set $\{\va{F}'(t),\va{F}''(t),\va{F}'''(t),\ldo
 \[
 	(T):y=\frac{y^{(p)}(t)}{x^{(p)}(t)}(x-x(t)) + y(t)
 	.\]
+\begin{remark}
+	\begin{itemize}
+		\item $\va{F}'(t_0)=0\implies t=t_0$ is a stationary point (reflection point of 1/2 kind).
+		\item $\va{F}'(t_0) \neq  0\implies t=t_0$ is an inflection point or normal shape point.
+		\item $\det(\va{F}'(t_0),\va{F}''(t_0))=0\implies t=t_0$ is a reflection or inflection point (not biregular).
+	\end{itemize}
+\end{remark}
 \newpage
 \begin{table}[h]
 	\centering
@@ -148,27 +172,5 @@ The first non zero vector in the set $\{\va{F}'(t),\va{F}''(t),\va{F}'''(t),\ldo
 	\end{tabular}
 \end{table}
 
-\begin{remark}
-	\begin{itemize}
-		\item $\va{F}'(t_0)=0\implies t=t_0$ is a stationary point (reflection point of 1/2 kind).
-		\item $\va{F}'(t_0) \neq  0\implies t=t_0$ is an inflection point or normal shape point.
-		\item $\det(\va{F}'(t_0),\va{F}''(t_0))=0\implies t=t_0$ is a reflection or inflection point (not biregular).
-	\end{itemize}
-\end{remark}
 
-\section{Infinite Branches}
 
-\begin{itemize}
-	\item If $\lim_{t \to t_0} x(t)= \pm \infty \qand \lim_{t \to t_0}y(t)=y_0$ then the line $y=y_0$ is a horizontal asymptote.
-	\item If $\lim_{t \to t_0} x(t)= x_0 \qand \lim_{t \to t_0}y(t)=\pm \infty$ then the line $x=x_0$ is a vertical asymptote.
-	\item If $\lim_{t \to t_0} x(t)= \pm \infty \qand \lim_{t \to t_0}y(t)=\pm \infty$ then we study $\frac{y(t)}{x(t)}$
-	      \begin{itemize}
-		      \item If $\lim_{t \to t_0}  \frac{y(t)}{x(t)}=\pm \infty$ then the curve admits a parabolic directed by $(Oy)$.
-		      \item If $\lim_{t \to t_0}  \frac{y(t)}{x(t)}=0$ then the curve admits a parabolic directed by $(Ox)$.
-		      \item If $\lim_{t \to t_0}  \frac{y(t)}{x(t)}=a\in \mathbb{R}^*$ then we study $y(t)-ax(t)$
-		            \begin{itemize}
-			            \item If $\lim_{t \to t_0} y(t)-ax(t)=b\in \mathbb{R} $ then the curve admits an oblique asymptote $y=ax+b$
-			            \item If $\lim_{t \to t_0} y(t)-ax(t)=\pm \infty$ then the curve admits an asymptotic direction $y=ax$
-		            \end{itemize}
-	      \end{itemize}
-\end{itemize}

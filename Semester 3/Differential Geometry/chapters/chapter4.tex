@@ -1,0 +1,60 @@
+\part{Polar Curves}
+
+A polar curve defined to be
+\[
+	\va{F}(\theta) = \mqty(\rho(\theta)\cos(\theta) \\ \rho(\theta)\sin(\theta))
+	.\]
+
+It can be defined by
+\[
+	\rho(\theta)
+	.\]
+
+\section{Periodicity}
+\[
+	\begin{array}{l|l}
+		\rho(\theta+T) = \rho(\theta)         & \rho\text{ is \(T\)-periodic}                                                         \\
+		\rho(-\theta) = \rho(\theta)          & (Ox)\text{ is an axis of symmetry}                                                    \\
+		\rho(-\theta) = -\rho(\theta)         & (Oy)\text{ is an axis of symmetry}                                                    \\
+		\rho(\pi-\theta) = \rho(\theta)       & (Oy)\text{ is an axis of symmetry}                                                    \\
+		\rho(\pi-\theta) = -\rho(\theta)      & (Ox)\text{ is an axis of symmetry}                                                    \\
+		\rho(\pi+\theta) = \rho(\theta)       & O\text{ is center of symmetry}                                                        \\
+		\rho(\pi+\theta) = -\rho(\theta)      & \rho\text{ is \(\pi\) periodic}                                                       \\
+		\rho(2\pi+\theta) = \rho(\theta)      & \rho\text{ is \(2\pi\) periodic}                                                      \\
+		\rho(\theta_0-\theta) = \rho(\theta)  & \text{then } \theta = \frac{\theta_0}{2} \text{ is an axis of symmetry}               \\
+		\rho(\theta_0-\theta) = -\rho(\theta) & \text{then } \theta = \frac{\theta_0}{2}+\frac{\pi}{2} \text{ is an axis of symmetry}
+	\end{array}
+\]
+\section{Study of Tangent Points}
+
+We define the angle $\nu$ at a point of $\theta_0$
+\[
+	\tan(\nu) = \lim_{\theta \to \theta_0}\frac{\rho(\theta)}{\rho'(\theta)}
+	.\]
+
+The slope of the tangent at a point $\theta_0$ to be
+\[
+	\tan(\varphi) = \tan(\theta_0 + \nu)
+	.\]
+
+\section{Infinite Branches}
+\begin{itemize}
+	\item if $\rho(\theta)\sin(\theta-\theta_0)\underset{\theta\to\theta_0}{\longrightarrow}A$ then the line $y=A$ is an oblique asymptote relative to the orthonormal system $(O,\vu{u},\vu{v})$ where $(\vu{i},\vu{u}) = \theta_0$.
+	\item if $\rho(\theta)\sin(\theta-\theta_0)\underset{\theta\to\theta_0}{\longrightarrow}\pm\infty$ then the curve admits a parabolic branch of direction $\theta=\theta_0$
+\end{itemize}
+
+Cartesian equation of an asymptote in the usual system
+\[
+	-\sin(\theta_0)x + \cos(\theta_0)y = A
+	.\]
+The equation in polar form
+\[
+	\rho = \frac{A}{\sin(\theta - \theta_0)}
+	.\]
+
+\subsection{When $\theta\to\pm\infty$}
+\begin{itemize}
+	\item if $\rho(\theta)\to 0$ then the curve admits $O$ as a point asymptote (limit point).
+	\item if $\rho(\theta)\to \pm\infty$ then the curve admits a spiral asymptote.
+	\item if $\rho(\theta)\to R$ then the curve admits a circle asymptote of radius $R$.
+\end{itemize}
