@@ -1,5 +1,6 @@
-\part{Magnetostatics}
-\section{Biot-Savart Law}
+\part{Magnetism}
+\section{Magneto-statics}
+\subsection{Biot-Savart Law}
 
 The Lorentz force law states that
 \[
@@ -30,18 +31,57 @@ The induction vector derives from a vector potential
 \[
 	\va{B}=\curl{\va{A}}\qq{where}\va{A}=\frac{\mu_0I}{2\pi}\int \frac{1}{r}\dd{\va{\ell}}
 	.\]
-\section{Ampère's circuital law}
+\subsection{Ampère's circuital law}
 Ampère's law is defined \emph{in a closed loop} to be
 \[
 	\oint \va{B} \dd{\va{\ell}} = \mu_0 I_\text{enc}
 	.\]
 
-Recall Coulomb's law and Gauss's law from the previous semester and notice the pattern
+\section{Laplace’s Force Law}
+If a particle moves with a speed $\va{v}$ in an electric field and a magnetic field it will experience Lorentz's force.
 \[
-	\left\{
-	\begin{aligned}
-		 & \text{Electrostatics:} & \text{Coulomb}     & \rightarrow\text{Gauss}  \\
-		 & \text{Magnetostatics:} & \text{Biot-Savart} & \rightarrow\text{Ampère}
-	\end{aligned}
-	\right.
+	\va{f} = q\va{E}+q\va{v}\cross\va{B}
 	.\]
+
+\[
+	\dd{\va{f}} = \va{J}\cross\va{B}\dd{\tau} = I(\dd{\va{\ell}}\cross\va{B})
+	.\]
+
+The flux going through a surface $S$ in a magnetic field is
+\[
+	\Phi = \iint_S \va{B}\cdot\dd{s}
+	.\]
+
+Work done by Lorentz force
+\[
+	W = I(\Phi_2 - \Phi_1)
+	.\]
+
+The electromagnetic force
+\[
+	\va{F} = I \grad{\Phi}
+	.\]
+
+Work done if the movement was a rotation
+\[
+	\dd{W} = \Gamma_x\dd{\alpha} = I \dd{\Phi_\alpha}
+	.\]
+
+Where $\alpha, \beta$ and $\gamma$
+\[
+	\Gamma_i = I \pdv{\Phi}{\alpha_i}
+	.\]
+
+\section{Electromotive Force}
+
+The induced emf is given by
+\[
+	e = -\pdv{\Phi}{t}
+	.\]
+
+If a circuit has a induced emf
+\[
+	E-\dv{\Phi}{t} = RI
+	.\]
+
+
