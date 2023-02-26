@@ -9,11 +9,9 @@ My notes from my time in ULFG. These notes are mostly just the most important bi
 - [Analysis III](https://raw.githubusercontent.com/the-refrigerator/ULFG-Notes/main/Semester%203/Analysis%20III/main.pdf)
 - [Electricity II](https://raw.githubusercontent.com/the-refrigerator/ULFG-Notes/main/Semester%203/Electricity%20II/main.pdf)
 - [Differential Geometry](https://raw.githubusercontent.com/the-refrigerator/ULFG-Notes/main/Semester%203/Differential%20Geometry/main.pdf)
-- [Probability](https://raw.githubusercontent.com/the-refrigerator/ULFG-Notes/main/Semester%203/Probability/main.pdf)
-<!--- - [Mechanics II](https://raw.githubusercontent.com/the-refrigerator/ULFG-Notes/main/Semester%203/Mechanics%20II/main.pdf) --->
 
 </details>
 
-# Contributing
+## Contributing
 
 If you find any errors or feel like adding any content feel free to make a pull request or simply contact `@.-.`
