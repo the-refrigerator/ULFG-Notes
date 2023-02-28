@@ -1,0 +1,125 @@
+\documentclass{report}
+
+\input{../template/preamble}
+\input{../template/macros}
+\input{../template/letterfonts}
+
+
+\title{\Huge{Computer Science 4}\\Semester 4}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\newpage% or \cleardoublepage
+% \pdfbookmark[<level>]{<title>}{<dest>}
+\pdfbookmark[section]{\contentsname}{toc}
+\tableofcontents
+\pagebreak
+
+
+\chapter{The Fall of Communism}
+The most basic C\# program (equivelant to \mintinline{c}|int main(void)| in C) is
+\inputminted{csharp}{./code/basic.cs}
+
+
+\section{Similarities with C}
+
+\begin{minipage}{0.4\linewidth}
+	\begin{minted}{csharp}
+/* Variable assignment */
+int x = 5, i = 0;
+float y = 4.5;
+double z = 3.1415;
+char c = 'A';
+
+/* Basic Operations */
+x + y;
+x * y;
+x++;
+etc...
+
+/* Conditionals */
+if (x == y) {
+    /*...*/
+} else if (x < y) {
+    /*..*/
+} else {
+    /*...*/
+}
+    \end{minted}
+\end{minipage}
+\hfill
+\begin{minipage}{0.4\linewidth}
+	\begin{minted}{csharp}
+/* Ternary Operator */
+int w = (x < y)? y : x;
+
+/* Loops */
+while (i < 6) {
+    /*...*/
+}
+
+do {
+    /*...*/
+} while (i < 6);
+
+for (int i = 0; i < 6; i++) {
+    /*...*/
+}
+
+    \end{minted}
+\end{minipage}
+
+
+\section{Basic C\#}
+\subsection{Input Output}
+
+Basically how to take input from the user and give an output back.
+
+In C we have the \mintinline{c}|scanf()|, which is used to get input from the user and place it in to a variable. in C\# we have the \mintinline{csharp}|Console.ReadLine()| which is similar however it \emph{returns} the user input as a string rather than placing it in a variable so if we want user input in C we do
+\begin{minted}{csharp}
+    int x;
+    scanf("%d",&x);
+\end{minted}
+
+While in C\# we have to read the input as a string then convert it to an integer like so
+
+\begin{minted}{csharp}
+    int x = System.Int32.Parse(Console.ReadLine());
+\end{minted}
+
+Likewise, in C we use \mintinline{c}|printf()| to print something to the screen, but in C\# we use \mintinline{csharp}|Console.WriteLine()| to do the same thing, however the difference is that C forces you to use a string to format before it is printed while C\# can handle the formatting for you, for example the C code
+\begin{minted}{c}
+    int x = 5;
+    printf("%d\n",x);
+\end{minted}
+is equivelant to the following C\# code
+
+\begin{minted}{csharp}
+    int x = 5;
+    Console.WriteLine(x); // print directly, no need to specify `%d` or `\n`
+\end{minted}
+
+\subsection{Format Strings}
+Strings in C\# can be defined using \mintinline{csharp}|string name = "World"|. If we want to format strings when printing we do \mintinline{c}|printf("Hello, %d!\n",name)|, but in C\# this can be done in a much simpler fashion using 
+
+\begin{minted}{csharp}
+    Console.WriteLine($"Hello, {name}!")
+\end{minted}
+or alternatively using
+\begin{minted}{csharp}
+    Console.WriteLine("Hello " + name + "!")
+\end{minted}
+
+
+\nt{
+	2 strings can be \emph{concatenated} together in C\#(added together) like so
+	\begin{center}
+		\mint{csharp}|  string firstName = "Hamboola";|
+		\mint{csharp}|  string lastName = "Habooling";|
+		\mint{csharp}|  string fullName = firstName + lastName; /* fullName => "Hamboola Hambooling" */|
+	\end{center}
+}
+\end{document}
