@@ -1,0 +1,201 @@
+\documentclass{report}
+
+\input{../template/preamble}
+\input{../template/macros}
+\input{../template/letterfonts}
+
+\title{\Huge{Some Class}\\Random Examples}
+\author{\huge{Your Name}}
+\date{}
+
+\begin{document}
+
+\maketitle
+\newpage% or \cleardoublepage
+% \pdfbookmark[<level>]{<title>}{<dest>}
+\pdfbookmark[section]{\contentsname}{toc}
+\tableofcontents
+\pagebreak
+
+\chapter{Interpolation}
+
+\section{Linear Interpolation}
+
+\begin{minipage}{0.4\linewidth}
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+					legend pos=outer north east,
+					axis lines = box,
+					xlabel = $x$,
+					ylabel = $f(x)$,
+					variable = t,
+					trig format plots = rad,
+					axis x line=bottom,
+					axis y line=left,
+					xmin=0,xmax=5.5,
+					ymin=0,ymax=3.9,
+				]
+
+				\addplot[
+					color=blue,
+				]
+				coordinates {
+						(0,0)(1,2)(2,3)(3,1)(4,3)(5,3.5)
+					};
+				\addplot[
+					color=red,
+					only marks,
+					mark=*,
+				]
+				coordinates {
+						(0,0)(1,2)(2,3)(3,1)(4,3)(5,3.5)
+					};
+
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}{0.4\linewidth}
+	\begin{tabular}{l|l}
+		$x$ & $f(x)$ \\
+		\hline
+		0   & 0      \\
+		1   & 2      \\
+		2   & 3      \\
+		3   & 1      \\
+		4   & 3      \\
+		5   & 3.5    \\
+	\end{tabular}
+\end{minipage}
+
+Linear interpolation is just drawing lines between the data points.
+\dfn{Linear Interpolation(lerp) equation}{
+	The equation of the lines between data points is
+
+	\[
+		y = \frac{y_{i+1} - y_i}{x_{i+1} - x_i}(x-x_i) + y_i
+		.\]
+}
+\thm{Error due to linear interpolation}{
+	Let $f$ be a continuous and differentiable on $[a,b]$. We define the error $z(x)$ to be
+	\[
+		|z(x)| \leq \frac{(b-a)^2 }{8 }\sup_{a\leq x \leq b}\lt|f''(x)\rt|
+		.\]
+}
+
+\section{Polynomial Interpolation}
+
+\subsection{Lagrange Polynomials}
+
+Really nice video \href{https://www.youtube.com/watch?v=bzp_q7NDdd4}{here} explaining Lagrange polynomials.
+
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				legend pos=outer north east,
+				axis lines = box,
+				xlabel = $x$,
+				ylabel = $f(x)$,
+				axis x line=bottom,
+				axis y line=left,
+				xmin=0,xmax=5.5,
+			]
+
+			\addplot[
+				only marks,
+				color=red,
+				mark=*,
+			]
+			coordinates {
+					(0,0)(1,2)(2,3)(3,1)(4,3)(5,3.5)
+				};
+
+			\addplot [
+				domain=0:5,
+				samples=100,
+				color=blue,
+			]
+			{-0.17916*x^5+(13/6)*x^4+(-425/48)*x^3+(163/12)*x^2+(-283/60)*x};
+			% \addlegendentry{$-\frac{43}{240}x^5 + \frac{13}{6}x^4 - \frac{425}{48}x^3 + \frac{163 }{12}x^2 - \frac{283}{60}x$}
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
+
+
+\thm{Lagrange polynomial equation}{
+	Consider a set of $n$ points $(x_1,y_1),(x_2,y_2),\dots,(x_n,y_n)$. The Lagrange polynomial for this set of data is
+	\[
+		L(x) = \sum_{k=0}^{n} y_k \ell_k(x)
+		.\]
+
+	where
+	\[
+		\ell_k(x) = \prod_{\substack{i=1\\i\neq k}}^{n}\frac{x-x_i }{x_k-x_i}
+		.\]
+}
+
+\subsection{Newton Polynomial}
+
+\dfn{Newton Polynomial equation}{
+	Consider a set of $n$ points $(x_1,y_1),(x_2,y_2),\dots,(x_n,y_n)$. The Newton polynomial for this set of data is
+	\[
+		p_n(x) = a_0 + a_1(x-x_0) + a_2(x-x_0)(x-x_1) + \dots + a_n \prod_{i=0}^{n-1}(x-x_i)
+		.\]
+	where
+	\[
+		a_i = f[x_0,x_1,\dots,x_i]
+		.\]
+	Here $f[\dots]$ is the divided difference of the inputted data.
+}
+
+The divided difference has 2 formulas, the recurrence formula
+\[
+	f[x_0,x_1,\dots,x_{n+1}] = \frac{f[x_1,x_2,\dots,x_{n+1}]-f[x_0,x_1,\dots,x_{n}]}{x_{n+1}-x_0}
+	.\]
+
+and a general formula
+\[
+	f[x_0,x_1,\dots,x_n] = \sum_{i=1}^{n}\frac{y_i }{\prod_{\substack{k=0\\k\neq i}}^{n} (x_i - x_k)}
+	.\]
+Now forget you ever saw those cause there is an easier method to finding the divided difference.
+
+\subsubsection{Divided Difference Table}
+\[
+	\begin{array}{cccccc}
+		x_0 & y_0                                                                                              \\
+		    &     & \frac{y_1-y_0}{x_1-x_0}=f[x_0,x_1]                                                         \\
+		x_1 & y_1 &                                    & \frac{f[x_1,x_2]-f[x_0,x_1]}{x_2-x_0}                 \\
+		    &     & \frac{y_2-y_1}{x_2-x_1}=f[x_1,x_2] &                                       & \dots         \\
+		x_2 & y_2 &                                    & \frac{f[x_2,x_3]-f[x_1,x_2]}{x_3-x_1} &       & \dots \\
+		    &     & \frac{y_3-y_2}{x_3-x_2}=f[x_2,x_3] &                                       & \dots         \\
+		x_3 & y_3 &                                    & \frac{f[x_3,x_4]-f[x_2,x_3]}{x_4-x_2}                 \\
+		    &     & \frac{y_4-y_3}{x_4-x_3}=f[x_3,x_4]                                                         \\
+		x_4 & y_4
+	\end{array}
+\]
+After we have constructed the table we can find the divided difference we want by looking at the top diagonal
+
+\[
+	\begin{array}{cccccc}
+		x_0 & y_0                                                                             \\
+		    &     & f[x_0,x_1]                                                                \\
+		x_1 & y_1 &            & f[x_0,x_1,x_2]                                               \\
+		    &     & \dots      &                & f[x_0,x_1,x_2,x_3]                          \\
+		x_2 & y_2 &            & \dots          &                    & f[x_0,x_1,x_2,x_3,x_4] \\
+		    &     & \dots      &                & \dots                                       \\
+		x_3 & y_3 &            & \dots                                                        \\
+		    &     & \dots                                                                     \\
+		x_4 & y_4
+	\end{array}
+\]
+
+\ex{Yes}{
+	I wanna do an example for the data I used at the top but it's 1AM so cowabunga it is
+}
+
+\end{document}
