@@ -1,0 +1,109 @@
+\documentclass{report}
+
+\input{../template/preamble}
+\input{../template/macros}
+\input{../template/letterfonts}
+
+\title{\Huge{Some Class}\\Random Examples}
+\author{\huge{Your Name}}
+\date{}
+
+\begin{document}
+
+\maketitle
+\newpage% or \cleardoublepage
+% \pdfbookmark[<level>]{<title>}{<dest>}
+\pdfbookmark[section]{\contentsname}{toc}
+\tableofcontents
+\pagebreak
+
+\chapter{Mathematical Concepts}
+\section{Tensors}
+\dfn{Einstein Notation}{
+	Also known as summation notation, says that if we have a repeated index then we are summing over that index. For example
+	\[
+		y = c_i \vu{e}_i
+		.\]
+	implies that
+	\[
+		y = \sum_{i=1}^{3} c_i \vu{e}_i = c_1\vu{e}_1 + c_2\vu{e}_2 + c_3\vu{e}_3
+		.\]
+	same thing with
+	\[
+		a_i\cdot b_i = a_1\cdot b_1 + a_2\cdot b_2 + a_3\cdot b_3
+		.\]
+}
+
+\dfn{}{
+	Kronecker delta is defined to be
+	\[
+		\delta_{ij} = \begin{cases}
+			0 & \text{if }i \neq j \\
+			1 & \text{if }i = j
+		\end{cases}
+		.\]
+	and the permutation symbol
+	\[
+		\varepsilon _{ijk}=\begin{cases}
+			+1           & {\text{if }}(i,j,k){\text{ is }}(1,2,3),(2,3,1),{\text{ or }}(3,1,2), \\
+			-1           & {\text{if }}(i,j,k){\text{ is }}(3,2,1),(1,3,2),{\text{ or }}(2,1,3), \\
+			\phantom{+}0 & {\text{if }}i=j,{\text{ or }}j=k,{\text{ or }}k=i
+		\end{cases}
+		.\]
+	And they appear in
+	\begin{align*}
+		\vu{e}_i \cdot \vu{e}_j  & = \delta_{ij}               \\
+		\vu{e}_i \times \vu{e}_j & = \varepsilon_{ijk}\vu{e}_k
+	\end{align*}
+}
+
+\dfn{Tensors}{
+	In an $m$-dimensional space, a tensor of rank $n$ is a mathematical object that has $n$ indices, $m^n$ components, and obeys certain \emph{transformation rules}\\
+}
+\nt{
+	Typically $m=3$ corresponding to the 3D space.
+}
+\ex{}{
+	\begin{itemize}
+		\item A rank 0 tensor is a scalar
+		      \[
+			      A
+			      .\]
+		\item A rank 1 tensor is a vector
+		      \[
+			      A \vu{x} = A_i x_i = A_1 x_1 + A_2 x_2 + A_3 x_3 = \begin{bmatrix}
+				      A_1 \\A_2\\A_3
+			      \end{bmatrix}
+			      .\]
+		\item A rank 2 tensor is a matrix
+		      \[
+			      A (\vu{x},\vu{y}) = A_{ij} x_i y_j = \begin{bmatrix}
+				      A_{11} & A_{12} & A_{13} \\
+				      A_{21} & A_{22} & A_{23} \\
+				      A_{31} & A_{32} & A_{33}
+			      \end{bmatrix}
+			      .\]
+	\end{itemize}
+}
+Some notable tensors are:
+\begin{enumerate}
+	\item Symmetric tensors
+	      \[
+		      A_{ij} = A_{ji}
+		      .\]
+	\item Anti-symmetric tensors
+	      \[
+		      A_{ij} = -A_{ji}
+		      .\]
+	\item General tensor. It can be represented using a symmetric and an anti symmetric tensor
+	      \[
+		      A = A^S + A^A
+		      .\]
+	      where
+	      \begin{align*}
+		      A^S & = \frac{1}{2}(A+A^T)      \\
+		      A^A & = \frac{1}{2}(A\cdot A^T)
+	      \end{align*}
+\end{enumerate}
+
+\end{document}
