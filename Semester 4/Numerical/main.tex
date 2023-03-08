@@ -139,12 +139,28 @@ Really nice video \href{https://www.youtube.com/watch?v=bzp_q7NDdd4}{here} expla
 		.\]
 }
 
+\subsubsection{Case of equidistant points}
+
+If the set of $x_i$ are equidistant from each other with a distance of $h=x_{i+1}-x_i$, then we can represent any point as $x_k = x_0 + kh$ where $k\in\mathbb{N}$ and any number $x = x_0 + sh$ where $s\in\mathbb{R}$. We can rewrite the formula as
+\[
+	Q(s) = \sum_{k=0}^{n} \ell_k(s)f(x_k)
+	.\]
+where
+\[
+	\ell_k(s) = \prod_{\substack{j=0\\k\neq k}}^n\frac{s-j}{k-j}
+	.\]
+
+by substitution
+\[
+	s = \frac{x-x_0}{h}
+	.\]
+
 \subsection{Newton Polynomial}
 
 \dfn{Newton Polynomial equation}{
 	Consider a set of $n$ points $(x_1,y_1),(x_2,y_2),\dots,(x_n,y_n)$. The Newton polynomial for this set of data is
 	\[
-		p_n(x) = a_0 + a_1(x-x_0) + a_2(x-x_0)(x-x_1) + \dots + a_n \prod_{i=0}^{n-1}(x-x_i)
+		p_n(x) = \underbrace{a_0}_{A_0} + \underbrace{a_1(x-x_0)}_{A_1} + \underbrace{a_2(x-x_0)(x-x_1)}_{A_2} + \dots + \underbrace{a_n \prod_{i=0}^{n-1}(x-x_i)}_{A_n}
 		.\]
 	where
 	\[
@@ -194,8 +210,73 @@ After we have constructed the table we can find the divided difference we want b
 	\end{array}
 \]
 
-\ex{Yes}{
-	I wanna do an example for the data I used at the top but it's 1AM so cowabunga it is
+\subsubsection{Case of equidistant points}
+Bla bla bla the formula becomes
+
+\[
+	P(t) = a_0 + a_1(t-0) + a_2(t-0)(t-1) + \dots + a_n \prod_{i=0}^{n-1}(t-i)
+	.\]
+
+where in this case
+\[
+	a_k = \frac{\nabla^k[y](x_k)}{k!}
+	.\]
+
+and
+\[
+	x = x_0 +th
+	.\]
+
+where $\nabla^k[y]$ is the discrete difference.
+
+\[
+	\nabla[y](x_i) = y(x_i+h)-y(x_i)
+	.\]
+
+\[
+	\begin{array}{cccccc}
+		x_0 & y_0                                                                           \\
+		    &     & \nabla[y](x_i)                                                          \\
+		x_1 & y_1 &                & \nabla^2[y](x_i)                                       \\
+		    &     & \dots          &                  & \nabla^3[y](x_i)                    \\
+		x_2 & y_2 &                & \dots            &                  & \nabla^4[y](x_i) \\
+		    &     & \dots          &                  & \dots                               \\
+		x_3 & y_3 &                & \dots                                                  \\
+		    &     & \dots                                                                   \\
+		x_4 & y_4
+	\end{array}
+\]
+
+\subsection{Error due to polynomial interpolation}
+
+Let $f(x)$ be of class $C^{n+1} \quad \forall x \in [a,b]$ and let the polynomial $P(x)$ interpolate it. \\
+
+The error function is bounded by
+\[
+	|\text{Error}| = |f(x) - P(x)| \leq \frac{\lt| \prod_{i=0}^n (x-x_i) \rt|}{(n+1)!} \sup_{x\in[a,b]} |f^{(n+1)}(x)|
+	.\]
+
+\subsection{Hermite Interpolation}
+
+\dfn{Hermite interpolation formula}{
+	Consider $(n+1)$ sets of point $(x_i,y_i,y'_i)$ representing $f(x)$ ($y_i = f(x_i)$ and $y_i' = f'(x_i)$), the hermite polynomial $P(x)$ interpolates $f(x)$ such that $P'(x) = f'(x)$.
+
+	\[
+		P(x) = \sum_{i=0}^n h_i(x)y_i + \sum_{i=0}^{n}k_i(x)y_i'
+		.\]
+
+	where
+	\begin{align*}
+		h_i(x)    & =\lt(1-2(x-x_i)\ell_i'(x_i)\rt)\ell^2_i(x) \\
+		k_i(x)    & =(x-x_i)\ell^2_i(x)                        \\
+		\ell_i(x) & = \prod_{\substack{j=0                     \\j\neq i}}^n \frac{x-x_j}{x_i-x_j}
+	\end{align*}
+}
+
+\thm{Error due to Hermite interpolation}{
+\[
+	|\text{Error}| = |f(x) - P(x)| \leq \frac{\lt| \prod_{i=0}^n (x-x_i)^2 \rt|}{(2n+2)!} \sup_{x\in[a,b]} |f^{(2n+2)}(x)|
+	.\]
 }
 
 \end{document}
