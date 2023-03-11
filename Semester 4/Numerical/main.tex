@@ -155,6 +155,51 @@ by substitution
 	s = \frac{x-x_0}{h}
 	.\]
 
+\subsubsection{Existence}
+
+\begin{myproof}
+	$P(x)$ belongs to the vectorial space of polynomial of degree of, at most, $n$. Now, we must fins a basis for this vectorial space. Find the polynomial $\ell_k$ of degree $\leq n$ such that
+	\[
+		\ell_k(x_i) = \delta_{ki} = \begin{cases}
+			1 & \text{if }i=k     \\
+			0 & \text{if }i\neq k
+		\end{cases}
+		.\]
+	Then, $\ell_k(x) = \lambda(x-x_0)\dots(x-x_{k-1})(x-x_{k+1})\dots(x-x_n)$
+	where
+	\[
+		\lambda = \frac{1}{(x_k-x_0)\dots(x_k-x_{k-1})(x_k-x_{k+1})\dots(x_k-x_n)}
+		.\]
+	The $(n+1)$ polynomials $\ell_k(x)$ for a system of generators in the vectorial space of polynomials of degree at most $n$.
+
+	\[
+		\lambda_0\ell_0(x) + \lambda_1\ell_1(x) + \dots + \lambda_k\ell_k(x) + \dots + \lambda_n\ell_n(x) = 0
+		.\]
+
+	for $x=x_k$
+	\begin{align*}
+		\lambda_0\ell_0(x_k) + \lambda_1\ell_1(x_k) + \dots + \lambda_k\ell_k(x_k) + \dots + \lambda_n\ell_n(x_k) & = 0 \\
+		0+0+\dots+\lambda_k1+\dots+0                                                                              & =0
+		\lambda_k                                                                                                 & = 0
+		.\end{align*}
+	$\therefore$ the set of $\ell_k$ for a basis in the vector space $\Rightarrow$ there has to exist a polynomial passing through the given set of points.
+
+\end{myproof}
+
+
+\subsubsection{Uniqueness}
+
+\begin{myproof}
+	Let $P$ and $Q$ be 2 Lagrange polynomials of degrees $\leq n\Big/P(x_i)=Q(x_i)=f(x_i)\quad\forall i = 0,1,\dots,n$.\\
+	Let
+	\[
+		\begin{rcases}
+			R=P-Q \text{ of degree }\leq n\\
+			R=0 \; (n+1) \text{ times}
+		\end{rcases}R\equiv0\Rightarrow P=Q\;\forall x
+		.\]
+\end{myproof}
+
 \subsection{Newton Polynomial}
 
 \dfn{Newton Polynomial equation}{
@@ -167,6 +212,17 @@ by substitution
 		a_i = f[x_0,x_1,\dots,x_i]
 		.\]
 	Here $f[\dots]$ is the divided difference of the inputted data.
+}
+
+\dfn{Backwards formula}{
+\[
+	P_n(x) = f_n + A_1 + A_2 + \dots+ A_n
+	.\]
+
+where
+\[
+	A_i = f[x_n,x_{n-1},\dots,x_{n-i}]\prod_{j=n-i+1}^{n}(x-x_j)
+	.\]
 }
 
 The divided difference has 2 formulas, the recurrence formula
@@ -210,6 +266,7 @@ After we have constructed the table we can find the divided difference we want b
 	\end{array}
 \]
 
+
 \subsubsection{Case of equidistant points}
 Bla bla bla the formula becomes
 
@@ -233,6 +290,32 @@ where $\nabla^k[y]$ is the discrete difference.
 	\nabla[y](x_i) = y(x_i+h)-y(x_i)
 	.\]
 
+and the backwards formula is
+\[
+	P(t) = f_n + A_1 + A_2 + \dots + A_n
+	.\]
+
+where
+\[
+	A_i = \frac{\bar{\nabla}^if_n}{i!}\prod_{j=n-i+1}^n (t-j)
+	.\]
+
+\dfn{Discrete Difference}{
+	Forward discrete difference:
+	\begin{align*}
+		\nabla[y](x_i)   & = y(x_i+h) - y(x_i)                    \\
+		\nabla^2[y](x_i) & = \nabla[y](x_i + h) - \nabla [y](x_i) \\
+		                 & = y(x_i+2h)-2y(x_i+h)+y(x_i)           \\
+		\nabla^k[y](x_i) & = \nabla\lt(\nabla^{k-1}[y](x_i)\rt)
+	\end{align*}
+
+
+	Backwards discrete difference:
+	\begin{align*}
+		\bar{\nabla}[y](x_i)   & = y(x_i) - y(x_i - h)                            \\
+		\bar{\nabla}^k[y](x_i) & = \bar{\nabla}\lt(\bar{\nabla}^{k-1}[y](x_i)\rt)
+	\end{align*}
+}
 \[
 	\begin{array}{cccccc}
 		x_0 & y_0                                                                           \\
