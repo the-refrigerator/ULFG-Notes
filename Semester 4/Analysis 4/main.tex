@@ -1,0 +1,225 @@
+\documentclass{report}
+
+\input{../template/preamble}
+\input{../template/macros}
+\input{../template/letterfonts}
+
+\title{\Huge{Complex Analysis}\\Semester 4}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\newpage% or \cleardoublepage
+% \pdfbookmark[<level>]{<title>}{<dest>}
+\pdfbookmark[section]{\contentsname}{toc}
+\tableofcontents
+\pagebreak
+
+\chapter{The Complex Plane}
+\section{Algebra of the complex plane}
+
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\node[anchor=south west,inner sep=0] at (0,0) {\includegraphics[width=0.5\textwidth]{wojak.jpg}};
+		\draw (4,3.5) node {$i = \sqrt{-1}$};
+	\end{tikzpicture}
+\end{figure}
+
+Euler’s formulas for $\sin$ and $\cos$
+\begin{align*}
+	\cos(\theta) & = \frac{e^{i\theta} + e^{-i\theta}}{2}                                 \\
+	\sin(\theta) & = \frac{e^{i\theta} - e^{-i\theta}}{2i}                                \\
+	\tan(\theta) & = \frac{e^{i\theta} - e^{-i\theta}}{i\lt(e^{i\theta}+e^{-i\theta}\rt)}
+\end{align*}
+
+The $n$-th roots of unity are the set of complex numbers $(\zeta_1,\zeta_2,\dots,\zeta_n)$ are the complex numbers that satisfy the equation
+
+\[
+	z^n = w
+	.\]
+where $w=Re^{i\alpha}$. The solutions equation are
+\[
+	\zeta_k = \sqrt[n]{R} e^{i\left( \frac{\alpha + 2k\pi}{n} \right)}
+	.\]
+
+\section{Topology of the complex plane}
+
+\thm{}{
+	The mapping
+	\begin{align*}
+		|z|: \mathbb{C} & \longrightarrow \mathbb{R}^+          \\
+		z=x+yi          & \longmapsto |x+yi| = \sqrt{x^2 + y^2}
+		.\end{align*}
+	defines a norm on $\mathbb{C}$, so the complex plane is a normed space.
+}
+
+\thm{}{
+	The mapping
+	\begin{align*}
+		d(.,.): \mathbb{C}\times\mathbb{C} & \longrightarrow \mathbb{R}^+ \\
+		(z,w)                              & \longmapsto d(z,w) = |z-w|
+		.\end{align*}
+	defined a distance on $\mathbb{C}$, so the complex plane is a metric space.
+}
+
+\dfn{Neighborhood}{
+	We call $\delta$-neighborhood of $z_0$ an open disk centered at $z_0$ of radius $\delta$
+	\[
+		N_\delta(z_0) = \{z\in\mathbb{C}: \; |z-z_0|<\delta\}
+		.\]
+}
+
+We call $N_\delta(z_0)-\{z_0\}$ a deleted $\delta$-neighborhood. ($\{z\in\mathbb{C}: \; 0 < |z-z_0|<\delta\}$)\\
+
+\dfn{}{
+	Let $z_0\in\mathbb{C}$ and $\Omega\subset\mathbb{C}$.
+	\begin{enumerate}
+		\ii $z_0$ is called an \emph{interior point} of $\Omega$ if
+		\[
+			\exists\delta>0, N_\delta(z_0)\subset\Omega
+			.\]
+		\ii $z_0$ is an \emph{exterior point} of $\Omega$ if
+		\[
+			\exists\delta>0, N_\delta(z_0)\cap\Omega=\emptyset
+			.\]
+		\ii $z_0$ is a \emph{boundary point} of $\Omega$ if
+		\[
+			\forall \delta>0, \; N_\delta(z_0)\cap\Omega\neq\emptyset \quad \text{and} \quad N_\delta(z_0)\cap \underbrace{C^{\Omega}_{\mathbb{C}}}_{\mathbb{C} - \Omega}\neq\emptyset
+			.\]
+	\end{enumerate}
+}
+
+\dfn{}{
+	The set of all:
+	\begin{enumerate}
+		\ii interior points: $\dot{\Omega}$
+		\ii boundary points: $\partial\Omega$
+		\ii the set $\Omega\cup\partial\Omega$ is called a closure of $\Omega$ denoted $\bar{\Omega}$
+	\end{enumerate}
+}
+
+\nt{
+	\[
+		\dot{\Omega}\subset\Omega\subset\bar{\Omega}
+		.\]
+	and
+	\[
+		\Omega \text{ is open} \Leftrightarrow \begin{cases}
+			\Omega\cap\partial\Omega=\emptyset \\
+			\Omega = \dot{\Omega}
+		\end{cases}
+		.\]
+}
+
+$\Omega$ is said to be \emph{compact} if it is both \emph{bounded and closed}.
+
+\thm{Bolzano-Weirstrass theorem}{
+	Every \emph{bounded infinte} set admits at least one limit point
+}
+
+\subsubsection{Paths}
+A path is a set of complex points $\Gamma$ where
+\[
+	\Gamma = \lt\{z(t) = x(t) + i\,y(t)\; t\in[a,b[\rt\}
+	.\]
+A simple path/Jordan arc if it does not cross itself
+\[
+	\forall t_1,t_2 \in [a,b[ \;t_1\neq t_2 \Rightarrow z(t_1)\neq z(t_2)
+	.\]
+
+A closed path is a path such that
+\[
+	z(a) = z(b)
+	.\]
+
+
+\chapter{Complex Functions}
+
+\section{Limits and Differentiability}
+
+\nt{
+	When taking limits we can do the 2D limit where $x = \Re(z)$ and $y=\Im(z)$
+	\[
+		\lim_{(x,y)\to(x_0,y_0)} f(x+iy)
+		.\]
+
+	then we can take multiple paths to find the limit. However we can't take suffecient paths to prove a limit exists as there could exist one path that causes the limit to not exist, however we can use polar limits to prove that the limit exists. We take $x = r\cos(\theta)-x_0$ and $y = r\sin(\theta)-y_0$
+	\[
+		\lim_{(r,\theta)\to(0,0)} f\lt(r\cos(\theta)-x_0+ i\lt(r\sin(\theta)-y_0\rt)\rt)
+		.\]
+
+}
+
+\thm{Cauchy-Riemann equations}{
+	We define a complex function
+	\[
+		f(x+iy) = u(x,y) + iv(x,y)
+		.\]
+
+	If $f$ is differentiable on a point $z_0 = x_0 + iy_0$ then $u$ and $v$ satisfy the Cauchy-Riemann equations:
+	\begin{align*}
+		\pdv{u}{x}(x_0,y_0) & = \pdv{v}{y}(x_0,y_0)  \\
+		\pdv{u}{y}(x_0,y_0) & = -\pdv{v}{x}(x_0,y_0)
+		.\end{align*}
+
+	Note that the converse is not true
+}
+
+To prove that a function $f$ is differentiable at $z_0$ then we have to prove that $u$ and $v$
+
+\[
+	\begin{cases}
+		\text{exist in } \Omega            \\
+		\text{are continous at } (x_0,y_0) \\
+		\text{satisfy the Cauchy-Riemann equations at }(x_0,y_0)
+	\end{cases}
+\]
+
+\subsection{Hyperbolic functions}
+
+\begin{align*}
+	\cosh z & = \frac{e^z + e^{-z}}{2}  \\
+	\sinh z & = \frac{e^z - e^{-z}}{2}  \\
+	\tanh z & = \frac{\sinh z}{\cosh z} \\
+\end{align*}
+
+Properties
+\begin{tasks}(2)
+	\task $\cosh^2z - \sinh^2z = 1$
+	\task $\cosh^2z + \sinh^2z = \cosh 2z$
+	\task $\cosh z_1+z_2 = \cosh z_1 \cdot \cosh z_2 + \sinh z_1 \cdot \sinh z_2$
+	\task $\sinh z_1+z_2 = \sinh z_1\cdot \cosh z_2 +\sinh z_2\cdot \cosh z_1$
+	\task $\cos iz = \cosh z$
+	\task $\sin iz = i\sinh z$
+	\task $\cosh iz = \cos z$
+	\task $\sinh iz = i\sin z$
+\end{tasks}
+
+\section{Harmonic functions}
+
+\dfn{Harmonic function}{
+	A function $u(x,y)$, of class $C^2$ and defined on $\Omega$, is said to be harmonic if
+	\[
+		\pdv[2]{u}{x} + \pdv[2]{u}{y} = 0
+		.\]
+	or in other words the Laplacian is equal to 0
+	\[
+		\Delta u = \nabla^2 u = 0
+		.\]
+}
+
+\thm{}{
+	Let a function $f = u + iv$ defined on $\Omega$
+	\[
+		f \text{ is holomorphic } \Leftrightarrow \begin{cases}
+			u,v \text{ are of class } C^\infty \text{ in } \Omega       \\
+			u,v \text{ satisfy the Cauchy–Riemann equations in } \Omega \\
+			u,v \text{ are harmonic in }\Omega
+		\end{cases}
+		.\]
+}
+
+\end{document}
