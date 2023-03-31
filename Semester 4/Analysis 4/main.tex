@@ -224,4 +224,53 @@ Properties
 		.\]
 }
 
+\chapter{Integrals}
+
+\dfn{Complex Integral}{
+	Let $\Omega$ be an open subset of $\CC$ and $\Gamma$ a piecewise differentiable path from $z_1$ to $z_2$. We define the integral of $f$ along the path to be 2 different line integrals:
+	\[
+		\int f(z)\dd{z} = \int_\Gamma (u+iv)(\dd{x}+i\dd{y}) = \int_\Gamma(u\dd{x}-v\dd{y}) + i\int_\Gamma(v\dd{x}+u\dd{y})
+		.\]
+}
+
+\thm{Parametrization of the path}{
+	If the path $\Gamma$ is parametrized by $\gamma(t)=x(t) + iy(t)$ where $x,y$ are of class $c^1$ on $[a,b]$ then
+	\[
+		\int_\Gamma f(z)\dd{z}=\int_a^b f\lt(\gamma(t)\rt)\cdot\gamma'(t)\dd{t}
+		.\]
+}
+
+\thm{$ML$-rule}{
+In a path of $\Gamma$ of length $L$, we can approximate the value of an integral along that path
+\[
+	\lt|\int_\Gamma f(z)\dd{z}\rt|\leq M\cdot L
+	.\]
+where
+\[
+	M=\sup_{z\in\Gamma}|f(z)|\quad\text{and}\quad L=\text{Length of the path } \Gamma = \int_a^b\sqrt{{x'}(t)^2 + {y'}(t)^2}\dd{t}
+	.\]
+}
+
+\thm{Cauchy's theorem}{
+	Let $\Gamma$ be a simple closed curve. Let $f$ be a holomorphic function on $\Gamma$ and inside $\Gamma$, then
+	\[
+		\oint_\Gamma f(z)\dd{z} = 0
+		.\]
+}
+
+\nt{
+	Green-Riemann theorem states that
+	\[
+		\oint_{\partial\Omega}\lt(P(x,y)\dd{x}+Q(x,y)\dd{y}\rt) = \iint_\Omega \lt(\pdv{Q}{x} - \pdv{P}{y}\rt)\dd{x}\dd{y}
+		.\]
+}
+
+\nt{
+	\[
+		\int_{\Gamma^-}f(z)\dd{z} = -\int_\Gamma f(z)\dd{z}
+		.\]
+}
+
+A consequence of Cauchy's theorem is that if a closed path $C$ contains a discontinuity then the path of integration doesn't matter as long as the new path also contains the exact same discontinuity.
+
 \end{document}
