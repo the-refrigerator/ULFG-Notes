@@ -273,4 +273,66 @@ where
 
 A consequence of Cauchy's theorem is that if a closed path $C$ contains a discontinuity then the path of integration doesn't matter as long as the new path also contains the exact same discontinuity.
 
+\thm{}{
+	Let $\Omega$ be a simply closed region. Let $f$ be a holomorphic function on $\Omega$, $z_1$ and $z_2$ be 2 point $\in\Omega$. Then the integral of $f(z)$ is independent of the path taken from $z_1$ to $z_2$
+	\[
+		\int_{\gamma_1} f(z)\dd{z} = \int_{\gamma_2}f(z)\dd{z}
+		.\]
+}
+
+\thm{Liouville's theorem}{
+	\begin{itemize}
+		\ii $f$ is holomorphic in $\CC$
+		\ii $f$ is bounded in $\CC$
+		\[
+			\exists M\in\RR_+,\forall z\in\CC,|f(z)\leq M|
+			.\]
+	\end{itemize}
+	then $f$ is constant in $\CC$
+}
+
+\thm{Mean value theorem}{
+	Let $\gamma_r$ be a circle of center $a$ and radius $r>0$. If $f$ is a holomorphic on and in $\gamma_r$ then
+	\[
+		f(a) = \frac{1}{2\pi}\int_0^{2\pi} f\lt(a+re^{i\theta}\rt)\dd{\theta}
+		.\]
+}
+
+\thm{Cauchy's integral formula}{
+	Let $\Gamma$ is a simple closed curve and the function $f(z)$ is holomorphic on $\Gamma$ and its interior. Then:
+	\[
+		f(a) = \frac{1}{2\pi i}\oint_{\Gamma^+}\frac{f(z)}{z-a}\dd{z}
+		.\]
+
+	and the general form of the formula is
+	\[
+		f^{(n)}(a) = \frac{n!}{2\pi i}\oint_{\Gamma^+}\frac{f(z)}{(z-a)^{n+1}}\dd{z}
+		.\]
+}
+
+\section{Primitives}
+\dfn{Primitives}{
+	Let $f$ be a complex function, defined in an open set $\Omega\subset\CC$.\\
+	We call a primitive of $f$ on $\Omega$, any function $F$ such that $F$ is holomorphic in $\Omega$ and $\forall z\in\Omega\;F'(z) = f(z)$
+	\[
+		F(z) = \int f(z)\dd{z}
+		.\]
+}
+
+\nt{
+	If $f$ admits a primitive on the open set $\Omega$ then $f$ is holomorphic in $\Omega$
+}
+
+Let the path $\gamma$ goes from $z_1$ to $z_2$ in $\Omega$ then
+\[
+	\int_\gamma f(z)\dd{z} = F(z_2)-F(z_2)
+	.\]
+
+\nt{
+	\[
+		\oint_\gamma f(z)\dd{z}=0\;\Rightarrow f\text{ is holomorphic in }\Omega
+		.\]
+
+}
+
 \end{document}
