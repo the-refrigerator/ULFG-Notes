@@ -123,7 +123,169 @@ or alternatively using
 	\end{center}
 }
 
+\section{Classes}
+In C\#, a class is a blueprint or a template for creating objects of a particular type. Classes encapsulate data and behavior into a single unit, making it easier to manage and maintain code.
 
+To define a class in C\#, you use the \csin{class} keyword followed by the name of the class. Here is an example:
 
+\begin{minted}{csharp}
+    public class Person {
+        // class members go here
+    }
+\end{minted}
+
+In this example, we've defined a class called \csin{Person}. The \csin{public} keyword indicates that the class is accessible from other parts of the program.\\
+
+Within a class, you can define members such as fields, properties, methods, and events. These members define the data and behavior that are associated with the class. Here's an example of a class with some members:
+
+\inputminted{csharp}{./code/classes.cs}
+
+In this example, we've defined the Person class with two fields (\csin{_name} and \csin{_age}), two properties (\csin{Name} and \csin{Age}), and one method (\csin{SayHello}).\\
+
+Fields are variables that hold data associated with the class. Properties provide a way to access and modify the values of fields. Methods define behavior associated with the class.\\
+Once you've defined a class, you can create objects of that class using the \csin{new} keyword:
+\begin{minted}{csharp}
+    Person person = new Person();
+\end{minted}
+
+This creates a new instance of the \csin{Person} class and assigns it to the \csin{person} variable. You can then access the members of the class using the dot notation:
+
+\begin{minted}{csharp}
+    person.Name = "Alice";
+    person.Age = 30;
+    person.SayHello();
+\end{minted}
+
+This sets the \csin{Name} and \csin{Age} properties of the \csin{person} object and calls the \csin{SayHello} method, which outputs a message to the console.
+
+\subsection{Difference between a field and a property}
+
+In C\#, a field is a variable that holds data associated with a class or struct. A property, on the other hand, provides a way to access and modify the values of fields.\\
+
+The main difference between fields and properties is that fields are accessed directly using the dot notation, while properties are accessed using getter and/or setter methods.\\
+
+In the previous listing, the \csin{Person} class has a private field \csin{_name} and a public property \csin{Name}.\\
+
+To access the \csin{_name} field directly, you use dot notation, like this:
+
+\begin{minted}{csharp}
+    Person person = new Person();
+    person._name = "Alice"; // This is not allowed since _name is private
+\end{minted}
+
+In this example, we're trying to set the value of the \csin{_name} field directly, but since it's declared as private, we get a compilation error.\\
+
+To access the \csin{Name} property, you also use dot notation, but you use the getter and/or setter methods defined in the property:
+
+\begin{minted}{csharp}
+    Person person = new Person();
+    person.Name = "Alice"; // This calls the setter method of the Name property
+    string name = person.Name; // This calls the getter method of the Name property
+\end{minted}
+
+In this example, we're using the \csin{Name} property to set and get the value of the \csin{_name} field. When we set the value of the \csin{Name} property, it calls the setter method that assigns the value to the \csin{_name} field. When we get the value of the \csin{Name} property, it calls the getter method that returns the value of the \csin{_name} field.\\
+
+In summary, fields and properties are both used to store and retrieve data, but properties provide a level of abstraction that allows you to control how the data is accessed and modified.
+
+\subsection{Constructors}
+
+In C\#, a constructor is a special method that is used to initialize an object when it is created. It has the same name as the class and does not have a return type, and it can be overloaded with different parameter lists to provide different ways of creating objects.\\
+
+When an object is created using the \csin{new} keyword, the constructor is called automatically, and any initialization code that is included in the constructor is executed. This can include setting default values for fields, allocating memory for objects, or initializing any required resources.\\
+
+Going back to out previous example:
+\begin{minted}{csharp}
+    public class Person {
+        public string Name { get; set; }
+        public int Age { get; set; }
+
+        public Person(string name, int age) {
+            Name = name;
+            Age = age;
+        }
+    }
+\end{minted}
+
+In this case, the constructor takes two parameters and assigns them to the \csin{Name} and \csin{Age} properties of the object. We can now create objects of this class using the constructor:
+
+\begin{minted}{csharp}
+    Person p1 = new Person("Alice", 30);
+    Person p2 = new Person("Bob", 25);
+\end{minted}
+
+In addition to providing initialization code, constructors can also be used to enforce business rules or perform validation on input parameters. For example, we could modify the constructor of the \csin{Person} class to ensure that the age parameter is greater than zero:
+
+\begin{minted}{csharp}
+    public Person(string name, int age) {
+        Name = name;
+        if (age <= 0)
+            throw new ArgumentException("Age must be greater than zero"); // Simply throws an error
+        Age = age;
+    }
+\end{minted}
+
+Now, if we try to create a person with an age less than or equal to zero, an exception will be thrown:
+
+\begin{minted}{csharp}
+    Person p3 = new Person("Charlie", 0); // throws ArgumentException
+\end{minted}
+
+\subsubsection{Inheretence}
+Inheritance is a concept in object-oriented programming that allows a class to inherit properties and methods from a parent or base class. In C\#, a class can inherit from another class using the "extends" keyword.\\
+
+The parent class is also called a base class or superclass, while the child class is also called a derived class or subclass. The derived class inherits all the properties and methods of the base class and can add its own properties and methods or override those inherited from the base class.\\
+
+For example, consider a base class called \csin{Animal} that has a property called \csin{Name}:
+
+\begin{minted}{csharp}
+    public class Animal {
+        public string Name { get; set; }
+    }
+\end{minted}
+
+We can now create a derived class called \csin{Dog} that inherits from the \csin{Animal} class and adds its own property called \csin{Breed}:
+\begin{minted}{csharp}
+    public class Dog : Animal {
+        public string Breed { get; set; }
+    }
+\end{minted}
+
+In this case, the \csin{Dog} class inherits the \csin{Name} property from the \csin{Animal} class and adds its own \csin{Breed} property. We can now create objects of the \csin{Dog} class and set the \csin{Name} and \csin{Breed} properties:
+\begin{minted}{csharp}
+    Dog dog = new Dog();
+    dog.Name = "Fido";
+    dog.Breed = "Labrador";
+\end{minted}
+
+In addition to inheriting properties, a derived class can also inherit methods from the base class. For example, consider a base class called \csin{Shape} that has a method called Area:
+\begin{minted}{csharp}
+    public class Shape {
+        public double Area() {
+            return 0;
+        }
+    }
+\end{minted}
+
+We can now create a derived class called \csin{Rectangle} that overrides the \csin{Area} method to calculate the area of a rectangle:
+
+\begin{minted}{csharp}
+    public class Rectangle : Shape {
+        public double Width { get; set; }
+        public double Height { get; set; }
+
+        public override double Area() {
+            return Width * Height;
+        }
+    }
+\end{minted}
+
+In this case, the \csin{Rectangle} class inherits the \csin{Area} method from the \csin{Shape} class and overrides it with its own implementation. We can now create objects of the \csin{Rectangle} class and call the \csin{Area} method:
+
+\begin{minted}{csharp}
+    Rectangle rect = new Rectangle();
+    rect.Width = 5;
+    rect.Height = 10;
+    double area = rect.Area(); // area = 50
+\end{minted}
 
 \end{document}
