@@ -108,4 +108,341 @@ Some notable tensors are:
 	      \end{align*}
 \end{enumerate}
 
+The identity tensor is the tensor whose components $I_{ij} = \delta_{ij}$
+\[
+	I = \begin{bmatrix}
+		1 & 0 & 0 \\
+		0 & 1 & 0 \\
+		0 & 0 & 1
+	\end{bmatrix}
+	.\]
+
+The scalar invariants of a tensor
+\begin{enumerate}
+	\ii $I_1 = \tr(A) = A_{ii} = A_{11} + A_{22} + A_{33}$
+	\ii $I_2 = \frac{1}{2} \lt[\tr(A)^2 - tr(A^2)\rt] = \frac{1}{2} \lt(A_{ii}A_{jj} - A_{ij}A_{ji}\rt)$
+	\ii $I_3 = \det(A) = \varepsilon_{iij}T_{i1}T_{j2}T_{k3}$
+\end{enumerate}
+
+The characteristic polynomial of a tensor $\det(A-\lambda I)$ can be expressed as
+\[
+	\det(A-\lambda I) = -\lambda^3 + I_1 \lambda^2 - I_2 \lambda + I_3
+	.\]
+
+\dfn{Tensor Product}{
+	We define the tensor product between 2 tensors $X$ and $Y$ of order 3 to be
+	\[
+		(X\otimes Y)_{ij} = X_iY_j
+		.\]
+	and with a tensor of order 2 $T$
+	\[
+		(T\otimes X)_{ij} = T_{ij}X_k
+		.\]
+
+}
+
+\ex{Tensor Product}{
+	\begin{align*}
+		\begin{bmatrix}
+			1 & \alpha \\\alpha^* & 1
+		\end{bmatrix}
+		\otimes
+		\begin{bmatrix}
+			1 & \beta \\\beta^* & 1
+		\end{bmatrix} & =
+		\begin{bmatrix}
+			1
+			\begin{bmatrix}
+				1 & \beta \\\beta^* & 1
+			\end{bmatrix}
+			 &
+			\alpha
+			\begin{bmatrix}
+				1 & \beta \\\beta^* & 1
+			\end{bmatrix}
+			\\
+			\alpha^*
+			\begin{bmatrix}
+				1 & \beta \\\beta^* & 1
+			\end{bmatrix}
+			 &
+			1 \begin{bmatrix}
+				1 & \beta \\\beta^* & 1
+			\end{bmatrix}
+		\end{bmatrix}
+		\\
+		                           & =
+		\begin{bmatrix}
+			1               & \beta         & \alpha        & \alpha\beta \\
+			\beta^*         & 1             & \alpha\beta^* & \alpha      \\
+			\alpha^*        & \alpha^*\beta & 1             & \beta       \\
+			\alpha^*\beta^* & \alpha^*      & \beta^*       & 1           \\
+		\end{bmatrix}
+	\end{align*}
+}
+
+\url{https://www.math3ma.com/blog/the-tensor-product-demystified}
+
+\nt{
+	The order of a tensor product $X\otimes Y$ is the sum of the orders of $X$ and $Y$.
+}
+\dfn{Contraction}{
+	We define the tensor product between 2 tensors $X$ and $Y$ to be
+	\[
+		X\cdot Y = X_iY_j
+		.\]
+}
+
+\nt{
+	From what I understand, a tensor product is the outer product and a contraction is an inner product
+	\begin{align*}
+		X\otimes Y & = X \times Y^T \\
+		X\cdot Y   & = X^T \times Y
+	\end{align*}
+}
+
+\section{Tensor Calculus}
+
+\dfn{Gradient operator}{
+	The gradient operator on a scalar tensor is defined to be
+	\[
+		\nabla f = \pdv{f}{x_i}\vu{e}_i = \pdv{f}{x_1}\vu{e}_1 + \pdv{f}{x_2}\vu{e}_2 + \pdv{f}{x_3}\vu{e}_3
+		.\]
+	in cylindrical coordinates
+	\[
+		\nabla f = \pdv{f}{r}\vu{e}_r + \frac{1}{r}\pdv{f}{\theta}\vu{e}_\theta + \pdv{f}{z}\vu{e}_z
+		.\]
+}
+
+\dfn{Gradient of a vector}{
+	The gradient of a vector tensor is
+	\[
+		\nabla \va{a} = \begin{bmatrix}
+			\pdv{a_1}{x_1} & \pdv{a_1}{x_2} & \pdv{a_1}{x_3} \\
+			\pdv{a_2}{x_1} & \pdv{a_2}{x_2} & \pdv{a_2}{x_3} \\
+			\pdv{a_3}{x_1} & \pdv{a_3}{x_2} & \pdv{a_3}{x_3}
+		\end{bmatrix}
+		.\]
+	in cylindrical coordinates
+	\[
+		\nabla \va{a} = \begin{bmatrix}
+			\pdv{a_r}{r}      & \frac{1}{r}\lt(\pdv{a_r}{\theta}-a_\theta\rt) & \pdv{a_r}{z}      \\
+			\pdv{a_\theta}{r} & \frac{1}{r}\lt(\pdv{a_\theta}{\theta}+a_r\rt) & \pdv{a_\theta}{z} \\
+			\pdv{a_z}{r}      & \frac{1}{r}\pdv{a_z}{\theta}                  & \pdv{a_z}{z}
+		\end{bmatrix}
+		.\]
+}
+\nt{
+	The order of a gradient tensor is 1 order higher than the tensor it operates on.
+}
+
+\dfn{Divergence}{
+	The divergence is defined to be
+	\[
+		\nabla\cdot \va{a} = \tr(\nabla \va{a})
+		.\]
+	unlike the gradient, it reduces the order of the tensor.
+}
+\dfn{Laplacian}{
+	The Laplacian is is the composition of a divergence and a gradient. It keeps the same order of the tensor
+	\[
+		\Delta f = \nabla\cdot(\nabla f) =\pdv[2]{f}{x_1} + \pdv[2]{f}{x_2} + \pdv[2]{f}{x_3}
+		.\]
+}
+
+\dfn{Rotation}{
+	Rotation mostly applies to vector tensors and retains the same order as it
+	\[
+		(\nabla\times \va{a})_i = \varepsilon_{ijk}\pdv{a_k}{x_j}
+		.\]
+	\[
+		\nabla \times \va{a} =
+		\lt(\pdv{a_3}{x_2} - \pdv{a_2}{x_3}\rt)\vu{e}_1 +
+		\lt(\pdv{a_1}{x_3} - \pdv{a_3}{x_1}\rt)\vu{e}_2 +
+		\lt(\pdv{a_2}{x_1} - \pdv{a_1}{x_2}\rt)\vu{e}_3
+		.\]
+	in cylindrical coordinates
+	\[
+		\nabla \times \va{a} =
+		\lt(\frac{1}{r}\pdv{a_z}{\theta} - \pdv{a_\theta}{z}\rt)\vu{e}_r +
+		\lt(\pdv{a_r}{r} - \pdv{a_z}{x_r}\rt)\vu{e}_\theta +
+		\lt(\pdv{a_\theta}{r} - \frac{1}{r}\pdv{a_r}{\theta}+\frac{a_\theta}{r}\rt)\vu{e}_z
+		.\]
+}
+
+\nt{
+	\begin{align*}
+		\nabla\times (\nabla \va{a})      & =0                          \\
+		\nabla \cdot(\nabla\times \va{a}) & =0                          \\
+		\nabla (ab)                       & = a(\nabla b) + b(\nabla a)
+	\end{align*}
+}
+
+\thm{Ostrogradsky's theorem}{
+	Denote $\iiint_D \dots\dd{V}$ as a volume integral and $\iint_S \dots\vu{n}\dd{S}$ as a surface integral.
+	\begin{align*}
+		\iiint_D \nabla f \dd{V}           & = \iint_S f\vu{n}\dd{S}      \\
+		\iiint_D \nabla\cdot \va{U} \dd{V} & = \iint_S \va{U}\vu{n}\dd{S} \\
+		\iiint_D \nabla \cdot T \dd{V}     & = \iint_S T\vu{n}\dd{S}      \\
+	\end{align*} % TODO make all 2nd order tensors \vb{}
+}
+
+\chapter{Deformation}
+
+We consider a body under some deformation, at time $t=0$, a point $P$ on that body can be described as
+\[
+	\va{X} = X_k\vu{e}_k
+	.\]
+
+after some time $t$ the object has deformed and the position of the point $P$ is now $\va{x}$. The relation between it's initial position and it's new position is
+\[
+	\va{x} = \va*{\Phi}(\va{X},t)
+	.\]
+where $\va*{\Phi}$ is a bijective transformation($\forall \va*{\Phi}, \exists \va*{\Phi}^{-1}$). The vector $\va{x}$ is a function of the initial position and time.
+
+The displacement vector is
+\[
+	\va{u}\lt(\va{X},t\rt) = \va{x}-\va{X}
+	.\]
+velocity vector
+\[
+	\va{v}\lt(\va{X},t\rt) = \pdv{\va{x}}{t}
+	.\]
+and acceleration vector
+\[
+	\va{a} = \pdv{\va{v}}{t}
+	.\]
+
+We consider a point $P$ on a body and 2 points on the same body $Q_1$ and $Q_2$ described with respect to the point $P$. The differentials of $Q_1$ and $Q_2$ are
+\begin{align*}
+	\dd{\va{X}_1} & = \va{X}_{Q_1} - \va{X}_P \\
+	\dd{\va{X}_2} & = \va{X}_{Q_2} - \va{X}_P
+\end{align*}
+and after the deformation
+\begin{align*}
+	\dd{\va{x}_1} & = \va*{\Phi}\lt(\va{X}_P+\dd{\va{X}_1},t\rt) - \va*{\Phi}\lt(\va{X}_P,t\rt) \\
+	\dd{\va{x}_2} & = \va*{\Phi}\lt(\va{X}_P+\dd{\va{X}_2},t\rt) - \va*{\Phi}\lt(\va{X}_P,t\rt) \\
+\end{align*}
+
+we define a differential tensor of the transformation
+\[
+	\vb{F}\lt(\va{X},t\rt) = \pdv{\va*{\Phi}}{\va{X}}
+	.\]
+
+aka the Jacobian matrix
+\[
+	\vb{F} = \begin{bmatrix}
+		\pdv{x_1}{X_1} & \pdv{x_1}{X_2} & \pdv{x_1}{X_3} \\
+		\pdv{x_2}{X_1} & \pdv{x_2}{X_2} & \pdv{x_2}{X_3} \\
+		\pdv{x_3}{X_1} & \pdv{x_3}{X_2} & \pdv{x_3}{X_3}
+	\end{bmatrix}
+	.\]
+
+The differential can be written as
+\begin{align*}
+	\dd{\va{x}_1} & =\vb{F}\lt(\va{X}_P,t\rt)\cdot\dd{\va{X}_1} \\
+	\dd{\va{x}_2} & =\vb{F}\lt(\va{X}_P,t\rt)\cdot\dd{\va{X}_2} \\
+\end{align*}
+
+The Jacobian is also useful for a change of reference when integrating
+\[
+	\int_v a(\va{x})\dd{v} = \int_V a\lt(\va{x}\lt(\va{X},t\rt)\rt)\det(\vb{F})\dd{V}
+	.\]
+
+The relation between vectors before and after deformation
+\[
+	\dd{\va{x}_1}\cdot\dd{\va{x}_2} = \dd{\va{X}_1}\cdot\vb{C}\cdot\dd{\va{X}_2}
+	.\]
+where $\vb{C}$ is the Cauchy–Green deformation tensor
+\[
+	\vb{C} = \vb{F}^T \cdot \vb{F}
+	.\]
+
+The elongation after deformation in a given direction
+\[
+	\delta(\dd{\va{X}})=\dv{\va{x}}{\va{X}}-1 = \dv{\sqrt{\dd{\va{X}}\cdot\vb{C}\cdot\dd{\va{X}}}}{\va{X}} - 1
+	.\]
+
+We define
+\[
+	\lambda = \dv{\sqrt{\dd{\va{X}}\cdot\vb{C}\cdot\dd{\va{X}}}}{\va{X}} = \delta + 1
+	.\]
+
+\[
+	\delta \begin{cases}
+		>0 & \text{elongation in the direction of }\dd{\va{x}}  \\
+		<0 & \text{contraction in the direction of }\dd{\va{x}}
+	\end{cases}
+	.\]
+
+Consider 2 orthogonal vectors, $X_1$ and $X_2$. The new angle formed $\alpha = \frac{\pi}{2}-\gamma$ is calculated using the formula
+\[
+	\sin(\gamma) = \frac{\dd{\va{X}}_1\cdot\vb{C}\cdot\dd{\va{X}_2}}{\sqrt{\dd{\va{X}}_1\cdot\vb{C}\cdot\dd{\va{X}_1}}\cdot\sqrt{\dd{\va{X}}_2\cdot\vb{C}\cdot\dd{\va{X}_2}}}
+	.\]
+
+We define the Green-Lagrangian strain tensor to be
+\[
+	\vb{E}=\frac{1}{2}(\vb{C}-\vb{I}) = \frac{1}{2}(\vb{F}^T\vb{F}-\vb{I})
+	.\]
+
+The diagonal elements of $\vb{E}$ represent scaling of basis vectors of the body, while non-diagonal elements represent the change in angle (rotation).\\
+
+We define $\dd{L}$ to the magnitude of $\dd{\va{X}}$ and $\vu{N}$ to be its direction vector.
+\[
+	\dd{\va{X}} = \dd{L}\vu{N}
+	.\]
+similarly for $\dd{\va{x}}$
+\[
+	\dd{\va{x}} = \dd{l}\vu{n}
+	.\]
+
+it follows that
+\[
+	\frac{1}{2}\lt(\frac{\dd{l}^2-\dd{L}^2}{\dd{L}^2}\rt) = \vu{N}\cdot\vb{E}\cdot\vu{N}
+	.\]
+
+and the angle between the 2 transformed vectors becomes $\alpha = \frac{\pi}{2}-\gamma$
+\[
+	\frac{1}{2}\sin(\gamma)\dv{l_1}{L_1}\dv{l_2}{L_2}=\vu{N}_1\cdot \vb{C}\cdot\vu{N}_2
+	.\]
+
+We can decompose the gradient tensor $\vb{F}$ in to 2 other tensors where $\vb{R}$ is an orthogonal matrix ($\vb{R}^T = \vb{R}^{-1}$) and $\vb{U}$ is a symmetric matrix
+\[
+	\vb{F}=\vb{R}\cdot\vb{U}
+	.\]
+
+\[
+	\vb{C} = \vb{U}\cdot\vb{U}
+	.\]
+and
+\[
+	\vb{E} = \frac{1}{2}(\vb{U}^2-\vb{I})
+	.\]
+
+in a small displacement
+\[
+	\vb{E} = \frac{1}{2}\lt(\pdv{\va{u}}{\va{X}} + \lt(\pdv{\va{u}}{\va{X}}\rt)^T + \lt(\pdv{\va{u}}{\va{X}}\rt)^T\cdot \pdv{\va{u}}{\va{X}}\rt)
+	.\]
+
+We can ignore the quadratic terms to obtain the strain tensor for small displacement $\vb*{\varepsilon}$
+\[
+	\vb*{\varepsilon} \approx \frac{1}{2}\lt(\pdv{\va{u}}{\va{X}} + \lt(\pdv{\va{u}}{\va{X}}\rt)^T\rt)
+	.\]
+\[
+	\varepsilon_{ij} = \frac{1}{2}\lt(\pdv{u_i}{X_j} + \pdv{u_j}{X_i}\rt)
+	.\]
+Using the above definition we can explicitly define the matrix
+\[
+	\vb{\varepsilon} = \begin{bmatrix}
+		\pdv{u_1}{X_1}                                     & \frac{1}{2}\lt(\pdv{u_1}{X_2} + \pdv{u_2}{X_1}\rt) & \frac{1}{2}\lt(\pdv{u_1}{X_3} + \pdv{u_3}{X_1}\rt) \\
+		\frac{1}{2}\lt(\pdv{u_1}{X_2} + \pdv{u_2}{X_1}\rt) & \pdv{u_2}{X_2}                                     & \frac{1}{2}\lt(\pdv{u_2}{X_3} + \pdv{u_3}{X_2}\rt) \\
+		\frac{1}{2}\lt(\pdv{u_1}{X_3} + \pdv{u_3}{X_1}\rt) & \frac{1}{2}\lt(\pdv{u_2}{X_3} + \pdv{u_3}{X_2}\rt) & \pdv{u_3}{X_3}
+	\end{bmatrix}
+	.\]
+
+We can also prove that $\gamma$ between the 2 base vectors $\vu{e}_1$ and $\vu{e}_2$ is
+\[
+	\frac{\gamma}{2} = \varepsilon_{12}
+	.\]
+
 \end{document}
