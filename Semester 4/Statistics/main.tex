@@ -246,4 +246,286 @@ is said to be following a student law. $T\sim\mathcal{T}_n$
 	.\]
 }
 
+\chapter{Estimators}
+
+Let $\theta$ be a certain characteristic of a population $P$ of $N$ individuals, for exmaple letting $\theta$ be the expectation of a certain random variable $X$ defined over the population. We take a sample of size $n<N$ of the population to estimate the value of $\theta$.\\
+
+Let $Y_n$ be a function of the random variables $X_1,X_2,\dots,X_n$. $Y_n$ is called an estimator of $\theta$ if
+\[
+	\lim_{n\to+\infty}\EE(Y_n)=\theta
+	.\]
+
+a consistent estimator if
+\[
+	\lim_{n\to+\infty}\Var{Y_n}=0
+	.\]
+and an unbiased estimator if
+\[
+	\EE(Y_n)=\theta\quad\forall n\in\NN^*
+	.\]
+the value $y_n$ of $Y_n$ computed from any observed sample is called point estimation of $\theta$
+
+\section{Point estimation of the mean}
+Let $X$ be a random variable defined over the population $P$ of the expected value $\mu$ and standard deviation $\sigma$. Consider a sample $(X_1,X_2,\dots,X_n)$ of size $n$, randomly selected from $P$ such that $X_i$ are independent and follow the same law.\\
+
+Consider the statistic $\bar{X}_n = \frac{X_1+X_2+\dots+X_n}{n}$, it is a random variable whose distribution is called the sample distribution of the mean.
+\begin{align*}
+	\EE(\bar{X}_n)  & = \mu                \\
+	\Var{\bar{X}_n} & = \frac{\sigma^2}{n}
+\end{align*}
+
+Since $\Var{\bar{X}_n}\xrightarrow[n\to+\infty]{}0$ then $\bar{X}_n$ is a consistent unbiased estimator of the mean $\mu$.
+\nt{
+	The standard deviation of $\bar{X}_n$ is called standard error of the mean
+	\[
+		\sigma(\bar{X}_n)=\frac{\sigma}{\sqrt{n}}
+		.\]
+}
+
+Due to the central limit theorem, as the sample size gets larger and larger $\bar{X}_n$ approaches a normal distribution $\bar{X}_n\sim\mathcal{N}\lt(\mu,\frac{\sigma}{\sqrt{n}}\rt)$.
+
+\section{Point estimator of the variance}
+
+\subsection{Suppose $\mu$ is unknown}
+
+Consider the random variable $S^2$ (estimator of $\sigma^2$)
+\[
+	S^2 = \frac{1}{n}\sum_{i=1}^n \lt(X_i-\bar{X}_n\rt)^2
+	.\]
+
+The expectation of $S^2$ can be proved to be
+\[
+	\EE(S^2)=\frac{n-1}{n}\sigma^2
+	.\]
+Since $\EE(S^2)\xrightarrow[n\to+\infty]{}\sigma^2$ then $S^2$ is a biased estimator of $\sigma^2$.\\
+
+Consider the random variable $S'^2$
+\[
+	S'^2 = \frac{n}{n-1}S^2 = \frac{1}{n-1}\sum_{i=1}^n \lt(X_i-\bar{X}_n\rt)^2
+	.\]
+Since $\EE(S'^2)=\sigma^2$ then $S'^2$ is an unbiased estimator of $\sigma^2$.\\
+
+Hence $\sigma$ can be estimated by
+\[
+	S' = \sqrt{\frac{n}{n-1}}S
+	.\]
+and
+\[
+	\sigma(\bar{X}_n) = \frac{S}{\sqrt{n-1}}
+	.\]
+where
+\begin{description}
+	\ii[$\sigma^2$] variance of the population.
+	\ii[$S^2$] variance of the sample.
+	\ii[$\sigma^2(\bar{X}_n)$] variance of the distribution of the sample mean.
+	\ii[$S'^2$] corrected variance of the sample.
+\end{description}
+\nt{
+	It is better to estimate $\sigma^2$ using $S'^2$ than $S^2$ since $S^2$ is a biased estimator. However, if $n$ (sample size) is big enough $\lt(\frac{n}{n-1}\approx1\rt)$, then $\sigma^2$ can be estimated by $S^2$
+}
+\subsection{Suppose $\mu$ is known}
+Consider the random variable $Z^2$ (not the variance of the sample)
+\[
+	Z^2=\frac{1}{n}\sum_{i=1}^n\lt(X_i-\mu\rt)^2
+	.\]
+
+Since $\EE(Z^2)=\sigma^2$ then $Z^2$ is an unbiased estimator of $\sigma^2$ thus the value $z^2 = \frac{1}{n}\sum_{i=1}^n(x_i-\mu)^2$ is a point estimation of the variance $\sigma^2$ of the population.
+
+\nt{
+	If $n>0.05N$ and if the sample is selected without replacement then the value of the variance changes to become
+	\[
+		\Var{\bar{X}_n}=\lt(\frac{N-n}{N-1}\rt)\frac{\sigma^2}{n}
+		.\]
+	and the standard error becomes
+	\[
+		\sigma(\bar{X}_n)=\frac{\sigma}{\sqrt{n}}\sqrt{\frac{N-n}{N-1}}
+		.\]
+	If the variance of the population is not known then we can use use $S^2$ or $Z^2$ to estimate $\Var{\bar{X}_n}$
+	\[
+		\Var{\bar{X}_n}=\lt(\frac{N-n}{N-1}\rt)\frac{S^2}{n-1}
+		.\]
+	and the standard error with
+	\[
+		\sigma(\bar{X}_n)=\frac{S}{\sqrt{n-1}}\sqrt{\frac{N-n}{N-1}}
+		.\]
+}
+
+\section{Point estimation of a proportion (percentage)}
+
+Consider a population $P$ of individuals with a proportion $p$ if individuals having a certain characteristic $\theta$. Let $(a_1,a_2,\dots,a_n)$ be a sample randomly selected $P$. We define for each individual $a_i$ the Bernoulli random variable $X_i$ as follows
+\[
+	\begin{cases}
+		X_i=1 & \text{if } a_i \text{ has the characteristic }\theta \text{ with probability }p \\
+		X_i=0 & \text{else}
+	\end{cases}
+	.\]
+
+Let $Y_n=\frac{X_1+X_2+\dots+X_n}{n}=\frac{1}{n}\sum_{i=1}^nX_i$. $Y_n$ is the random variable giving the proportion of individuals of the sample that have the characteristic $\theta$.
+\begin{align*}
+	\Pr{X_i=1} & =\frac{\text{number of individuals of the population having }\theta}{\text{total number of individuals}} = p \\
+	\Pr{X_i=0} & =1-p
+\end{align*}
+
+Thus $X_1+X_2+\dots+X_n\sim\mathrm{Bin}(n,p)$
+\begin{align*}
+	\EE(X_1+X_2+\dots+X_n)  & = np      \\
+	\Var{X_1+X_2+\dots+X_n} & = np(1-p)
+\end{align*}
+\begin{align*}
+	\EE(Y_n)  & = p                \\
+	\Var{Y_n} & = \frac{p(1-p)}{n}
+\end{align*}
+
+Hence $Y_n$ is a consistent unbiased estimator of $p$. Therefore any observed value $y_n$ of $Y_n$ is a point estimator of $P$, meaning $p$ is estimated by the proportion of the sample.
+
+\section{Confidence interval}
+
+\subsection{Confidence interval for the mean}
+
+\begin{enumerate}
+
+	\ii \textbf{Suppose that $n\geq30$, the population is normally distributed, and $\sigma$ is known}\\
+	Let $X$ be a random variable defined over a population $P$ of mean $\EE(X)=\mu$ and of variance $\Var{X}=\sigma^2$.
+
+	Here we consider that $\bar{X}_n\sim\mathcal{N}\lt(\mu,\frac{\sigma}{\sqrt{n}}\rt)$. Hence $\frac{\bar{X}_n-\mu}{\sigma_{\bar{X}_n}}\sim\mathcal{N}(0,1)$.
+
+	Given the probability $\gamma$ (level of confidence), we can find $t$ such that
+	\begin{align*}
+		\Pr{-t\leq\frac{\bar{X}_n-\mu}{\sigma_{\bar{X}_n}}\leq t}                   & =\gamma \\
+		\Pr{\bar{X}_n-t\sigma_{\bar{X}_n}\leq\mu\leq \bar{X}_n+t\sigma_{\bar{X}_n}} & =\gamma
+	\end{align*}
+	where $\pi(t)=\frac{\gamma}{2}$. Knowing $\gamma$ we get $t$. Therefore a $\gamma\%$ confidence interval for the mean $\mu$ is given by
+	\[
+		\mathrm{IC}_\gamma(\mu)=[\bar{x}_n-t\sigma_{\bar{X}_n},\bar{x}_n+t\sigma_{\bar{X}_n}]
+		.\]
+
+	where
+	\[
+		\sigma_{\bar{X}_n} = \begin{cases}
+			\frac{\sigma}{\sqrt{n}} & \text{if }\sigma\text{ is known}                                           \\
+			\frac{S}{\sqrt{n-1}}    & \text{if }\sigma\text{ is unknown (estimated by }S'=\sqrt{\frac{n}{n-1}}S) \\
+		\end{cases}
+		.\]
+	\ii \textbf{Suppose that $n<30$, the population is normally distributed, and $\sigma$ is unknown}:\\
+
+	Using the table of student distributed knowing $\gamma$, we determine $t$ such that
+	\[
+		\Pr{\bar{X}_n-t\frac{S}{\sqrt{n-1}}\leq \mu\leq \bar{X}_n+t\frac{S}{\sqrt{n-1}}} = \gamma
+		.\]
+
+	hence the confidence inteval for the mean $\mu$ is
+	\[
+		\mathrm{IC}_\gamma(\mu) = \lt[\bar{X}_n-t\frac{S}{\sqrt{n-1}},\bar{X}_n+t\frac{S}{\sqrt{n-1}}\rt]
+		.\]
+
+	\thm{}{
+		\begin{enumerate}
+			\ii $\bar{X}_n$ and $S^2$ are two independent random variance.
+			\ii The random variable $n\frac{S^2}{\sigma^2}$ follows a chi-square law with $n-1$ degrees of freedom.
+		\end{enumerate}
+	}
+
+	\thm{}{
+		The random variable
+		\[
+			\tilde{T} = \frac{\bar{X}_n-\mu}{\frac{S'}{\sqrt{n}}} = \frac{\bar{X}_n-\mu}{\frac{S}{\sqrt{n-1}}}
+			.\]
+		follows a student law (t-distribution) with $n-1$ degrees of freedom
+	}
+	\ii \textbf{Suppose that $n<30$, the population is not normally distributed}:\\
+	In this case we cannot use the normal distributed nor the student distribution. However we can use Chebyshev's inequality.
+	\[
+		\Pr{|\bar{X}_n-\mu|\leq\varepsilon}\geq 1 -\frac{\sigma_{\bar{X}_n}^2}{\varepsilon^2}
+		.\]
+	Take $\varepsilon=t\sigma_{\bar{X}_n}$
+	\[
+		\Pr{\bar{X}_n-t\sigma_{\bar{X}_n} \leq \mu \leq \bar{X}_n+t\sigma_{\bar{X}_n}} \geq 1-\frac{1}{t^2}
+		.\]
+	Then we set $1-\frac{1}{t^2}$ equal to $\gamma$ solve for $t$ and find the interval as follows
+	\[
+		\mathrm{IC}_\gamma = [\bar{x}_n-t\sigma_{\bar{X}_n},\bar{x}_n+t\sigma_{\bar{X}_n}]
+		.\]
+	\nt{
+		\begin{itemize}
+			\ii if $\sigma$ is known then $\sigma_{\bar{X}_n}=\frac{\sigma}{\sqrt{n}}$
+			\ii if $\sigma$ is unknown then we replace $\sigma_{\bar{X}_n}$ by its point estimator $\frac{S'}{\sqrt{n}}=\frac{S}{\sqrt{n-1}}$
+		\end{itemize}
+	}
+\end{enumerate}
+
+\subsection{Confidence interval for a proportion (precentage)}
+
+same setup as last time. If we assume this time that $\mathrm{Bin}(n,p)\approx \mathcal{N}\lt(np,\sqrt{np(1-p)}\rt)$ if ($n\geq30,\;np,n(1-p)\geq5$) then we can say $Y_n\sim\mathcal{N}\lt(p,\sqrt{\frac{p(1-p)}{n}}\rt)$. Knowing $\gamma$ we can determine $t$ such that
+\[
+	\Pr{-t\leq \frac{Y_n-p}{\sigma_{Y_n}}\leq t}=\gamma
+	.\]
+The confidence interval becomes
+\[
+	[y_n-t\sigma_{Y_n}, y_n+t\sigma_{Y_n}]
+	.\]
+
+where $\sigma_{Y_n}=\sqrt{\frac{p(1-p)}{n}}$ estimated by
+\[
+	\sqrt{\frac{n}{n-1}}\sqrt{\frac{y_n(1-y_n)}{n}}=\sqrt{\frac{y_n(1-y_n)}{n-1}}
+	.\]
+
+Therefore the confidence interval becomes
+\[
+	\mathrm{IC}_\gamma(p)=\lt[y_n-t\sqrt{\frac{y_n(1-y_n)}{n-1}}, y_n+t\sqrt{\frac{y_n(1-y_n)}{n-1}}\rt]
+	.\]
+
+\nt{
+	If $n\geq 100$ then $\frac{n}{n-1}\approx 1$, then the confidence interval s
+	\[
+		[y_n-t\sqrt{\frac{y_n(1-y_n)}{n}},y_n+t\sqrt{\frac{y_n(1-y_n)}{n}}]
+		.\]
+}
+\nt{
+	If the sample is selected without replace and if $n>0.05N$ then we shall put a correcting factor $\frac{N-n}{N-1}$ to $\sigma_{Y_n}=\sqrt{\frac{p(1-p)}{n}}$, thus the confidence interval for proportion $p$ becomes
+	\[
+		\lt[ y_n-t\sqrt{\frac{N-n}{N-1}}\sqrt{\frac{y_n(1-y_n)}{n-1}}, y_n +t\sqrt{\frac{N-n}{N-1}}\sqrt{\frac{y_n(1-y_n)}{n-1}} \rt]
+		.\]
+}
+\subsection{Confidence interval for the variance}
+Assume $X\sim\mathcal{N}(\mu,\sigma)$ and $X_1,X_2,\dots,X_n$ $n$ independent random variables and identically distributed as $X$. We set the variables
+\begin{align*}
+	\bar{X}_n & = \frac{1}{n}\sum_{i=1}^nX_i                                          \\
+	S^2       & = \frac{1}{n}\sum_{i=1}^n\lt(X_i-\bar{X}_n\rt)^2                      \\
+	S'^2      & = \frac{n}{n-1}S^2 = \frac{1}{n-1}\sum_{i=1}^n\lt(X_i-\bar{X}_n\rt)^2 \\
+	Z^2       & =  \frac{1}{n}\sum_{i=1}^n\lt(X_i-\mu\rt)^2                           \\
+\end{align*}
+
+we have
+\begin{align*}
+	\bar{X}_n             & \sim\mathcal{N}\lt(\mu,\frac{\sigma}{\sqrt{n}}\rt) \\
+	n\frac{S^2}{\sigma^2} & \sim{\chi_{n-1}}^2                                 \\
+	n\frac{Z^2}{\sigma^2} & \sim{\chi_n}^2                                     \\
+\end{align*}
+
+\begin{enumerate}
+	\ii Suppose $\mu$ is unknown\\
+
+	Since $n\frac{S^2}{\sigma^2}\sim{\chi_{n-1}}^2$, then we determine the values $v_{\alpha/2}$ and $v_{1-\alpha/2}$ from the chi-square table such that
+	\[
+		\Pr{v_{\alpha/2}\leq \frac{nS^2}{\sigma^2}\leq v_{1-\alpha/2}} = \gamma=1-\alpha
+		.\]
+	therefore a confidence interval of level $\gamma$ (risk $\alpha$) is given by
+	\[
+		IC_\gamma(\sigma^2)=\lt[\frac{nS^2}{v_{1-\alpha/2}}, \frac{nS^2}{v_{\alpha/2}} \rt] = \lt[\frac{(n-1)S'^2}{v_{1-\alpha/2}}, \frac{(n-1)S'^2}{v_{\alpha/2}} \rt]
+		.\]
+
+	\ii Suppose $\mu$ is known\\
+
+	From the chi-square table, we determine the values of the quantities $v_{\alpha/2}$ and $v_{1-\alpha/2}$ for the law ${\chi_n}^2$ such that
+	\[
+		\Pr{v_{\alpha/2}\leq \frac{nZ^2}{\sigma^2}\leq v_{1-\alpha/2}}=\gamma
+		.\]
+
+	Therefore the confidence interval of level $\gamma$ is given by
+	\[
+		\mathrm{IC}_\gamma(\sigma^2)=\lt[\frac{nz^2}{v_{1-\alpha/2}},\frac{nz^2}{v_{\alpha/2}}\rt]
+		.\]
+
+\end{enumerate}
+
 \end{document}
