@@ -444,5 +444,88 @@ We can also prove that $\gamma$ between the 2 base vectors $\vu{e}_1$ and $\vu{e
 \[
 	\frac{\gamma}{2} = \varepsilon_{12}
 	.\]
+Plane strain in a displacement plane $\va{u}=(u,v)$ of a body that has a unit thickness $\dd{x}$ and $\dd{y}$. The Jacobian becomes
+\[
+	\vb{F} = \begin{bmatrix}
+		\pdv{u}{x} & \pdv{u}{y} & 0 \\
+		\pdv{v}{x} & \pdv{v}{y} & 0 \\
+		0          & 0          & 0
+	\end{bmatrix}
+	+ \begin{bmatrix}
+		1 & 0 & 0 \\
+		0 & 1 & 0 \\
+		0 & 0 & 1
+	\end{bmatrix}
+	.\]
+
+\begin{align*}
+	\dd{x'} & =\vb{F}\begin{bmatrix}
+		\dd{x} \\0
+	\end{bmatrix}=\begin{bmatrix}
+		\pdv{u}{x}\dd{x}+\dd{x} \\
+		\pdv{v}{x}\dd{x}
+	\end{bmatrix} \\
+	\dd{y'} & =\vb{F}\begin{bmatrix}
+		0 \\\dd{y}
+	\end{bmatrix}=\begin{bmatrix}
+		\pdv{u}{y}\dd{y} \\
+		\pdv{v}{y}\dd{y}+\dd{y}
+	\end{bmatrix}
+\end{align*}
+
+The strain tensor becomes
+\[
+	\vb{\varepsilon} = \begin{bmatrix}
+		\varepsilon_{xx}       & \frac{1}{2}\gamma_{xy} \\
+		\frac{1}{2}\gamma_{xy} & \varepsilon_{yy}
+	\end{bmatrix}
+	.\]
+
+where
+\begin{align*}
+	\varepsilon_{xx} & = \pdv{u}{x}              \\
+	\varepsilon_{yy} & = \pdv{v}{y}              \\
+	\gamma_{xy}      & = \pdv{u}{y} + \pdv{v}{x}
+\end{align*}
+
+We can scale it up to 3D ($\dd{x},\dd{y},\dd{z}$ and $\va{u}=(u,v,w)$)
+
+\begin{align*}
+	\varepsilon_{xx} & =\pdv{u}{x} & \gamma_{xy} & =\pdv{u}{y} + \pdv{v}{x} \\
+	\varepsilon_{yy} & =\pdv{v}{y} & \gamma_{yz} & =\pdv{w}{y} + \pdv{v}{z} \\
+	\varepsilon_{zz} & =\pdv{w}{z} & \gamma_{xz} & =\pdv{w}{x} + \pdv{u}{z} \\
+\end{align*}
+
+\[
+	\vb{\varepsilon} = \begin{bmatrix}
+		\varepsilon_{xx}       & \frac{1}{2}\gamma_{xy} & \frac{1}{2}\gamma_{xz} \\
+		\frac{1}{2}\gamma_{xy} & \varepsilon_{yy}       & \frac{1}{2}\gamma_{yz} \\
+		\frac{1}{2}\gamma_{xz} & \frac{1}{2}\gamma_{yz} & \varepsilon_{zz}
+	\end{bmatrix}
+	.\]
+
+Consider a small displacement, to study the change in volume we need to look at the Jacobian. To do that we define the tensor
+\[
+	\vb{H} = \pdv{\va{u}}{\va{X}}
+	.\]
+
+such that
+\[
+	\vb{F} = \vb{H} + \vb{I}
+	.\]
+
+The Jacobian becomes
+\[
+	J = \det\vb{F} = 1 + \tr\vb{H} = 1 + \tr\vb{\varepsilon}
+	.\]
+
+For a tensor to be considered a stress tensor it has to satisfy the 6 compatibility equations
+
+\begin{align*}
+	\pdv[2]{\varepsilon_{11}}{X_2} + \pdv[2]{\varepsilon_{22}}{X_1} & = 2\pdv{\varepsilon_{12}}{X_1}{X_2}                                                                                                       & \pdv{\varepsilon_{11}}{X_2}{X_3} + \pdv{}{X_1}\lt(\pdv{\varepsilon_{23}}{X_1}-\pdv{\varepsilon_{31}}{X_2}-\pdv{\varepsilon_{12}}{X_3}\rt) & =0 \\
+	\pdv[2]{\varepsilon_{22}}{X_2} + \pdv[2]{\varepsilon_{33}}{X_2} & = 2\pdv{\varepsilon_{23}}{X_2}{X_3}                                                                                                       & \pdv{\varepsilon_{22}}{X_3}{X_1} + \pdv{}{X_2}\lt(\pdv{\varepsilon_{31}}{X_2}-\pdv{\varepsilon_{12}}{X_3}-\pdv{\varepsilon_{23}}{X_1}\rt) & =0 \\
+	\pdv[2]{\varepsilon_{33}}{X_1} + \pdv[2]{\varepsilon_{11}}{X_3} & = 2\pdv{\varepsilon_{31}}{X_3}{X_1}
+	                                                                & \pdv{\varepsilon_{33}}{X_1}{X_2} + \pdv{}{X_3}\lt(\pdv{\varepsilon_{12}}{X_3}-\pdv{\varepsilon_{23}}{X_1}-\pdv{\varepsilon_{31}}{X_2}\rt) & =0
+\end{align*}
 
 \end{document}
