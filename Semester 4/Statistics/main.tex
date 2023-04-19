@@ -1,0 +1,249 @@
+\documentclass{report}
+
+\input{../template/preamble}
+\input{../template/macros}
+\input{../template/letterfonts}
+
+\title{\Huge{Statistics}\\Semester 4}
+\author{\huge{}}
+\date{}
+
+\begin{document}
+
+\maketitle
+\newpage% or \cleardoublepage
+% \pdfbookmark[<level>]{<title>}{<dest>}
+\pdfbookmark[section]{\contentsname}{toc}
+\tableofcontents
+\pagebreak
+
+\chapter{Revision of Probability}
+
+I'm simply gonna list rules.
+\begin{align*}
+	\EE(X)    & = \mu =\sum_{i\in\Omega}X_i\Pr{X_i}                            \\
+	\EE(g(X)) & = \sum_{i\in\Omega}g(X_i)\Pr{X_i}                              \\
+	\EE(aX+b) & = a\EE(X) + b                                                  \\
+	\EE(X+Y)  & = \EE(X) + \EE(Y)\quad\text{if both variables are independent}
+\end{align*}
+
+\begin{align*}
+	\Var{X}     & = \sigma^2 = \EE(X^2) - \mu^2          \\
+	\Var{aX+bY} & = a^2\Var{X} + b^2\Var{Y}+2ab\cov{X,Y}
+\end{align*}
+
+where
+\[
+	\cov{X,Y} = \EE(XY) - \EE(X)\cdot\EE(Y)
+	.\]
+
+\section{Discrete Distributions}
+
+\begin{enumerate}
+	\ii \textbf{Uniform discrete law}
+	\begin{align*}
+		 & X(\Omega)= \{1,2,3,\dots,n\}                        \\
+		 & \Pr{X=k} = \frac{1}{n}\quad\forall k =1,2,3,\dots,n \\
+		 & \begin{cases}
+			\EE(X) = \frac{n+1}{2} \\
+			\Var{X} = \frac{n^2-1}{12}
+		\end{cases}
+	\end{align*}
+	\ii \textbf{Bernoulli law of parameters $p$} $(0<p<1)$
+	\begin{align*}
+		 & X \sim \mathrm{B}(p)              \\
+		 & X(\Omega) = \{0,1\}               \\
+		 & \Pr{X=1} = p \quad \Pr{X=0} = 1-p \\
+		 & \begin{cases}
+			\EE(X) = p \\
+			\Var{X} = p(1-p)
+		\end{cases}
+	\end{align*}
+	\ii \textbf{Binomial law of parameters $n$ and $p$}
+	\begin{align*}
+		 & X \sim \mathrm{Bin}(n,p)                                      \\
+		 & X(\Omega) = \{1,2,\dots,n\}                                   \\
+		 & \Pr{X=1} = C^k_n p^kq^{n-k}\quad\forall k\in\{0,1,2,\dots,n\} \\
+		 & \begin{cases}
+			\EE(X) = np \\
+			\Var{X} = np(1-p)
+		\end{cases}
+	\end{align*}
+	\ii \textbf{Hypergeometric law}
+	\begin{align*}
+		 & X \sim \mathcal{H}(N,n,p)                                                     \\
+		 & X(\Omega) = [\max\{0,n-N+M\},\min\{M,n\}]                                     \\
+		 & \Pr{X=k} = \frac{C^k_M \cdot C^{n-k}_{N-M}}{C^n_N}\quad\forall k\in X(\Omega) \\
+		 & \begin{cases}
+			\EE(X) = np \\
+			\Var{X} = np(1-p)\lt(\frac{N-n}{N-1}\rt)
+		\end{cases}
+	\end{align*}
+	\ii \textbf{Geometric law}
+	\begin{align*}
+		 & X \sim \mathrm{G}(p)                          \\
+		 & X(\Omega) = \NN^*                             \\
+		 & \Pr{X=k} =p(1-p)^{k-1}\quad\forall k\in \NN^* \\
+		 & \begin{cases}
+			\EE(X) = \frac{1}{p} \\
+			\Var{X} = \frac{1-p}{p^2}
+		\end{cases}
+	\end{align*}
+	\ii \textbf{Poisson's law of parameter} $\lambda$ $(\lambda\in\RR_+^*)$
+	\begin{align*}
+		 & X \sim \mathcal{P}(\lambda)                                      \\
+		 & X(\Omega) = \NN                                                  \\
+		 & \Pr{X=k} = e^{-\lambda}\frac{\lambda^k}{k!}\quad\forall k\in \NN \\
+		 & \begin{cases}
+			\EE(X) = \lambda \\
+			\Var{X} = \lambda
+		\end{cases}
+	\end{align*}
+
+\end{enumerate}
+
+\section{Continuous Distributions}
+
+\begin{enumerate}
+	\ii \textbf{Uniform law}
+	\begin{align*}
+		 & f(x) = \begin{cases}
+			\frac{1}{b-a} & \text{if } x\in[a,b] \\
+			0             & \text{else}
+		\end{cases} \\
+		 & \begin{cases}
+			\EE(x) =  \frac{a+b}{2} \\
+			\Var{x} = \frac{(b-a)^2}{12}
+		\end{cases}
+	\end{align*}
+	\ii \textbf{Continuous law}
+	\begin{align*}
+		 & x \sim \xi(\lambda)               \\
+		 & f(x) = \begin{cases}
+			\lambda e^{-\lambda x} & \text{if } x>0 \\
+			0                      & \text{else}
+		\end{cases} \\
+		 & \begin{cases}
+			\EE(x) =  \frac{1}{\lambda} \\
+			\Var{x} = \frac{1}{\lambda^2}
+		\end{cases}
+	\end{align*}
+
+	\ii \textbf{Normal law}
+	\begin{align*}
+		 & x \sim \mathcal{N}(\mu,\sigma)                                     \\
+		 & f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}} \\
+		 & \begin{cases}
+			\EE(x) =  \mu \\
+			\Var{x} = \sigma^2
+		\end{cases}
+	\end{align*}
+	For $\mathcal{N}(0,1)$
+	\[
+		\Phi(z) = \int_{-\infty}^z\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}\dd{x}
+		.\]
+	\[
+		\pi(z) = \Phi(z) - 0.5 = \int_0^z\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}\dd{x}
+		.\]
+
+\end{enumerate}
+
+\section{Convergence}
+
+\thm{Chebyshev's inequality}{
+	Let $X$ be a random variable of expectation $\EE(X)$ and variance $\Var{X}$. Then $\forall \varepsilon$
+	\[
+		\Pr{\lt| X-\EE(X) \rt|\geq \varepsilon} \leq \frac{\Var{X}}{\varepsilon^2}
+		.\]
+	it can also be stated as
+	\[
+		\Pr{\lt| X-\EE(X) \rt|< \varepsilon} \geq 1-\frac{\Var{X}}{\varepsilon^2}
+		.\]
+}
+
+We say a sequence of random variables $X_n$ converges to $a$ $(X_n)\xrightarrow{\mathrm{Pr}}a$ if $\forall \varepsilon$
+\[
+	\lim_{n\to+\infty}\Pr{|X_n-a|>\varepsilon}=0
+	.\]
+or
+\[
+	\lim_{n\to+\infty}\Pr{|X_n-a|\leq\varepsilon}=1
+	.\]
+
+\thm{Weak law of large numbers}{
+	Consider a random variable $(X_n)$ of mean $\mu$ and variance $\sigma^2$. Consider the random variable $\tilde{X}_n = \frac{X_1+X_2+\cdots+X_n}{n}$. It can be shown that $\tilde{X}_n$ converges to $\mu$ meaning $\forall \varepsilon$
+	\[
+		\lim_{n\to+\infty}\Pr{|\tilde{X}_n-\mu|>\varepsilon}=0
+		.\]
+}
+
+\section{Approximations}
+\thm{Binomial by a Poisson}{
+	\[
+		\mathrm{Bin}(n,p)\sim\mathcal{P}(np)\quad \text{if }\begin{cases}
+			n\geq30  \\
+			p\leq0.1 \\
+			np<15
+		\end{cases}
+		.\]
+}
+
+\thm{Hypergeometric by a Binomial}{
+	\[
+		\mathcal{H}(N,n,p)\sim\mathrm{Bin}(n,p)\quad \text{if } n\leq0.05N
+		.\]
+}
+
+\thm{De Moivre–Laplace theorem}{
+	\[
+		\mathrm{Bin}(n,p)\sim\mathcal{N}\lt(np,\sqrt{np(1-p)}\rt)\quad \text{if }\begin{cases}
+			n\geq30 \\
+			np\geq5 \\
+			n(1-p)\geq5
+		\end{cases}
+		.\]
+	In this case the event $X=k$ can be replaced by $k-0.5<X<l+0.5$
+}
+
+\thm{Central limit theorem}{
+	Let $(X_n)$ be a sequence of independent random variables following the same law of expectation $\mu$ and of standard deviation $\sigma$. Let $S_n = \sum_{i=1}^n X_i$ and $S_n^* = \frac{S_n-n\mu}{\sigma\sqrt{n}}$. It can be shown that $S_n^*$ converges in law to $\mathcal{N}(0,1)$.
+	\begin{align*}
+		\EE(S_n)  & = n\mu      \\
+		\Var{S_n} & = n\sigma^2
+	\end{align*}
+}
+\section{Further laws}
+
+\thm{Chi square law}{
+Let $X_1,X_2,\dots,X_n$ be $n$ independent random variables following the standard normal law $\mathcal{N}(0,1)$. Let $Y={X_1}^2 + {X_2}^2+\dots+{X_n}^2$. We say that $Y$ follows a chi-square law with $n$ degrees of freedom. $Y\sim{\chi_n}^2$.
+
+\begin{align*}
+	\EE(Y)  & = n  \\
+	\Var{Y} & = 2n
+\end{align*}
+
+It can be shown that the density function of $Y$ is
+\[
+	f(x)=\begin{cases}
+		\dfrac{1}{2^{\frac{n}{2}}\Gamma\lt(\frac{n}{2}\rt)}x^{\frac{n}{2}-1}e^{-\frac{x}{2}} & \text{if }x>0 \\
+		0                                                                                    & \text{else}
+	\end{cases}
+	.\]
+where $\Gamma$ is the gamma function
+\[
+	\Gamma(x)=\int_0^{+\infty}t^{x-1}e^{-t}\dd{t}\quad\forall x>0
+	.\]
+}
+
+\thm{Student law(t-distribution)}{
+Let $X$, $Z$ be two independent random random variables such that $X\sim\mathcal{N}(0,1)$ and $Z\sim{\chi_n}^2$. Hence the random variable
+\[
+	T=\frac{X}{\sqrt{\frac{Z}{n}}}
+	.\]
+is said to be following a student law. $T\sim\mathcal{T}_n$
+\[
+	f(t)=\frac{1}{\sqrt{n\pi}}\frac{\Gamma\lt(\dfrac{n+1}{2}\rt)}{\Gamma\lt(\dfrac{n}{2}\rt)}\lt(1+\frac{t^2}{n}\rt)^{-\frac{n+1}{2}}
+	.\]
+}
+
+\end{document}

@@ -24,6 +24,7 @@
 \newcommand{\surjto}{\twoheadrightarrow}
 \newcommand{\injto}{\hookrightarrow}
 \newcommand{\On}{\mathrm{On}} % ordinals
+% \newcommand{\EE}{\mathbb{E}} % Expectance
 \DeclareMathOperator{\img}{im} % Image
 \DeclareMathOperator{\Img}{Im} % Image
 \DeclareMathOperator{\coker}{coker} % Cokernel
@@ -40,6 +41,8 @@
 \DeclareMathOperator{\Hom}{Hom} % homomorphism
 \DeclareMathOperator{\Mor}{Mor} % morphisms
 \DeclareMathOperator{\End}{End} % endomorphism
+% \DeclareMathOperator{\Pr}{Pr} % probability
+% \DeclareMathOperator{\Var}{Var} % variance
 
 \newcommand{\eps}{\epsilon}
 \newcommand{\veps}{\varepsilon}
@@ -94,6 +97,9 @@
 \renewcommand{\Im}{\mathrm{Im}}
 \DeclareMathOperator{\tr}{tr}
 \newcommand{\csin}[1]{\mintinline{csharp}|#1|}
+\renewcommand{\Pr}[1]{\mathrm{Pr}\lt( #1 \rt)}
+\renewcommand{\Var}[1]{\mathrm{Var}\lt( #1 \rt)}
+\newcommand{\cov}[1]{\mathrm{cov}\lt( #1 \rt)}
 
 \newcommand{\sol}{\setlength{\parindent}{0cm}\textbf{\textit{Solution:}}\setlength{\parindent}{1cm} }
 \newcommand{\solve}[1]{\setlength{\parindent}{0cm}\textbf{\textit{Solution: }}\setlength{\parindent}{1cm}#1 \Qed}
