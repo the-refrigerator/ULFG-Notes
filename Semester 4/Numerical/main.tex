@@ -147,7 +147,7 @@ If the set of $x_i$ are equidistant from each other with a distance of $h=x_{i+1
 	.\]
 where
 \[
-	\ell_k(s) = \prod_{\substack{j=0\\k\neq k}}^n\frac{s-j}{k-j}
+	\ell_k(s) = \prod_{\substack{j=0\\j\neq k}}^n\frac{s-j}{k-j}
 	.\]
 
 by substitution
@@ -194,7 +194,7 @@ by substitution
 	Let
 	\[
 		\begin{rcases}
-			R=P-Q \text{ of degree }\leq n\\
+			R=P-Q \text{ of degree }\leq n \\
 			R=0 \; (n+1) \text{ times}
 		\end{rcases}R\equiv0\Rightarrow P=Q\;\forall x
 		.\]
@@ -336,7 +336,7 @@ Let $f(x)$ be of class $C^{n+1} \quad \forall x \in [a,b]$ and let the polynomia
 
 The error function is bounded by
 \[
-	|\text{Error}| = |f(x) - P(x)| \leq \frac{\lt| \prod_{i=0}^n (x-x_i) \rt|}{(n+1)!} \sup_{x\in[a,b]} |f^{(n+1)}(x)|
+	|\text{Error}| = |f(x) - P(x)| \leq \frac{\lt| \prod_{i=0}^n (x-x_i) \rt|}{(n+1)!} \sup_{x\in[a,b]} \lt|f^{(n+1)}(x)\rt|
 	.\]
 
 \subsection{Hermite Interpolation}
@@ -416,7 +416,7 @@ The error function is bounded by
 	$R'=0\;n$ times as a consequence of Rolle's theorem then
 	\[
 		\begin{rcases}
-			R'(x)=0\;(2n+1)\text{ times}\\
+			R'(x)=0\;(2n+1)\text{ times} \\
 			R'(x)\text{ is of degree }2n
 		\end{rcases}
 		R'(x)=0 \;\forall x
@@ -512,8 +512,8 @@ Suppose that $f$ is a continuous and monotone function on the domain $I = [a,b]$
 The starting value of $x_0$ depends on the value of $f$
 \[
 	x_0 = \begin{cases}
-		a & \text{if }f(a)f''(a)<0 \\
-		b & \text{if }f(b)f''(b)<0
+		a & \text{if }f(a)f''(a)>0 \\
+		b & \text{if }f(b)f''(b)>0
 	\end{cases}
 	.\]
 
