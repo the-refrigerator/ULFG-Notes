@@ -45,9 +45,9 @@ where
 		 & X(\Omega)= \{1,2,3,\dots,n\}                        \\
 		 & \Pr{X=k} = \frac{1}{n}\quad\forall k =1,2,3,\dots,n \\
 		 & \begin{cases}
-			\EE(X) = \frac{n+1}{2} \\
-			\Var{X} = \frac{n^2-1}{12}
-		\end{cases}
+			   \EE(X) = \frac{n+1}{2} \\
+			   \Var{X} = \frac{n^2-1}{12}
+		   \end{cases}
 	\end{align*}
 	\ii \textbf{Bernoulli law of parameters $p$} $(0<p<1)$
 	\begin{align*}
@@ -55,9 +55,9 @@ where
 		 & X(\Omega) = \{0,1\}               \\
 		 & \Pr{X=1} = p \quad \Pr{X=0} = 1-p \\
 		 & \begin{cases}
-			\EE(X) = p \\
-			\Var{X} = p(1-p)
-		\end{cases}
+			   \EE(X) = p \\
+			   \Var{X} = p(1-p)
+		   \end{cases}
 	\end{align*}
 	\ii \textbf{Binomial law of parameters $n$ and $p$}
 	\begin{align*}
@@ -65,9 +65,9 @@ where
 		 & X(\Omega) = \{1,2,\dots,n\}                                   \\
 		 & \Pr{X=1} = C^k_n p^kq^{n-k}\quad\forall k\in\{0,1,2,\dots,n\} \\
 		 & \begin{cases}
-			\EE(X) = np \\
-			\Var{X} = np(1-p)
-		\end{cases}
+			   \EE(X) = np \\
+			   \Var{X} = np(1-p)
+		   \end{cases}
 	\end{align*}
 	\ii \textbf{Hypergeometric law}
 	\begin{align*}
@@ -75,9 +75,9 @@ where
 		 & X(\Omega) = [\max\{0,n-N+M\},\min\{M,n\}]                                     \\
 		 & \Pr{X=k} = \frac{C^k_M \cdot C^{n-k}_{N-M}}{C^n_N}\quad\forall k\in X(\Omega) \\
 		 & \begin{cases}
-			\EE(X) = np \\
-			\Var{X} = np(1-p)\lt(\frac{N-n}{N-1}\rt)
-		\end{cases}
+			   \EE(X) = np \\
+			   \Var{X} = np(1-p)\lt(\frac{N-n}{N-1}\rt)
+		   \end{cases}
 	\end{align*}
 	\ii \textbf{Geometric law}
 	\begin{align*}
@@ -85,9 +85,9 @@ where
 		 & X(\Omega) = \NN^*                             \\
 		 & \Pr{X=k} =p(1-p)^{k-1}\quad\forall k\in \NN^* \\
 		 & \begin{cases}
-			\EE(X) = \frac{1}{p} \\
-			\Var{X} = \frac{1-p}{p^2}
-		\end{cases}
+			   \EE(X) = \frac{1}{p} \\
+			   \Var{X} = \frac{1-p}{p^2}
+		   \end{cases}
 	\end{align*}
 	\ii \textbf{Poisson's law of parameter} $\lambda$ $(\lambda\in\RR_+^*)$
 	\begin{align*}
@@ -95,9 +95,9 @@ where
 		 & X(\Omega) = \NN                                                  \\
 		 & \Pr{X=k} = e^{-\lambda}\frac{\lambda^k}{k!}\quad\forall k\in \NN \\
 		 & \begin{cases}
-			\EE(X) = \lambda \\
-			\Var{X} = \lambda
-		\end{cases}
+			   \EE(X) = \lambda \\
+			   \Var{X} = \lambda
+		   \end{cases}
 	\end{align*}
 
 \end{enumerate}
@@ -108,25 +108,25 @@ where
 	\ii \textbf{Uniform law}
 	\begin{align*}
 		 & f(x) = \begin{cases}
-			\frac{1}{b-a} & \text{if } x\in[a,b] \\
-			0             & \text{else}
-		\end{cases} \\
+			          \frac{1}{b-a} & \text{if } x\in[a,b] \\
+			          0             & \text{else}
+		          \end{cases} \\
 		 & \begin{cases}
-			\EE(x) =  \frac{a+b}{2} \\
-			\Var{x} = \frac{(b-a)^2}{12}
-		\end{cases}
+			   \EE(x) =  \frac{a+b}{2} \\
+			   \Var{x} = \frac{(b-a)^2}{12}
+		   \end{cases}
 	\end{align*}
 	\ii \textbf{Continuous law}
 	\begin{align*}
-		 & x \sim \xi(\lambda)               \\
+		 & x \sim \xi(\lambda)                            \\
 		 & f(x) = \begin{cases}
-			\lambda e^{-\lambda x} & \text{if } x>0 \\
-			0                      & \text{else}
-		\end{cases} \\
+			          \lambda e^{-\lambda x} & \text{if } x>0 \\
+			          0                      & \text{else}
+		          \end{cases} \\
 		 & \begin{cases}
-			\EE(x) =  \frac{1}{\lambda} \\
-			\Var{x} = \frac{1}{\lambda^2}
-		\end{cases}
+			   \EE(x) =  \frac{1}{\lambda} \\
+			   \Var{x} = \frac{1}{\lambda^2}
+		   \end{cases}
 	\end{align*}
 
 	\ii \textbf{Normal law}
@@ -134,9 +134,9 @@ where
 		 & x \sim \mathcal{N}(\mu,\sigma)                                     \\
 		 & f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}} \\
 		 & \begin{cases}
-			\EE(x) =  \mu \\
-			\Var{x} = \sigma^2
-		\end{cases}
+			   \EE(x) =  \mu \\
+			   \Var{x} = \sigma^2
+		   \end{cases}
 	\end{align*}
 	For $\mathcal{N}(0,1)$
 	\[
@@ -527,5 +527,31 @@ we have
 		.\]
 
 \end{enumerate}
+
+\section{Mean Squared Error}
+
+Consider the estimator $y_n = f(x_1,x_2,\dots,x_n)$ of $\theta$. The bias of $y_n$ relative to $\theta$ is
+\[
+	\mathrm{Bias}(y_n)=\EE(y_n)-\theta
+	.\]
+The mean squared error of $y_n$ with respect to $\theta$ is
+\[
+	\mathrm{MSE}(y_n)=\EE\lt[(y_n-\theta)^2\rt]
+	.\]
+It can also be shown that
+\[
+	\mathrm{MSE}(y_n)=\Var{y_n} + \mathrm{Bias}(y_n)^2
+	.\]
+If $y_n$ is an unbiased estimator of $\theta$ then $\mathrm{Bias}(y_n)=\EE(y_n)-\theta=0\Rightarrow$
+
+\[
+	\mathrm{MSE}(y_n)=\Var{y_n}
+	.\]
+Assume $y_n$ and $z_n$ are two estimators of the same parameter $\theta$. We say $y_n$ is more efficient than $z_n$ if
+\[
+	\mathrm{MSE}(y_n)<\mathrm{MSE}(z_n)
+	.\]
+
+Assume $y_n$ and $z_n$ are two unbiased estimators of $\theta$, then $y_n$ is more efficient then $z_n$ if and only if $\Var{y_n}<\Var{z_n}$
 
 \end{document}
