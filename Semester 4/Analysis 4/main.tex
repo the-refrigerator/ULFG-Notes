@@ -101,22 +101,41 @@ We call $N_\delta(z_0)-\{z_0\}$ a deleted $\delta$-neighborhood. ($\{z\in\mathbb
 	\end{enumerate}
 }
 
-\nt{
-	\[
-		\dot{\Omega}\subset\Omega\subset\bar{\Omega}
-		.\]
-	and
-	\[
-		\Omega \text{ is open} \Leftrightarrow \begin{cases}
-			\Omega\cap\partial\Omega=\emptyset \\
-			\Omega = \dot{\Omega}
-		\end{cases}
-		.\]
-	If $\Omega$ is not open from all sides then it is not open. Same thing with closed.\\
-	If $\Omega$ is not open then it is not connected.
+\dfn{}{
+	We call a set $\Omega$
+	\begin{enumerate}
+		\ii an \emph{open set} if it only contains it's interior points
+		\[
+			\Omega \cup \partial\Omega =\emptyset \quad\text{and}\quad\Omega =\dot{\Omega}
+			.\]
+		\ii a \emph{closed set} if it contains all it's boundary points
+		\[
+			\partial\Omega \subset \Omega \quad\text{and}\quad\Omega =\bar{\Omega}
+			.\]
+	\end{enumerate}
 }
 
-$\Omega$ is said to be \emph{compact} if it is both \emph{bounded and closed}.
+\nt{
+	$\Omega$ is said to be \emph{compact} if it is both \emph{bounded and closed}.
+}
+
+\dfn{Limit (accumulation point)}{
+	Given a point $z_0\in\Omega$. $z_0$ is a limit point if for all $\delta>0$, $\exists$ infinitely many points $\in N_\delta(z_0)$.
+}
+
+\nt{
+	If a set is finite then it doesn't have any limit points.\\
+	If $z_0$ is a boundary point of $\Omega$ and $\not\in\Omega\Rightarrow z_0$ is a limit point\\
+	$\Omega$ is a closed set $\Leftrightarrow\Omega\subset\{\text{All limit points}\}$\\
+	The set of all limit points of $\Omega$ is called the derivative set $\Omega'$
+}
+
+\nt{
+	A set $\Omega$ is bounded if
+	\[
+		\exists M \in \RR_+ \Big/ \forall z\in \Omega\;|z|\leq M
+		.\]
+}
 
 \thm{Bolzano-Weirstrass theorem}{
 	Every \emph{bounded infinte} set admits at least one limit point
@@ -136,7 +155,14 @@ A closed path is a path such that
 \[
 	z(a) = z(b)
 	.\]
+A differentiable path (aka. a contour) is a path of equation $\lt(x(t),y(t)\rt)$ such that $x$ and $y$ are of class $C^1$ on the domain of $t$.\\
 
+A piecewise differentiable path is union of several differentiable paths.
+
+\nt{
+	A set is connected if we can connect 2 points $z_1,z_2\in\Omega$ using a broken line\\
+	A connected set simply connected if we can connect any 2 points within using a straight line (no holes in the set), otherwise it is multiply connected.
+}
 
 \chapter{Complex Functions}
 
@@ -148,9 +174,9 @@ A closed path is a path such that
 		\lim_{(x,y)\to(x_0,y_0)} f(x+iy)
 		.\]
 
-	then we can take multiple paths to find the limit. However we can't take suffecient paths to prove a limit exists as there could exist one path that causes the limit to not exist, however we can use polar limits to prove that the limit exists. We take $x = r\cos(\theta)-x_0$ and $y = r\sin(\theta)-y_0$
+	then we can take multiple paths to find the limit. However we can't take sufficient paths to prove a limit exists as there could exist one path that causes the limit to not exist, however we can use polar limits to prove that the limit exists. We take $x = r\cos(\theta)-x_0$ and $y = r\sin(\theta)-y_0$
 	\[
-		\lim_{(r,\theta)\to(0,0)} f\lt(r\cos(\theta)-x_0+ i\lt(r\sin(\theta)-y_0\rt)\rt)
+		\lim_{r\to0} f\lt(r\cos(\theta)-x_0+ i\lt(r\sin(\theta)-y_0\rt)\rt)
 		.\]
 
 }
@@ -170,7 +196,7 @@ A closed path is a path such that
 	Note that the converse is not true
 }
 
-To prove that a function $f$ is differentiable at $z_0$ then we have to prove that $u$ and $v$
+To prove that a function $f$ is differentiable at $z_0$ then we have to prove that $u_x$, $u_y$, $v_x$, and $v_y$
 
 \[
 	\begin{cases}
@@ -199,6 +225,10 @@ Properties
 	\task $\cosh iz = \cos z$
 	\task $\sinh iz = i\sin z$
 \end{tasks}
+
+\thm{}{
+	Consider 2 functions $u$ and $v$, and the 2 curves $u=\alpha$ and $v=\beta$ such that $\alpha,\beta\in\RR$. The 2 curves are orthogonal at their intersection points if and only if they satisfy the Cauchy-Riemann conditions.
+}
 
 \section{Harmonic functions}
 
@@ -308,6 +338,20 @@ A consequence of Cauchy's theorem is that if a closed path $C$ contains a discon
 	\[
 		f^{(n)}(a) = \frac{n!}{2\pi i}\oint_{\Gamma^+}\frac{f(z)}{(z-a)^{n+1}}\dd{z}
 		.\]
+}
+
+\thm{Tangent half-angle substitution}{
+	We can transform the integral of the form
+	\[
+		\int f(\sin x, \cos x)\dd{x}=\int f\lt(\frac{2t}{1+t^2},\frac{1-t^2}{1+t^2}\rt)\dd{x}
+		.\]
+	by letterfonts
+	\[
+		t = \tan \frac{x}{2}
+		.\]
+	\[
+		\sin x = \frac{2t}{1+t^2}\qquad\cos x=\frac{1-t^2}{1+t^2}\qquad \dd{x}=\frac{2}{1+t^2}\dd{t}
+	\]
 }
 
 \section{Primitives}
