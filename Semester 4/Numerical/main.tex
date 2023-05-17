@@ -648,5 +648,87 @@ Let the circle $C$ be the circle of radius $\displaystyle\lt(-\frac{Q}{2},\frac{
 The roots of the polynomial $X^4 + PX^2 + QX + R = 0$ are the intersection of the circle $C$ and the parabola $Y=X^2$
 
 
+\chapter{Numerical Intergration}
+
+
+Let $f$ be a continuous function on $[a,b]$ and $I=\int_a^b f(x)\,\dd{x}$
+
+\section{Rectangle method}
+
+We sample the domain of $f$ in to $n$ equal subintervals ($x_i - x_{i+1}=\frac{b-a}{n}=h$). The approximated value of $I$ becomes
+\[
+	\int_a^b f(x)\,\dd{x} \approx \frac{b-a}{n}\lt[ \sum_{i=0}^{n-1} f(x_i) \rt]
+	.\]
+
+such that $x_0=a$ and $x_1=b$\\
+
+The error associated with this approximation is
+\[
+	|\varepsilon|\leq \frac{M_1}{2n}(b-a)^2
+	.\]
+
+where
+\[
+	M_1 = \sup_{[a,b]}\lt|f'(x)\rt|
+	.\]
+
+\section{Trapezoid method}
+
+Same sampling as before.
+
+\[
+	\int_a^b f(x)\,\dd{x} \approx \frac{b-a}{2n}\lt(f(a)+f(b)+2\sum_{i=1}^{n-1}f(x_i)\rt)
+	.\]
+The error associated with this approximation is
+\[
+	|\varepsilon|\leq \frac{M-2}{12n^2}\lt|(b-a)^3\rt|
+	.\]
+
+where
+\[
+	M_2 = \sup_{[a,b]}\lt|f''(x)\rt|
+	.\]
+
+\section{Simpson's rule}
+
+You get the point by now
+
+\[
+	\int_a^b f(x)\,\dd{x} \approx \frac{b-a}{6n}\lt(f(a)+f(b)+2\sum_{i=1}^{n-1}f(x_i) + 4\lt(
+	f\lt(\frac{a+x_1}{2}\rt) +
+	f\lt(\frac{x_1+x_2}{2}\rt) +
+	\cdots
+	f\lt(\frac{x_{n-1}+b}{2}\rt)
+	\rt)
+	\rt)
+	.\]
+
+The error associated with this approximation is
+\[
+	|\varepsilon|\leq \frac{\lt|(b-a)^5\rt|}{n^4}\frac{M_4}{2880}
+	.\]
+
+where
+\[
+	M_4 = \sup_{[a,b]}\lt|f^{(4)}(x)\rt|
+	.\]
+
+
+\section{Newton Cote's method}
+
+Let $P$ be the Lagrange polynomial that interpolates the function $f$ at $(n+1)$ points $(x_0,f_0),(x_1,f_1),\dots,(x_n,f_n)$.
+\[
+	P(s) = \sum_{i=0}^{n}\ell_i(s)f(x_i)
+	.\]
+
+The approximated value of $I$ is
+\[
+	\int_a^b f(x)\,\dd{x} \approx (b-a)\sum_{i=0}^n H_i f_i
+	.\]
+
+where
+\[
+	H_i = \frac{1}{n}\int_0^n \ell_i(s)\,\dd{s}
+	.\]
 
 \end{document}
