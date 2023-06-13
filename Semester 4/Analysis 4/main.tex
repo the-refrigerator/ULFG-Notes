@@ -42,7 +42,7 @@ The $n$-th roots of unity are the set of complex numbers $(\zeta_1,\zeta_2,\dots
 	.\]
 where $w=Re^{i\alpha}$. The solutions equation are
 \[
-	\zeta_k = \sqrt[n]{R} e^{i\left( \frac{\alpha + 2k\pi}{n} \right)}
+	\zeta_k = \sqrt[n]{R} e^{i\lt( \frac{\alpha + 2k\pi}{n} \rt)}
 	.\]
 
 \section{Topology of the complex plane}
@@ -377,6 +377,444 @@ Let the path $\gamma$ goes from $z_1$ to $z_2$ in $\Omega$ then
 		\oint_\gamma f(z)\dd{z}=0\;\Rightarrow f\text{ is holomorphic in }\Omega
 		.\]
 
+}
+
+\chapter{Multivalued Functions}
+
+\section{Complex Logarithm}
+
+We define the complex logarithm to be
+\[
+	\log(z) = \ln|z| + i\arg(z)
+	.\]
+
+where
+\[
+	\arg\lt(re^{i\theta}\rt) = \theta + 2k\pi \quad k \in \ZZ
+	.\]
+
+We define the principle valued logarithm to be
+\[
+	\Log(z) = \ln|z| + i \Arg(z)
+	.\]
+where
+
+\[
+	\Arg\lt(re^{i\theta}\rt) = \text{principle value of } \arg\lt(re^{i\theta}\rt)\quad \theta\in]-\pi,\pi]
+	.\]
+
+$\Log$ is defined on $\CC^*$ however it is only continous on $\CC - \RR_-$
+
+\begin{align*}
+	\Omega_1 & = \{z\in\CC: \Re(z)>0\} \\
+	\Omega_2 & = \{z\in\CC: \Im(z)>0\} \\
+	\Omega_3 & = \{z\in\CC: \Im(z)<0\}
+\end{align*}
+
+\[
+	\CC-\RR_- = \Omega_1 \cup \Omega_2 \cup \Omega_3
+	.\]
+
+\[
+	\Arg(x+iy) = \begin{cases}
+		\arctan\lt(\dfrac{y}{x}\rt)               & \text{if }z\in\Omega_1 \\
+		\arccos\lt(\dfrac{x}{\sqrt{x^2+y^2}}\rt)  & \text{if }z\in\Omega_2 \\
+		\arccos\lt(-\dfrac{x}{\sqrt{x^2+y^2}}\rt) & \text{if }z\in\Omega_3
+	\end{cases}
+	.\]
+
+\begin{align*}
+	\Log(z_1\cdot z_2)           & = \Log(z_1) + \Log(z_2) + 2k\pi i \\
+	\Log\lt(\dfrac{z_1}{z_2}\rt) & = \Log(z_1) - \Log(z_2) + 2k\pi i \\
+	\overline{\Log(z)}           & = \Log(\bar{z})
+\end{align*}
+
+\subsection{Generalisation of the Complex Logarithm}
+
+We define
+\[
+	\Log_\alpha(z) = \ln|z| + i\Arg(z) \quad \Arg(z)\in ]\alpha,\alpha+2\pi]
+	.\]
+
+It is continuous on $\CC-\Delta$ where
+
+\[
+	\Delta = \lt\{re^{i\alpha}: r\geq 0\rt\}
+	.\]
+
+\section{$n$-th root}
+
+We call the square root of $z=re^{i\theta}$ any complex number $w\in\CC$ satisfying
+\[
+	w^2 = z
+	.\]
+
+\[
+	w = \sqrt{r} e^{i\lt(\frac{\theta}{2}+k\pi\rt)}
+	.\]
+
+And the $n$-th root becomes
+
+\[
+	w = \sqrt[n]{r} e^{i\lt(\frac{\theta}{n}+\frac{2k\pi}{n}\rt)}
+	.\]
+
+\section{Power Functions}
+
+A power function is any function $f(z) = z^\alpha$. For $\alpha\in\ZZ$ the function is single valued, while for values $\alpha\not\in\ZZ$ the function is multivalued. The principle determination of $f$
+\[
+	z^\alpha = e^{\alpha\Log(z)}
+	.\]
+
+\section{Inverse Trig Functions}
+
+It can be shown that
+\[
+	\Arcsin(z) = \frac{1}{i}\log\lt(iz+\sqrt{1-z^2}\rt)
+	.\]
+is holomorphic on $\CC - ]-\infty,-1]\cup[1,+\infty[$ and
+\[
+	\dv{}{z}\Arcsin(z) = \frac{1}{\sqrt{1-z^2}}
+	.\]
+
+\begin{align*}
+	 & \Arccos(z)=\frac{1}{i}\Log\lt(z+\sqrt{z^2-1}\rt)   & \dv{}{z}\Arccos(z)  & = -\frac{1}{\sqrt{1-z^2}} \\
+	 & \Arctan(z)=\frac{i}{2}\Log\lt(\frac{i+z}{i-z}\rt)  & \dv{}{z}\Arctan(z)  & = \frac{1}{1+z^2}         \\
+	 & \Arcsinh(z)=\Log\lt(z+\sqrt{z^2+1}\rt)             & \dv{}{z}\Arcsinh(z) & = \frac{1}{\sqrt{1+z^2}}  \\
+	 & \Arccosh(z)=\Log\lt(z+\sqrt{z^2-1}\rt)             & \dv{}{z}\Arccosh(z) & = \frac{1}{\sqrt{z^2-1}}  \\
+	 & \Arctanh(z)=\frac{1}{2}\Log\lt(\frac{1+z}{1-z}\rt) & \dv{}{z}\Arctanh(z) & = \frac{1}{1-z^2}         \\
+\end{align*}
+
+\chapter{Series}
+
+\dfn{Power Series}{
+	We define a power series to be a function of the from
+	\[
+		f(z) = \sum_{n=0}^\infty a_n(z-z_0)^n
+		.\]
+}
+
+\nt{
+	A power series is always convergent at $z=z_0$ and it's value is $a_0$.
+}
+
+\thm{}{
+	Consider a power series $ \sum_{n=0}^\infty a_n(z-z_0)^n$.
+
+	\begin{enumerate}
+		\ii If this power series converges at $z_1\neq z_0$ then it converges absolutely for all $z$ such that
+		\[
+			|z-z_0|<|z_1-z_0|
+			.\]
+		\ii If this power series diverges at $z_2\neq z_0$ then it diverges for all $z$ such that
+		\[
+			|z-z_0|>|z_2-z_0|
+			.\]
+	\end{enumerate}
+}
+
+\subsection{Radius of Convergence}
+Consider a power series $\sum_{n=0}^\infty a_n(z-z_0)^n$. We conider the cases for convergence.
+
+\begin{enumerate}
+	\ii \textbf{Case 1}: The power series cvonverges at $z_0$ only. Then the radius of convergence is $0$.
+	\ii \textbf{Case 2}: The power series converges for all $z$ in a disc $D$ of radius $R$ centered at $z_0$. Then the radius of convergence is $R$. The power series may or many no converge in $\partial D$.
+	\ii \textbf{Case 3}: The power series converges for all $z$. Then the radius of convergence is $\infty$.
+\end{enumerate}
+
+\thm{}{
+	Consider a power series $\sum_{n=0}^\infty a_n(z-z_0)^n$ with radius of convergence $R$. Then the series converges uniformly on any closed disc $\gamma_r$ of radius $r<R$ centered at $z_0$.
+	\[
+		\gamma_r = \lt\{z\in\CC: |z-z_0|=r\rt\}
+		.\]
+}
+
+\section{Taylor Series}
+
+\dfn{Taylor Series}{
+	Consider a function $f$ holomorphic on a disc $D$ of radius $R$ centered at $z_0$. Then the Taylor series of $f$ centered at $z_0$ is
+	\[
+		f(z) = \sum_{n=0}^\infty a_n(z-z_0)^n
+		.\]
+	where
+	\[
+		a_n = \frac{f^{(n)}(z_0)}{n!} = \frac{1}{2\pi i} \oint_{\gamma_r} \frac{f(z)}{(z-z_0)^{n+1}}\,\dd{z}\quad \forall n\in\NN
+		.\]
+}
+\nt{
+	The Taylor series of $f(z)$ at $z=0$ is called the Maclaurin series of $f(z)$.
+}
+
+\thm{}{
+	The radius of convergence $R$ of the Taylor series of $f$ at $z_0$ is given by $R=|z_T-z_0|$ where $z_T$ is the closest singularity of $f$ to $z_0$.
+}
+\nt{
+	\begin{enumerate}
+		\ii If $f$ is holomorphic on $\CC$ then $z_T$ is located at infinity hence $R=\infty$.
+		\ii $f$ is holomorphic on an open set $\Omega$ if an only if the Taylor series of $f$ converges to $f$ on $\Omega$.
+	\end{enumerate}
+}
+
+\nt{
+	The Taylor expension of some common functions are
+	\begin{align*}
+		\frac{1}{1-z} & =\sum_{n=0}^\infty z^n                                          & R=1                        \\
+		\frac{1}{1+z} & =\sum_{n=0}^\infty (-1)^nz^n                                    & R=1                        \\
+		\Log(1+z)     & =\sum_{n=1}^\infty \frac{(-1)^{n+1}}{n}z^n                      & R=1                        \\
+		e^z           & =\sum_{n=0}^\infty \frac{z^n}{n!}                               & R=\infty                   \\
+		\sin(z)       & =\sum_{n=0}^\infty \frac{(-1)^n}{(2n+1)!}z^{2n+1}               & R=\infty                   \\
+		\cos(z)       & =\sum_{n=0}^\infty \frac{(-1)^n}{(2n)!}z^{2n}                   & R=\infty                   \\
+		\sinh(z)      & =\sum_{n=0}^\infty \frac{z^{2n+1}}{(2n+1)!}                     & R=\infty                   \\
+		\cosh(z)      & =\sum_{n=0}^\infty \frac{z^{2n}}{(2n)!}                         & R=\infty                   \\
+		(1+z)^\alpha  & =\sum_{n=0}^\infty  \prod_{k=0}^{n-1}(\alpha-k)  \frac{z^n}{n!} & R\text{ depends on }\alpha
+	\end{align*}
+}
+
+\nt{
+$z_0$ is a zero of order $n$ of $f$ if $f(z_0)=f'(z_0)=\cdots=f^{(n-1)}(z_0)=0$ and $f^{(n)}(z_0)\neq 0$.
+}
+
+\cor{}{
+	Consider a function $h = f \cdot g$ where $f$ and $g$ are holomorphic around $z_0$. If $z_0$ is a zero of order $n$ of $f$ and $z_0$ is a zero of order $m$ of $g$ then $z_0$ is a zero of order $n+m$ of $h$.
+}
+
+\cor{}{
+	Consider a function $f$ holomorphic in an open $\Omega$ containing $z_0$, such that $f\neq0$ in $\Omega$. If $z_0$ is a zero of $f$ then $z_0$ is an isolated zero.
+}
+
+\cor{}{
+	Consider a function $f$ holomorphic in an open set $\Omega$. Let $K$ be compact set in $\Omega$ such that $f\neq0$ on $K$. Then $f$ admits a finite number
+}
+
+\dfn{Poles}{
+	Consider 2 functions $f$ and $g$ holomorphic in a neighborhood of $z_0$. Let $h=\frac{f}{g}$. If $g(z_0)\neq z_0$ then $z_0$ is a regular point. However if $g(z_0)=0$ then we have several cases of study. Let $l$ be the order of the root of $f$ at $z_0$ and $u$ be the order of the root of $g$ at $z_0$.
+	\begin{itemize}
+		\ii If $l<u$ then $z_0$ is a pole of order $u-l$ of $h$.
+		\ii If $l\geq u$ then $z_0$ is a removable singularity of $h$.
+	\end{itemize}
+}
+
+\dfn{Memomorphic functions}{
+	A function $f$ is meromorphic in an open set $\Omega$ if $\exists A \subset \Omega$
+	\begin{enumerate}
+		\ii $A$ admits no accumulation points
+		\ii $f$ is holomorphic in $\Omega - A$.
+		\ii Each point of $A$ is a pole of $f$.
+	\end{enumerate}
+}
+
+\section{Laurent Series}
+
+\dfn{Laurent Series}{
+	Consider a function $f$ holomorphic in a disk $\gamma_r$ of center $z_0$ not including $z_0$ and radii $r<R$. Then the Laurent series of $f$ centered at $z_0$ is
+	\[
+		f(z) = \sum_{n=-\infty}^\infty a_n(z-z_0)^n
+		.\]
+	where
+	\[
+		a_n = \frac{1}{2\pi i} \oint_{\gamma_r} \frac{f(z)}{(z-z_0)^{n+1}}\,\dd{z}\quad \forall n\in\ZZ
+		.\]
+}
+
+The negative terms of the Laurent series are called the principal part of the Laurent series, while the positive terms are called the regular part of the Laurent series.
+
+The domain of convergence of the Laurent series is the punctured disk of center $z_0$ and radius $R=|z_T-z_0|$ where $z_T$ is the closest singularity of $f$ to $z_0$.
+
+\dfn{Analytic Extensions}{
+	Let $\gamma_r$ be a punctured disk of center $z_0$ and radius $r$. Let $f$ be a holomorphic function in $\gamma_r$(not necessarily holomorphic at $z_0$). Then the following statements are equivalent
+	\begin{enumerate}
+		\ii $f$ is bounded in the deleted neighborhood of $z_0$.
+		\ii The Laurent expansion of $f$ at $z-0$ is a Taylor expansion.
+		\ii $f$ admits an analytic extension at $z_0$.
+	\end{enumerate}
+}
+
+\nt{
+	If $f$ is holomorphic at $z_0$ then it is bounded in a neighborhood of $z_0$. So the Laurent expansion of $f$ at $z_0$ coincides with its Taylor expansion at $z_0$.
+}
+
+Let $f$ be a function expandable into a Laurent series at $z_0$, and non-holomorphic at $z_0$. This is equivalent to say $z_0$ is an isolated singular point of $f$. We distinguish then three situations for this singular point:
+
+\begin{enumerate}
+	\ii If the Laurent series of $f$ at $z_0$ has only positive terms, then $z_0$ is a removable singularity of $f$.
+	\ii If the Laurent series of $f$ at $z_0$ has only a finite number $k$ of negative terms, then $z_0$ is a pole of $f$ of order $k$.
+	\ii If the Laurent series of $f$ at $z_0$ has an infinite number of negative terms, then $z_0$ is either an essential singularity of $f$ or a pole of $f$.
+\end{enumerate}
+
+\chapter{Residues}
+
+\dfn{Residue}{
+	Let $f$ be a function analytic in a punctured open disk $V$ centred at $z_0$ ($f$ may not be analytic at $z_0$). Then $f$ is expandable into a Laurent series at $z_0$ and this Laurent series is given by:
+	\[
+		f(z) = \sum_{n=-\infty}^\infty a_n(z-z_0)^n = \cdots + \frac{a_{-1}}{z-z_0} + a_0 + a_1(z-z_0) + \cdots
+		.\]
+	where
+	\[
+		a_n = \frac{1}{2\pi i} \oint_{\gamma_r} \frac{f(z)}{(z-z_0)^{n+1}}\,\dd{z}\quad \forall n\in\ZZ
+		.\]
+
+	The coefficient $a_{-1}$ is called the residue of $f$ at $z_0$ and is denoted by $\Res(f,z_0)$.
+	\[
+		\oint_{\gamma_r} f(z)\,\dd{z} = 2\pi i a_{-1}
+		.\]
+}
+
+\thm{Residue Theorem}{
+	Let $\Gamma$ be a simple closed curve and $f$ be a function analytic in an open set containing $\Gamma$ except for a finite number of singularities $z_1,\ldots,z_n$ inside $\Gamma$. Then
+	\[
+		\oint_\Gamma f(z)\,\dd{z} = 2\pi i \sum_{k=1}^n \Res(f,z_k)
+		.\]
+}
+
+\section{Calculating Residues}
+
+\begin{enumerate}
+	\ii \textbf{Case of a simple pole}: Suppose that $z_0$ is a simple pole of the function $f$. The Laurent series of $f$ at $z_0$ is
+	\[
+		f(z) = \frac{a_{-1}}{z-z_0} + a_0 + a_1(z-z_0) + \cdots
+		.\]
+	and
+	\[
+		a_{-1} = \Res(f,z_0) = \lim_{z\to z_0} (z-z_0)f(z)
+		.\]
+	\ii \textbf{Case of a pole of order $k$}: Suppose that $z_0$ is a pole of order $k$ of the function $f$. The Laurent series of $f$ at $z_0$ is
+	\[
+		f(z) = \frac{a_{-k}}{(z-z_0)^k} + \frac{a_{-k+1}}{(z-z_0)^{k-1}} + \cdots + \frac{a_{-1}}{z-z_0} + a_0 + a_1(z-z_0) + \cdots
+		.\]
+
+	Thus
+	\[
+		\Res(f,z_0) = \lim_{z\to z_0} \frac{1}{(k-1)!} \dv[k-1]{z} \lt[ (z-z_0)^k f(z) \rt]
+		.\]
+	\ii \textbf{Case of an essential singularity or a pole of high order}: In this case, to calculate the residue of $f$ at $z_0$, it is sufficient to expand $f$ into a Laurent series at $z_0$ and examine the coefficient of the term $(z-z_0)^{-1}$
+\end{enumerate}
+
+\mprop{}{
+	In the particular case where $f(z)=\frac{P(z)}{Q(z)}$ with $P(z_0)\neq 0$ and $z_0$ being a simple zero of $Q(z)$, then
+	\[
+		\Res(f,z_0) = \frac{P(z_0)}{Q'(z_0)}
+		.\]
+}
+
+\section{Applications of the Residue Theorem}
+
+\subsection{Jordan’s lemmas}
+
+\mlenma{}{
+	Let $f$ be a continuous function in $\Omega=\{z\in\CC: 0<|z|<R, 0\leq \theta_1\leq \Arg(z)\leq \theta_2\leq 2\pi\}$, where $R>0$ and $\theta_1$ and $\theta_2$ are both fixed.
+
+	Consider an arc of circle $\gamma_r$ of center $0$ and radius $r$ contained in $\Omega$. Then if
+	\[
+		\lim_{z\to0} zf(z) = 0 \quad\text{then}\quad  \lim_{r\to0} \int_{\gamma_r} f(z)\,\dd{z} = 0
+		.\]
+}
+\mlenma{}{
+	Let $f$ be a continuous function in $\Omega=\{z\in\CC: |z|>R, 0\leq \theta_1\leq \Arg(z)\leq \theta_2\leq 2\pi\}$, where $R>0$ and $\theta_1$ and $\theta_2$ are both fixed.
+	Consider an arc of circle $\gamma_r$ of center $0$ and radius $r$ contained in $\Omega$. Then if
+	\[
+		\lim_{|z|\to\infty} zf(z) = 0 \quad\text{then}\quad  \lim_{r\to\infty} \int_{\gamma_r} f(z)\,\dd{z} = 0
+		.\]
+}
+
+\mlenma{}{
+	Let $f$ be a continuous function in $\Omega=\{z\in\CC: |z|>R, 0\leq \theta_1\leq \Arg(z)\leq \theta_2\leq \pi\}$, where $R>0$ and $\theta_1$ and $\theta_2$ are both fixed.
+	Consider an arc of circle $\gamma_r$ of center $0$ and radius $r$ contained in $\Omega$, and let $m$ be a positive constant. Then if
+	\[
+		\lim_{|z|\to\infty} f(z) = 0 \quad\text{then}\quad \lim_{r\to\infty} \int_{\gamma_r} f(z)e^{imz}\,\dd{z} = 0
+		.\]
+}
+
+\mlenma{}{
+Consider an open disk $D$ centered at $z_0$ and a function $f$ holomorphic in $D - {z_0}$ such that $z_0$ is a simple pole of $f$. Let $\gamma_r$ be an \emph{arc} of a circle of center $z_0$ and radius $r$ contained in $D$ and of angle $\alpha$. Then
+\[
+	\lim_{r\to0} \int_{\gamma_r} f(z)\,\dd{z} = \alpha i \Res(f,z_0)
+	.\]
+}
+
+\subsection{Evaluation of real integrals}
+
+\subsubsection{Integrals of the form $\int_0^{2\pi} f(\cos\theta,\sin\theta)\,\dd{\theta}$}
+This type of integral can be evaluated by the substitution $z=e^{i\theta}$, $\dd{z}=ie^{i\theta}\dd{\theta}$, $\cos\theta=\frac{1}{2}(z+\frac{1}{z})$, and $\sin\theta=\frac{1}{2i}(z-\frac{1}{z})$. Hence
+\[
+	\int_0^{2\pi} f(\cos\theta,\sin\theta)\,\dd{\theta} = \int_\gamma \frac{1}{iz} f\lt( \frac{1}{2}\lt( z+\frac{1}{z} \rt), \frac{1}{2i}\lt( z-\frac{1}{z} \rt) \rt)\,\dd{z}
+	.\]
+
+Then we can simply evaluate the integral using the residue theorem, Cauchy's integral formula, or the Cauchy's theorem.
+
+\subsubsection{Integrals of the form $\int_{-\infty}^\infty f(x)\,\dd{x}$}
+
+Where $f(x) = \frac{P(x)}{Q(x)}$ with $\deg Q(x) \geq \deg P(x) + 2$ and $Q(x)$ has no real roots, then we can evaluate the integral by considering the path $\Gamma$ consisting of the real axis and a semicircle of radius $R$ in the positive imaginary plane, where $R$ is chosen to be big enough such that $\Gamma$ encloses all the singularities of $f$
+
+\subsubsection{Integrals of the form $\int_{-\infty}^\infty f(x)e^{imx}\,\dd{x}$, $\int_{-\infty}^\infty f(x)\cos(mx)\,\dd{x}$, and $\int_{-\infty}^\infty f(x)\sin(mx)\,\dd{x}$}
+
+Where $f(x) = \frac{P(x)}{Q(x)}$ with $\deg Q(x) \geq \deg P(x) + 1$, $Q(x)$ has no real roots, and $m$ is a real positive number, then we can evaluate the integral by considering the same semicircle path as before.
+
+\subsubsection{Integrals of the form $\int_{-\infty}^\infty \frac{f(x)}{x^\alpha}\,\dd{x}$}
+
+Where $f(x) = \frac{P(x)}{Q(x)}$ with $\deg Q(x) \geq \deg P(x) + 1$, $Q(x)$ has no real roots, and $\alpha\in]0,1[$, then we integrate the function $g(z)=\frac{f(z)}{z^\alpha}$ where $z^\alpha=e^{\alpha\Log(z)}$ along the closed path $\Gamma = ABCDEFGHA$ shown below
+
+\begin{tikzpicture}
+	\draw[->] (-3,0) -- (3,0) node[right] {$\Re(z)$};
+
+	\draw[->] (0,-3) -- (0,3) node[above] {$\Im(z)$};
+	\draw[->] (0,0) -- (2,2) node[above] {Imma do it later};
+	\draw (0,0) node[below left] {$0$};
+\end{tikzpicture}
+
+\section{Special Functions}
+
+\dfn{Gamma funcction}{
+The \emph{Gamma function} is defined as
+\[
+	\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}\,\dd{t}
+	.\]
+}
+
+Some properties of the Gamma function are
+\begin{enumerate}
+	\ii $\Gamma(z+1) = z\Gamma(z)$
+	\ii $\Gamma(n+1) = n!$
+	\ii $\Gamma(z)\Gamma(1-z) = \frac{\pi}{\sin(\pi z)}$
+	\ii $\Gamma(\frac{1}{2}) = \sqrt{\pi}$
+\end{enumerate}
+
+
+\dfn{Beta function}{
+The \emph{Beta function} is defined as
+\[
+	B(x,y) = \int_0^1 (1-t)^{x-1}t^{y-1}\,\dd{y}
+	.\]
+}
+Some properties of the Beta function are
+\begin{enumerate}
+	\ii $B(x,y) = B(y,x)$
+	\ii $B(x,y) = \frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)}$
+	\ii $B(x,y) = 2\int_0^{\pi/2} \sin^{2x-1}\theta\cos^{2y-1}\theta\,\dd{\theta}$
+	\ii $B(p,1-p) = \frac{\pi}{\sin(\pi p)}$
+\end{enumerate}
+
+
+\dfn{Gauss error functions}{
+	The \emph{Gauss error functions} are defined as
+	\[
+		\erf(z) = \frac{2}{\sqrt{\pi}} \int_0^z e^{-t^2}\,\dd{t}
+		\quad\text{and}\quad
+		\erfc(z) = 1 - \erf(z)
+		.\]
+}
+
+Some properties of the Gauss error functions are
+\begin{enumerate}
+	\ii $\erf(-z) = -\erf(z)$
+	\ii $\lim_{z\to\infty} \erf(z) = 1$
+	\ii $\lim_{z\to-\infty} \erf(z) = -1$
+	\ii $\erf(z) + \erfc(z) = 1$
+\end{enumerate}
+
+\thm{Stirling's approximation}{
+	\[
+		n! \sim \sqrt{2\pi n}\lt( \frac{n}{e} \rt)^n
+		.\]
 }
 
 \end{document}
