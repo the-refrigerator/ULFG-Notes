@@ -751,15 +751,42 @@ Where $f(x) = \frac{P(x)}{Q(x)}$ with $\deg Q(x) \geq \deg P(x) + 1$, $Q(x)$ has
 
 \subsubsection{Integrals of the form $\int_{-\infty}^\infty \frac{f(x)}{x^\alpha}\,\dd{x}$}
 
-Where $f(x) = \frac{P(x)}{Q(x)}$ with $\deg Q(x) \geq \deg P(x) + 1$, $Q(x)$ has no real roots, and $\alpha\in]0,1[$, then we integrate the function $g(z)=\frac{f(z)}{z^\alpha}$ where $z^\alpha=e^{\alpha\Log(z)}$ along the closed path $\Gamma = ABCDEFGHA$ shown below
+Where $f(x) = \frac{P(x)}{Q(x)}$ with $\deg Q(x) \geq \deg P(x) + 1$, $Q(x)$ has no real roots, and $\alpha\in]0,1[$, then we integrate the function $g(z)=\frac{f(z)}{z^\alpha}$ where $z^\alpha=e^{\alpha\Log(z)}$ along the closed path $\Gamma = ABCDA$ shown below were $A(r,0^+)$, $B(R,0^+)$, $C(r,0^-)$, and $D(R,0^-)$
 
-\begin{tikzpicture}
-	\draw[->] (-3,0) -- (3,0) node[right] {$\Re(z)$};
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}[font=\footnotesize]
 
-	\draw[->] (0,-3) -- (0,3) node[above] {$\Im(z)$};
-	\draw[->] (0,0) -- (2,2) node[above] {Imma do it later};
-	\draw (0,0) node[below left] {$0$};
-\end{tikzpicture}
+		% Imaginary plane axis
+		\draw[->] (-2.1,0) -- (2.1,0) node[right] {$\Re(z)$};
+		\draw[->] (0,-2.1) -- (0,2.1) node[above] {$\Im(z)$};
+
+		% Ticks on x-axis
+		\foreach \x in {-2.1,-1.9,-1.7,...,1.9}
+		\draw[gray] (\x,0.05) -- (\x,-0.05);
+
+		% Ticks on y-axis
+		\foreach \y in {-2.1,-1.9,-1.7,...,1.9}
+		\draw[gray] (0.05,\y) -- (-0.05,\y);
+
+		% Outer arc
+		\draw (0,0) ++(2:1.5cm) arc (2:358:1.5cm);
+
+		% Inner arc
+		\draw (0,0) ++(4:1cm) arc (4:356:1cm);
+
+		% Connecting lines
+		\draw (0,0) ++(2:1.5cm) coordinate (start1) -- ++(180:0.5cm) coordinate (end1);
+		\draw (0,0) ++(358:1.5cm) coordinate (start2) -- ++(180:0.5cm) coordinate (end2);
+
+		% Points with labels
+		\fill (start1) circle (0.7pt) node[above right, inner sep=1pt] {\scriptsize $B$};
+		\fill (end1) circle (0.7pt) node[above left, inner sep=1pt] {\scriptsize $A$};
+		\fill (start2) circle (0.7pt) node[below right, inner sep=1pt] {\scriptsize $C$};
+		\fill (end2) circle (0.7pt) node[below left, inner sep=1pt] {\scriptsize $D$};
+	\end{tikzpicture}
+
+\end{figure}
 
 \section{Special Functions}
 
