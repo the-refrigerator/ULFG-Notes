@@ -132,7 +132,7 @@ In a cycle the energy does not change so
 	W_\text{cycle} = Q_\text{in} - Q_\text{out}
 	.\]
 
-The formual for thermal effeciency is
+The formula for thermal efficiency is
 \[
 	\eta = \frac{W_\text{cycle}}{Q_\text{in}} = 1-\frac{Q_\text{out}}{Q_\text{in}}
 	.\]
@@ -259,5 +259,353 @@ and
 	C_V(T) & =\frac{R}{k-1}  \\
 	C_p(T) & =\frac{kR}{k-1}
 \end{align*}
+
+\chapter{Control Volume Analysis}
+
+Control Volume is a region in space through which mass and energy can flow. It is defined by a control surface that encloses the control volume.
+
+\section{Mass Conservation}
+
+\[
+	\dot{m}_\text{in} - \dot{m}_\text{out} = \dv{m_\text{control}}{t}
+	.\]
+
+\[
+	\dot{m} = \int_{A_\text{in}}\rho\va{v}\cdot\va{n}\,\dd{A}
+	.\]
+
+One dimensional Flow Form of the mass balance rate
+\[
+	\dot{m} = \rho A v
+	.\]
+
+$A v$ is the volumetric flow rate
+
+\[
+	\dv{m_\text{control}}{t} = \sum \frac{A_\text{in} v_\text{in}}{\nu_\text{in}} - \sum \frac{A_\text{out} v_\text{out}}{\nu_\text{out}}
+	.\]
+
+When the system reaches a steady state $\dv{m_\text{control}}{t} = 0$, so
+\[
+	\sum \dot{m}_\text{in} = \sum \dot{m}_\text{out}
+	.\]
+
+\[
+	m_\text{control}(t) = \int_V \rho\,\dd{V}
+	.\]
+
+\section{Energy Conservation}
+
+\[
+	\dv{E_\text{control}}{t} = \dot{Q} - \dot{W} + \dot{m}_\text{in}\lt(u_\text{in} + \frac{v_\text{in}^2}{2} + gz_\text{in}\rt) - \dot{m}_\text{out}\lt(u_\text{out} + \frac{v_\text{out}^2}{2} + gz_\text{out}\rt)
+	.\]
+
+In addition to the work done by the system, there is also work done on the system by the surroundings. This is called flow work and is defined as
+\[
+	\dot{W}_\text{flow} = \dot{m}(p_\text{out}\nu_\text{out} - p_\text{in}\nu_\text{in})
+	.\]
+
+\[
+	\dot{W} = \dot{W}_\text{control} + \dot{W}_\text{flow}
+	.\]
+
+so the equation for the energy of the system becomes
+\[
+	\dv{E_\text{control}}{t} = \dot{Q}_\text{control} - \dot{W}_\text{control} + \dot{m}_\text{in}\lt(u_\text{in} + p_\text{in}\nu_\text{in} + \frac{v_\text{in}^2}{2} + gz_\text{in}\rt) - \dot{m}_\text{out}\lt(u_\text{out} + p_\text{out}\nu_\text{out} + \frac{v_\text{out}^2}{2} + gz_\text{out}\rt)
+	.\]
+
+Using the definition of the enthalpy, we can write
+\[
+	\dv{E_\text{control}}{t} = \dot{Q}_\text{control} - \dot{W}_\text{control} + \dot{m}_\text{in}\lt(h_\text{in} + \frac{v_\text{in}^2}{2} + gz_\text{in}\rt) - \dot{m}_\text{out}\lt(h_\text{out} + \frac{v_\text{out}^2}{2} + gz_\text{out}\rt)
+	.\]
+
+In practice there may be several locations on the boundary through which mass enters or exists. The energy rate balance in this case becomes
+\[
+	\dv{E_\text{control}}{t} = \dot{Q}_\text{control} - \dot{W}_\text{control} + \sum \dot{m}_\text{in}\lt(h_\text{in} + \frac{v_\text{in}^2}{2} + gz_\text{in}\rt) - \sum \dot{m}_\text{out}\lt(h_\text{out} + \frac{v_\text{out}^2}{2} + gz_\text{out}\rt)
+	.\]
+
+\section{Energy Balance for Steady Flow}
+
+\[
+	\dot{m}_\text{in}\lt(h_\text{in} + \frac{v_\text{in}^2}{2} + gz_\text{in}\rt) - \dot{m}_\text{out}\lt(h_\text{out} + \frac{v_\text{out}^2}{2} + gz_\text{out}\rt) = \dot{W}_\text{control} - \dot{Q}_\text{control}
+	.\]
+
+The mass rate balance reduces simply to $\dot{m}_\text{in} = \dot{m}_\text{out}$
+\[
+	(h_\text{in} - h_\text{out}) + \frac{v_\text{in}^2 - v_\text{out}^2}{2} + g(z_\text{in} - z_\text{out}) = \frac{\dot{W}_\text{control}}{\dot{m}} - \frac{\dot{Q}_\text{control}}{\dot{m}}
+	.\]
+
+$\frac{Q}{\dot{m}}$ and $\frac{W}{\dot{m}}$ are rates of heat and work transfer per unit mass of fluid flowing through the control volume. They are called specific heat and specific work respectively.
+
+\section{Nozzles and Diffusers}
+
+A nozzle is a device that increases the velocity of a fluid at the expense of pressure. A diffuser is a device that increases the pressure of a fluid at the expense of velocity. \\
+
+The only work is flow work at locations where the fluid enters or exits the control volume. Thus $W_\text{control} = 0$. The energy balance for steady flow becomes
+
+\[
+	0 = \frac{Q_\text{control}}{\dot{m}} + \frac{v_\text{in}^2 - v_\text{out}^2}{2} + (h_\text{in} - h_\text{out})
+	.\]
+
+The term $Q_\text{control}$ is often negligible, so the energy balance becomes
+\[
+	\frac{v_\text{in}^2 - v_\text{out}^2}{2} + (h_\text{in} - h_\text{out}) = 0
+	.\]
+
+\section{Turbines}
+
+A turbine is a device that extracts energy from a fluid.\\
+
+For the turbine the kinetic potential energy of the matter flowing across the boundary is usually small enough to be neglected. The energy balance for steady flow becomes
+
+\[
+	0 = \dot{Q}_\text{control} - W_\text{control} + \dot{m}(h_\text{in} - h_\text{out})
+	.\]
+
+If $Q_\text{control}$ is negligible, then
+
+\[
+	\dot{W}_\text{control}  = \dot{m}(h_\text{in} - h_\text{out})
+	.\]
+
+\section{Compressors and Pumps}
+
+A compressor is a device that increases the pressure of a gas. A pump is a device that increases the pressure of a liquid. The equations of the model are the same as the equations for the turbines
+
+\section{Heat Exchangers}
+
+A heat exchanger is a device that transfers heat from one fluid to another. \\
+
+The only work is flow work at locations where the fluid enters or exits the control volume. Thus $W_\text{control} = 0$, and although heat transfer occurs, it is often small enough to be ignored
+\[
+	\sum \dot{m}_\text{in}h_\text{in} = \sum \dot{m}_\text{out}h_\text{out}
+	.\]
+
+\section{Throttling Devices}
+
+A throttling device is a device that reduces the pressure of a fluid without changing its phase. \\
+
+The only work is flow work at locations where the fluid enters or exits the control volume. Thus $W_\text{control} = 0$, and although heat transfer occurs, it is often small enough to be ignored, and it is safe to assume that there is no change in potential energy
+\[
+	h_1 + \frac{v_1^2}{2} = h_2 + \frac{v_2^2}{2}
+	.\]
+
+Although velocities may be relatively high in the vicinity of the restriction, measurements made upstream and downstream of the reduced flow area show in most cases that the change in the specific kinetic energy of the gas or liquid between these locations can be neglected. With this further simplification, the last equation reduces to
+
+\[
+	h_\text{in} = h_\text{out}
+	.\]
+
+\chapter{The Second Law of Thermodynamics}
+
+The second law can be used to determine whether a process is possible(spontaneously) and it's direction. It can also be used to determine the equilibrium state of a system, as well as it's maximum efficiency. \\
+
+\section{Clausius Statement}
+
+Claudius statement of the second law of thermodynamics states that it is impossible for any system to operate in such a way that the sole result would be the absorption of heat from a colder body to a warmer one without requiring work.
+
+\section{Kelvin-Planck Statement}
+
+Kelvin-Planck statement of the second law of thermodynamics states that it is impossible for any system to operate in a thermodynamic cycle and deliver a net amount of energy by work to its surroundings while receiving energy by heat transfer from a single thermal reservoir. In other words, It is impossible to take a quantity of heat $Q$ of an energy source and the fully transform into work.
+
+\section{Entropy Statement}
+
+Entropy is a property of a system that is a measure of its molecular disorder or randomness. The entropy of a system is a function of state. It is impossible for any system to operate such that it's net entropy decreases.
+
+\[
+	S_\text{gen} \geq 0
+	.\]
+
+\subsubsection{Reversibility and Irreversibility}
+
+A process is called if the system and all irreversible parts of its surroundings cannot be restored to their initial states without leaving some trace on the surroundings. While a reversible process is one that can be reversed without leaving any trace on the surroundings.
+
+
+\chapter{The Second Law of Thermodynamics}
+
+The efficiency of a cycle is given by
+\[
+	\eta = \frac{\text{Net Work Output}}{\text{Heat Input}} = \frac{W_\text{net}}{Q_H} = 1 - \frac{Q_C}{Q_H}
+	.\]
+
+According to the Kelvin-Planck statement, $\eta_\text{max} < 1$ for any cycle.
+
+\cor{Carnot Corollary 1}{
+	The thermal efficiency of an irreversible power cycle is always less than the thermal efficiency of a reversible power cycle when each operates between the same two thermal reservoirs.
+}
+
+\cor{Carnot Corollary 2}{
+	All reversible power cycles operating between the same two thermal reservoirs have the same thermal efficiency.
+}
+
+For a refrigeration cycle, the coefficient of performance is given by
+\[
+	\beta = \frac{\text{Heat Removed}}{\text{Work Input}} = \frac{Q_C}{W_\text{net}} = \frac{Q_C}{Q_H - Q_C}
+	.\]
+
+And for a heat pump cycle, the coefficient of performance is given by
+
+\[
+	\gamma = \frac{\text{Heat Added}}{\text{Work Input}} = \frac{Q_H}{W_\text{net}} = \frac{Q_H}{Q_H - Q_C}
+	.\]
+
+According to Clausius statement, $W_\text{net} \neq 0$ so these coefficients are always finite in value.
+
+\[
+	\lt(\frac{Q_C}{Q_H}\rt)_\text{rev} = \frac{T_C}{T_H}
+	.\]
+
+\begin{align*}
+	\eta_\text{max}   & = 1 - \frac{T_C}{T_H}   \\
+	\beta_\text{max}  & = \frac{T_C}{T_H - T_C} \\
+	\gamma_\text{max} & = \frac{T_H}{T_H - T_C}
+\end{align*}
+
+\section{Carnot Cycle}
+
+\begin{description}
+	\ii[Process 1—2] The gas expands isothermally at Tc while receiving energy $Q_C$ from the cold reservoir by heat transfer.
+	\ii[Process 2—3] The gas is compressed adiabatically until its temperature is $T_H$.
+	\ii[Process 3—4] The gas is compressed isothermally at $T_H$ while it discharges energy $Q_H$ to the hot reservoir by heat transfer.
+	\ii[Process 4—1] The gas expands adiabatically until its temperature decreases to $T_C$.
+\end{description}
+
+% \begin{tikzpicture}[node distance=2cm,>=latex]
+% 	% Nodes
+% 	\node[draw, minimum width=2cm, minimum height=1.5cm] (compressor) {Compressor};
+% 	\node[draw, minimum width=2cm, minimum height=1.5cm, right=of compressor] (heat_source) {Heat Source};
+% 	\node[draw, minimum width=2cm, minimum height=1.5cm, below=of heat_source] (expander) {Expander};
+% 	\node[draw, minimum width=2cm, minimum height=1.5cm, left=of expander] (heat_sink) {Heat Sink};
+%
+% 	% Arrows
+% 	\draw[->] (compressor) -- node[midway, above] {1} (heat_source);
+% 	\draw[->] (heat_source) -- node[midway, right] {2} (expander);
+% 	\draw[->] (expander) -- node[midway, below] {3} (heat_sink);
+% 	\draw[->] (heat_sink) -- node[midway, left] {4} (compressor);
+%
+% 	% Isothermal Process
+% 	\node[draw, minimum width=2cm, minimum height=1.5cm, below=1cm of compressor] (isothermal) {Isothermal};
+%
+% 	% Adiabatic Process
+% 	\node[draw, minimum width=2cm, minimum height=1.5cm, right=2cm of isothermal] (adiabatic) {Adiabatic};
+%
+% 	% Labels
+% 	\node[below=0.5cm of isothermal] {1};
+% 	\node[below=0.5cm of adiabatic] {2};
+% 	\node[below=0.5cm of heat_sink] {3};
+% 	\node[below=0.5cm of compressor] {4};
+% \end{tikzpicture}
+
+\chapter{Entropy}
+
+\[
+	\Delta S = \int \frac{\delta Q_\text{rev}}{T}
+	.\]
+
+\section{Using the $T$-$\dd{S}$ Equations}
+
+\begin{align*}
+	T\dd{S} & = \dd{U} + p\dd{V} \\
+	T\dd{S} & = \dd{H} - V\dd{p} \\
+\end{align*}
+
+\section{Entropy Change of an Ideal Gas}
+
+\begin{align*}
+	s(T_2, v_2) - s(T_1, v_1) & = c_v \ln\frac{T_2}{T_1} + R\ln\frac{v_2}{v_1} \\
+	s(T_2, p_2) - s(T_1, p_1) & = c_p \ln\frac{T_2}{T_1} - R\ln\frac{p_2}{p_1} \\
+\end{align*}
+
+\section{Entropy Change of an Incompressible Substance}
+
+\[
+	s_2 - s_1 = c\ln\frac{T_2}{T_1}
+	.\]
+
+\[
+	Q_\text{rev} = \int_1^2 T\,\dd{S}
+	.\]
+
+\section{Entropy Balance for a Closed System}
+
+\[
+	S_2 - S_1 = \int_1^2 \lt(\frac{\delta Q}{T}\rt)_b + \sigma
+	.\]
+
+where $\sigma$ is the entropy generated.
+
+The differential form of the entropy balance is
+\[
+	\dd{S} = \lt(\frac{\delta Q}{T}\rt)_b + \delta\sigma
+	.\]
+
+Closed system entropy rate balance is given by
+
+\[
+	\dv{S}{t} = \sum_j \frac{Q_j}{T_j} + \dot{\sigma}
+	.\]
+
+Control volume entropy rate balance is given by
+
+\[
+	\dv{S_\text{control}}{t} = \sum_j \frac{\dot{Q}_j}{T_j} + \sum \dot{m}_\text{in} s_\text{in} - \sum \dot{m}_\text{out} s_\text{out} + \dot{\sigma}
+	.\]
+
+At steady state, the entropy rate balance becomes
+
+\[
+	\sum_j \frac{\dot{Q}_j}{T_j} + \sum \dot{m}_\text{in} s_\text{in} - \sum \dot{m}_\text{out} s_\text{out} + \dot{\sigma} = 0
+	.\]
+
+For one inlet and one outlet, the entropy rate balance becomes
+
+\[
+	s_2 - s_1 = \frac{1}{\dot{m}} \lt( \sum_j \frac{\dot{Q}_j}{T_j} \rt) + \frac{\dot{\sigma}}{\dot{m}}
+	.\]
+
+\section{Isentropic Processes}
+
+An isentropic process is a process during which the entropy of the system remains constant.
+
+\[
+	\Delta S = 0
+	.\]
+
+\subsection{Isentropic Process for an Ideal Gas}
+
+\[
+	p_2 = p_1 \exp\lt[ \frac{s^\circ(T_2) - s^\circ(T_1)}{R} \rt]
+	.\]
+
+Assuming constant specific heats,
+
+\begin{align*}
+	c_p & = \frac{kR}{k-1} \\
+	c_v & = \frac{R}{k-1}  \\
+\end{align*}
+
+\begin{align*}
+	0               & = c_p \ln\frac{T_2}{T_1} - R\ln\frac{p_2}{p_1} \\
+	0               & = c_v \ln\frac{T_2}{T_1} + R\ln\frac{v_2}{v_1} \\
+	\frac{T_2}{T_1} & = \lt(\frac{p_2}{p_1}\rt)^{\frac{k-1}{k}}      \\
+	\frac{T_2}{T_1} & = \lt(\frac{v_1}{v_2}\rt)^{k-1}                \\
+	\frac{p_2}{p_1} & = \lt(\frac{v_1}{v_2}\rt)^k
+\end{align*}
+
+\section{Isentropic Efficiency}
+
+\subsection{Isentropic Efficiency of a Turbine}
+
+\[
+	\eta_t = \frac{h_1 - h_2}{h_1 - h_{2s}}
+	.\]
+
+where $h_{2s}$ is the enthalpy at state 2 if the turbine were isentropic.
+
+\subsection{Isentropic Efficiency of a Nozzle}
+
+\[
+	\eta_\text{nozzle} = \frac{h_1 - h_{s2}}{h_1-h_2}
+	.\]
 
 \end{document}
