@@ -731,4 +731,298 @@ where
 	H_i = \frac{1}{n}\int_0^n \ell_i(s)\,\dd{s}
 	.\]
 
+\chapter{Linear Systems}
+
+Developed form of a linear system:
+
+\begin{align*}
+	a_{11}x_1 + a_{12}x_2 + \cdots + a_{1n}x_n & = b_1 \\
+	a_{21}x_1 + a_{22}x_2 + \cdots + a_{2n}x_n & = b_2 \\
+	\vdots                                     &       \\
+	a_{n1}x_1 + a_{n2}x_2 + \cdots + a_{nn}x_n & = b_n
+\end{align*}
+
+Matrix form of a linear system:
+
+\[
+	A\va{x} = \va{b}
+	.\]
+
+
+\[
+	A = \begin{bmatrix}
+		a_{11} & a_{12} & \cdots & a_{1n} \\
+		a_{21} & a_{22} & \cdots & a_{2n} \\
+		\vdots &        &        &        \\
+		a_{n1} & a_{n2} & \cdots & a_{nn}
+	\end{bmatrix} \quad
+	\va{x} = \begin{bmatrix}
+		x_1    \\
+		x_2    \\
+		\vdots \\
+		x_n
+	\end{bmatrix}\quad
+	\va{b} =\begin{bmatrix}
+		b_1    \\
+		b_2    \\
+		\vdots \\
+		b_n
+	\end{bmatrix}
+	.\]
+
+\section{Direct Methods}
+
+\subsection{Cramer's Rule}
+
+\[
+	x_i = \frac{\det A_i}{\det A}
+	.\]
+
+where $A_i$ is the matrix obtained by replacing the $i$-th column of $A$ by $\va{b}$. For example
+
+\[
+	A_1 = \begin{bmatrix}
+		b_1    & a_{12} & \cdots & a_{1n} \\
+		b_2    & a_{22} & \cdots & a_{2n} \\
+		\vdots &        & \ddots &        \\
+		b_n    & a_{n2} & \cdots & a_{nn}
+	\end{bmatrix}
+	.\]
+
+\subsection{Gaussian Elimination}
+
+This method converts the augmented matrix $[A,\va{b}]$ in to an upper triangular matrix.
+
+\[
+	[A,\va{b}] = \lt[
+		\begin{array}{cccc|c}
+			a_{11} & a_{12} & \cdots & a_{1n} & b_1    \\
+			a_{21} & a_{22} & \cdots & a_{2n} & b_2    \\
+			\vdots &        & \ddots & \vdots & \vdots \\
+			a_{n1} & a_{n2} & \cdots & a_{nn} & b_n
+		\end{array}
+		\rt]
+	.\]
+
+The steps of this method are as follows:
+
+\begin{enumerate}
+	\ii Compose the augmented matrix $[A,\va{b}]$.
+	\ii Find the max pivot element $a_{kk}$ by only switching rows. Where $k$ is the current iteration. Then divide the row with the max pivot element by $a_{kk}$.
+	\ii Subtract all the rows below the current row by a multiple of the current row such that the elements below the pivot element are zero.
+	\ii Repeat the above steps until you reach the last row.
+	\ii Find the value of $x_n$ and substitute it in the $n-1$-th equation until you have reached the first equation.
+\end{enumerate}
+
+\subsection{Gauss-Jordan Elimination}
+
+This method is identical to Gaussian elimination except that it converts the augmented matrix $[A,\va{b}]$ in to an augmented identity matrix. Simply perform the steps of Gaussian elimination and then subtract the $n-1$-th equation with the $n$-th equation times a constant so that the non-pivot terms becomes zero. The final step is repeated until the matrix is diagonal.
+
+
+\section{Iterative Methods}
+
+\subsection{Jacobi's Method}
+
+The steps of this method are as follows:
+
+\begin{enumerate}
+	\ii Arrange the given system of equations in a diagonally dominant form.
+	\ii Assume an initial guess for the solution vector $\va{x}^{(0)}$.
+	\ii Calculate the next iteration of the solution vector $\va{x}^{(k+1)}$ using the following formula
+	\[
+		x_i^{(k+1)} = \frac{1}{a_{ii}}\lt(b_i - \sum_{\substack{j=1\\j\neq i}}^{n}a_{ij}x_j^{(k)}\rt)
+		.\]
+\end{enumerate}
+
+\nt{
+A matrix $A$ is said to be diagonally dominant if
+\[
+	|a_{ii}| > \sum_{\substack{j=1\\j\neq i}}^{n}|a_{ij}|
+	.\]
+}
+
+\subsection{Gauss-Seidel Method}
+
+This method is identical to Jacobi's method except that the solution vector $\va{x}^{(k+1)}$ is calculated using the following formula
+
+\[
+	x_i^{(k+1)} = \frac{1}{a_{ii}}\lt(b_i - \sum_{j=1}^{i-1}a_{ij}x_j^{(k+1)} - \sum_{j=i+1}^{n}a_{ij}x_j^{(k)}\rt)
+	.\]
+which uses the most recent values of the solution vector instead of the previous iteration.
+
+\subsubsection{Matrix Form}
+
+The matrix $A$ can be written as the sum of a lower triangular matrix $E$, a diagonal matrix $D$ and an upper triangular matrix $F$.
+
+\[
+	A = D - E - F
+	.\]
+The Gauss-Seidel method can be written in matrix form as follows
+
+\[
+	\va{x}^{(k+1)} = (D-E)^{-1}F\cdot\va{x}^{(k)} + (D-E)^{-1}\cdot\va{b}
+	.\]
+
+\nt{
+	If the matrix $A$ is diagonally dominant then the Gauss-Seidel method and the Jacobi method converge.
+}
+
+\nt{
+The stop condition for iterative methods is
+\[
+	\lt|x_i^{(k+1)} - x_i^{(k)}\rt| < \varepsilon\quad\forall i
+	.\]
+}
+
+\subsubsection{Successive Over-Relaxation (SOR)}
+
+The choice of initial guess for the solution vector $\va{x}^{(0)}$ can affect the convergence of the iterative methods. The SOR multiplies the difference between the current and the next iteration of the solution vector by a constant $\lambda$.
+
+\subsubsection{Same Side Convergence}
+
+If $(x^{(1)} - x^{(2)})(x^{(2)} - x^{(3)}) > 0$ then we accelerate the convergence by multiplying the difference by a constant $\lambda > 1$ (usually $\lambda=1.2$). Then we calculate
+
+\[
+	x^{(2)*} = x^{(1)} + \lambda(x^{(2)} - x^{(1)})
+	.\]
+
+\subsubsection{Opposite Side Convergence}
+
+If $(x^{(1)} - x^{(2)})(x^{(2)} - x^{(3)}) < 0$ then we accelerate the convergence by multiplying the difference by a constant $\lambda < 1$ (usually $\lambda=0.8$). Then we calculate
+
+\[
+	x^{(2)*} = x^{(1)} + \lambda(x^{(2)} - x^{(1)})
+	.\]
+
+\chapter{Differential Equations}
+
+\dfn{Cauchy's Problem}{
+	Cauchy's problem is to find a function $y(x)$ given a function $f$ such that
+	\[
+		\begin{cases}
+			\dv{y}{x} = f(x,y) \\
+			y(x_0) = y_0
+		\end{cases}
+	\]
+}
+
+\thm{}{
+	There exists a unique solution to Cauchy's problem if $f$ is continuous on $[a,b]$ and Lipschitz continuous in $y$.
+	\[
+		\exists L \in \RR^+ \Big/ \lt|f(x,y_1) - f(x,y_2)\rt| \leq L\lt|y_1 - y_2\rt|\quad\forall x\in[a,b],\forall y_1,y_2\in\RR
+		.\]
+}
+
+\mlenma{}{
+	If $f_y$ is continuous and bounded then $f$ is Lipschitz continuous in $y$.
+}
+
+\section{Convergence and Stability}
+
+Choosing a method means choosing a function $\varphi$ such that
+\[
+	y_{i+1} = y_i +h\cdot\varphi(x_i,y_i,h)
+	.\]
+
+\dfn{Convergence}{
+	A method is said to be convergent if
+	\[
+		\lim_{h\to 0}\max_{i=0,\ldots,n-1}\lt|y(x_i) - y_i\rt| = 0
+		.\]
+}
+
+\dfn{Consistency}{
+A method is said to be consistent if
+\[
+\lim_{h\to 0}\max_{i=0,\ldots,n-1}\frac{1}{h}(y(x_{i+1}) - y(x_i) - h\cdot\varphi(x_i,y(x_i),h)) = 0
+.\]
+or in other words
+\[
+\varphi(x,y,0) = f(x,y)
+.\]
+}
+
+\dfn{Stability}{
+Let $y_i$ and $z_i$ be the solutions of the following problems
+\[
+	\begin{cases}
+		y_{i+1} = y_i + h\cdot\varphi(x_i,y_i,h) \\
+		y(x_0) = y_0
+	\end{cases}
+	\quad\text{and}\quad
+	\begin{cases}
+		z_{i+1} = z_i + h\cdot[\varphi(x_i,z_i,h)+\varepsilon_i] \\
+		z(x_0) = z_0
+	\end{cases}
+\]
+
+where $\lim_{h\to 0}\max_i |\varepsilon_i| = 0$. The method is said to be stable if
+\[
+	\exists M_1,M_2,\forall h \Big/ \max_i |y_{i+1} - z_{i+1}| \leq  M_1\max_i |y_0 - z_0| + M_2\max_i |\varepsilon_i|
+	.\]
+}
+
+\thm{}{
+	If $\varphi$ is Lipschitz continuous in $y$ then the method is stable.
+}
+
+\thm{}{
+	If the method is stable and consistent then it is convergent.
+}
+
+\thm{}{
+	If $\varphi(x,y,0) = f(x,y)$ and $\varphi$ is Lipschitz continuous in $y$ then the method is stable.
+}
+
+\section{Euler's Method}
+
+For all methods here on out we will divide the interval $[a,b]$ into $n$ sub-intervals of length $h$ such that $h = \frac{b-a}{n}$ (equidistant).
+
+\[
+	y_{i+1} = y_i + h\cdot f(x_i,y_i)
+	.\]
+
+where $y_i$ is the approximation of $y(x_i)$.
+
+\section{Heun's Method}
+
+\[
+	y_{i+1} = y_i + \frac{h}{2}\lt(f(x_i,y_i) + f(x_{i+1},y_i + h\cdot f(x_i,y_i))\rt)
+	.\]
+
+
+\section{Taylor's Method}
+
+\[
+	y_{i+1} = y_i + h\cdot f(x_i,y_i) + \frac{h^2}{2!}\cdot y'' + \frac{h^3}{3!}\cdot y''' + \ldots
+	.\]
+
+\section{Runge-Kutta Methods}
+
+\subsection{RK2}
+
+\[
+	y_{i+1} = y_i + \frac{h}{2}\cdot\lt(k_1 + k_2\rt)
+	.\]
+
+where
+\begin{align*}
+	k_1 & = f(x_i,y_i)                  \\
+	k_2 & = f(x_i + h,y_i + h\cdot k_1)
+\end{align*}
+
+\subsection{RK4}
+
+\[
+	y_{i+1} = y_i + \frac{h}{6}\cdot\lt(k_1 + 2k_2 + 2k_3 + k_4\rt)
+	.\]
+
+where
+\begin{align*}
+	k_1 & = f(x_i,y_i)                                            \\
+	k_2 & = f\lt(x_i + \frac{h}{2},y_i + \frac{h}{2}\cdot k_1\rt) \\
+	k_3 & = f\lt(x_i + \frac{h}{2},y_i + \frac{h}{2}\cdot k_2\rt) \\
+	k_4 & = f(x_i + h,y_i + h\cdot k_3)
+\end{align*}
+
 \end{document}
