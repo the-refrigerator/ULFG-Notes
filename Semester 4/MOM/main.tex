@@ -167,11 +167,11 @@ The characteristic polynomial of a tensor $\det(A-\lambda I)$ can be expressed a
 			\end{bmatrix}
 			 &
 			1 \begin{bmatrix}
-				1 & \beta \\\beta^* & 1
-			\end{bmatrix}
+				  1 & \beta \\\beta^* & 1
+			  \end{bmatrix}
 		\end{bmatrix}
 		\\
-		                           & =
+		                        & =
 		\begin{bmatrix}
 			1               & \beta         & \alpha        & \alpha\beta \\
 			\beta^*         & 1             & \alpha\beta^* & \alpha      \\
@@ -460,17 +460,17 @@ Plane strain in a displacement plane $\va{u}=(u,v)$ of a body that has a unit th
 
 \begin{align*}
 	\dd{x'} & =\vb{F}\begin{bmatrix}
-		\dd{x} \\0
-	\end{bmatrix}=\begin{bmatrix}
-		\pdv{u}{x}\dd{x}+\dd{x} \\
-		\pdv{v}{x}\dd{x}
-	\end{bmatrix} \\
+		                 \dd{x} \\0
+	                 \end{bmatrix}=\begin{bmatrix}
+		                               \pdv{u}{x}\dd{x}+\dd{x} \\
+		                               \pdv{v}{x}\dd{x}
+	                               \end{bmatrix} \\
 	\dd{y'} & =\vb{F}\begin{bmatrix}
-		0 \\\dd{y}
-	\end{bmatrix}=\begin{bmatrix}
-		\pdv{u}{y}\dd{y} \\
-		\pdv{v}{y}\dd{y}+\dd{y}
-	\end{bmatrix}
+		                 0 \\\dd{y}
+	                 \end{bmatrix}=\begin{bmatrix}
+		                               \pdv{u}{y}\dd{y} \\
+		                               \pdv{v}{y}\dd{y}+\dd{y}
+	                               \end{bmatrix}
 \end{align*}
 
 The strain tensor becomes
@@ -526,6 +526,277 @@ For a tensor to be considered a stress tensor it has to satisfy the 6 compatibil
 	\pdv[2]{\varepsilon_{22}}{X_2} + \pdv[2]{\varepsilon_{33}}{X_2} & = 2\pdv{\varepsilon_{23}}{X_2}{X_3}                                                                                                       & \pdv{\varepsilon_{22}}{X_3}{X_1} + \pdv{}{X_2}\lt(\pdv{\varepsilon_{31}}{X_2}-\pdv{\varepsilon_{12}}{X_3}-\pdv{\varepsilon_{23}}{X_1}\rt) & =0 \\
 	\pdv[2]{\varepsilon_{33}}{X_1} + \pdv[2]{\varepsilon_{11}}{X_3} & = 2\pdv{\varepsilon_{31}}{X_3}{X_1}
 	                                                                & \pdv{\varepsilon_{33}}{X_1}{X_2} + \pdv{}{X_3}\lt(\pdv{\varepsilon_{12}}{X_3}-\pdv{\varepsilon_{23}}{X_1}-\pdv{\varepsilon_{31}}{X_2}\rt) & =0
+\end{align*}
+
+\chapter{Stress}
+
+External forces can be classified as body forces and surface forces. Body forces are forces that act on the entire body, such as gravity. Surface forces are forces that act on the surface of the body, such as pressure. \\
+
+A body is at equilibrium if the external forces resisted by internal forces.
+
+\section{Stress Vectors}
+
+\[
+	\va{T} = \lim_{\dd{s}\to 0} \dv{\va{F}}{s}
+	.\]
+
+The stress vector is a vector that acts on a surface. It is defined as the force per unit area acting on a surface $\dd{s}$. It can be split in to 2 vectors
+\[
+	\va{T} = \va{T}_n + \va{T}_t
+	.\]
+
+where $\va{T}_n$ is the normal stress vector and $\va{T}_t$ is the shear stress vector. \\
+
+To know the stress vector of a plane we can look at $T$ in 3 perpendicular directions. The stress vector is then
+
+\[
+	\sigma_{ij} = \va{T}_i \cdot \vu{e}_j
+	.\]
+
+where the index $i$ is the direction of the normal vector and $j$ is the direction of the stress vector.
+
+\[
+	\va{T} = \begin{pmatrix}
+		\sigma_{11} \\
+		\sigma_{12} \\
+		\sigma_{13}
+	\end{pmatrix}
+	.\]
+
+To find the stress at every plane we can use the stress tensor
+
+\[
+	\vb*{\sigma} = \begin{bmatrix}
+		\sigma_{11} & \sigma_{21} & \sigma_{31} \\
+		\sigma_{12} & \sigma_{22} & \sigma_{32} \\
+		\sigma_{13} & \sigma_{23} & \sigma_{33}
+	\end{bmatrix}
+	.\]
+
+\nt{The stress tensor is symmetric.}
+
+The stress at a plane $P$ with normal vector $\vu{n}$ is
+
+\[
+	\va{T} = \vb*{\sigma} \cdot \vu{n}
+	.\]
+
+\begin{align*}
+	\va{T}_n & = \vu{n} \cdot \vb*{\sigma} \cdot \vu{n} \\
+	\va{T}_t & = \va{T} - \va{T}_n
+\end{align*}
+
+\section{Priciple Stresses}
+
+The principle stresses are the maximum and minimum stresses at a point. They are the eigenvalues of the stress tensor. The eigenvectors are the directions of the principle stresses. \\
+
+\[
+	\vb{\sigma}_p = \begin{bmatrix}
+		\sigma_{11} & 0           & 0           \\
+		0           & \sigma_{22} & 0           \\
+		0           & 0           & \sigma_{33}
+	\end{bmatrix}
+	.\]
+
+\section{Plane stress}
+
+Plane stress is when the stress in the $z$ direction is 0. This means that $\sigma_{13} = \sigma_{23} = \sigma_{33} = 0$.
+
+\[
+	\vb{\sigma} = \begin{bmatrix}
+		\sigma_{11} & \sigma_{12} & 0 \\
+		\sigma_{21} & \sigma_{22} & 0 \\
+		0           & 0           & 0
+	\end{bmatrix}
+	.\]
+
+Let $\va{T}$ be the stress vector acting on a plane with normal vector $\vu{n}$, such that $\vu{n}$ is making an angle $\theta$ with the horizontal.
+
+\[
+	\va{T} = \begin{pmatrix}
+		T_1 \\
+		T_2 \\
+		0
+	\end{pmatrix} = \begin{pmatrix}
+		\sigma_{11}\cos\theta + \sigma_{12}\sin\theta \\
+		\sigma_{12}\cos\theta + \sigma_{22}\sin\theta \\
+		0
+	\end{pmatrix}
+	.\]
+
+\begin{align*}
+	\sigma_n  & = \frac{\sigma_{11}+\sigma_{22}}{2} + \frac{\sigma_{11}-\sigma_{22}}{2}\cos2\theta + \sigma_{12}\sin2\theta \\
+	\tau_{nt} & = -\frac{\sigma_{11}-\sigma_{22}}{2}\sin2\theta + \sigma_{12}\cos2\theta
+\end{align*}
+
+\subsection{Mohr's Circle in Plane Stress}
+
+Mohr's circle is a graphical method of finding the principle stresses. It's a circle with centr $(\sigma_{11}+\sigma_{22})/2$ and radius $\sqrt{\lt(\frac{\sigma_{11}-\sigma_{22}}{2}\rt)^2 + \sigma_{12}^2}$. The sign convention in Mohr circle space is that $\tau_{nt}$ is in the negative $y$ direction and $\sigma_n$ is in the positive $x$ direction, and an angle of $\theta$ in real space is an angle of $2\theta$ in Mohr circle space.
+
+The principle stresses are the $x$ intercepts of the circle.
+
+\[
+	\sigma_{1,2} = \frac{\sigma_{11}+\sigma_{22}}{2} \pm \sqrt{\lt(\frac{\sigma_{11}-\sigma_{22}}{2}\rt)^2 + \tau_{xy}^2}
+	.\]
+
+\[
+	\tau_\text{max} = \sqrt{\lt(\frac{\sigma_{11}-\sigma_{22}}{2}\rt)^2 + \tau_{xy}^2}
+	.\]
+
+The principle angles $\theta_{1,2}$ are
+
+\[
+	\tan2\theta_{1,2} = \frac{2\tau_{xy}}{\sigma_{11}-\sigma_{22}}
+	.\]
+
+\section{Mohr's Circle in 3D}
+
+Mohr's circle in case of 3D stress consists of 3 circles. We calculate the 3 principle stresses $\sigma_{1,2,3}$ and the 3 principle directions of those stresses $n_{1,2,3}$.
+
+\begin{align*}
+	{n_1}^2 & = \frac{{\tau_n}^2 + (\sigma_n - \sigma_2)(\sigma_n - \sigma_3)}{(\sigma_1 - \sigma_2)(\sigma_1-\sigma_3)} \\
+	{n_2}^2 & = \frac{{\tau_n}^2 + (\sigma_n - \sigma_1)(\sigma_n - \sigma_3)}{(\sigma_2 - \sigma_1)(\sigma_2-\sigma_3)} \\
+	{n_3}^2 & = \frac{{\tau_n}^2 + (\sigma_n - \sigma_1)(\sigma_n - \sigma_2)}{(\sigma_3 - \sigma_1)(\sigma_3-\sigma_2)}
+\end{align*}
+
+Thus we obtain the 3 equations of the 3 circles
+
+\begin{align*}
+	C_1 = \lt(\frac{\sigma_1 + \sigma_2}{2},0\rt) \qquad R_1 = \frac{\sigma_1 - \sigma_2}{2} \\
+	C_2 = \lt(\frac{\sigma_2 + \sigma_3}{2},0\rt) \qquad R_2 = \frac{\sigma_2 - \sigma_3}{2} \\
+	C_3 = \lt(\frac{\sigma_3 + \sigma_1}{2},0\rt) \qquad R_3 = \frac{\sigma_1 - \sigma_3}{2}
+\end{align*}
+
+\section{Equation of Equilibrium}
+
+\[
+	\pdv{\sigma_{ij}}{x_j} + f_i = 0
+	.\]
+
+\[
+	\nabla \cdot \vb*{\sigma} + \vb{f} = 0
+	.\]
+
+\chapter{Elasticity}
+
+\section{Tensile Test}
+
+Nominal stress
+\[
+	\sigma = \frac{F}{S_0}
+	.\]
+
+Nominal strain
+\[
+	\varepsilon = \frac{\Delta L}{L_0}
+	.\]
+
+Hooke's Law (in case $\sigma<R_e$ where $R_e$ is the yield strength)
+\[
+	\sigma = E \varepsilon
+	.\]
+
+Where $E$ is the Young's Modulus.\\
+
+We define the Poisson's ratio in case of an isotropic material as
+
+\begin{align*}
+	\vartheta_x & = -\frac{\varepsilon_x}{\varepsilon_z} \\
+	\vartheta_y & = -\frac{\varepsilon_y}{\varepsilon_z}
+\end{align*}
+
+\[
+	\sigma_z = E \varepsilon_z
+	.\]
+
+\[
+	\vartheta_x = \vartheta_y = \vartheta
+	.\]
+
+\section{Pure Shear Test}
+
+\[
+	\tau = \frac{F}{A}
+	.\]
+
+\[
+	2\varepsilon_{xy} = \tau_{xy} = \tan\theta
+	.\]
+
+If the material is still elastic, the
+\[
+	\tau_{xy} = G \varepsilon_{xy}
+	.\]
+
+Where $G=\mu$ is the shear modulus.
+
+\[
+	G = \mu = \frac{E}{2(1+\vartheta)}
+	.\]
+
+\section{Generalized Hooke's Law}
+
+\begin{align*}
+	\varepsilon_1 & = \frac{1}{E}\lt(\sigma_1 - \vartheta(\sigma_2 + \sigma_3)\rt) \\
+	\varepsilon_2 & = \frac{1}{E}\lt(\sigma_2 - \vartheta(\sigma_1 + \sigma_3)\rt) \\
+	\varepsilon_3 & = \frac{1}{E}\lt(\sigma_3 - \vartheta(\sigma_1 + \sigma_2)\rt)
+\end{align*}
+
+If a material experiences a deformation $\varepsilon_{ij}$, the new length of the material across the $x_i$ dimension is
+\[
+	x_i' = (1+\varepsilon_{ii})x_i
+	.\]
+
+\begin{align*}
+	\sigma_{ij}      & = \lambda \delta_{ij} \varepsilon_{kk} + 2\mu \varepsilon_{ij}                     \\
+	\varepsilon_{ij} & = \frac{1}{E} \lt((1+\vartheta)\sigma_{ij} - \vartheta \sigma_{kk}\delta_{ij} \rt)
+\end{align*}
+
+where $\lambda$ is the Lame's constant.
+
+\[
+	\lambda = \frac{E\vartheta}{(1+\vartheta)(1-2\vartheta)}
+	.\]
+
+\section{Deformation Approach}
+
+\begin{enumerate}
+	\ii Postulate the strain field.
+	\ii Verify the boundary conditions.
+	\ii Verify the Lam\'e-Navier equations.
+	\[
+		(\lambda + 2\mu) \nabla(\nabla \cdot \vb{u}) + + \nabla \cdot \va{f} =  0
+		.\]
+	\ii Find the strain components first and then the stress components.
+	\ii Check boundary conditions in stress.
+\end{enumerate}
+
+\section{Stress Approach}
+
+\begin{enumerate}
+	\ii Postulate the stress filed.
+	\ii Verify the conditions of equilibrium.
+	\ii Verify the boundary conditions in terms of stress.
+	\ii Verify the equations of Beltrami-Michell.
+
+	\[
+		\nabla^2 \sigma_ij + \frac{1}{1+\vartheta}\pdv{\sigma_{kk}}{x_i}{x_j} + \frac{\vartheta}{1+\vartheta}\dv{f_l}{x_l} + \pdv{f_j}{x_i} + \pdv{f_i}{x_j} = 0
+		.\]
+	\ii Verify the boundary conditions in displacement.
+\end{enumerate}
+
+\section{Stress functions}
+
+We call $\Phi$ a stress function if it verfies
+
+\[
+	\pdv[4]{\Phi}{x_1} + 2\frac{\partial^4\Phi}{\partial{x_1}^2 \partial{x_2}^2} + \pdv[4]{\Phi}{x_2} = 0
+	.\]
+
+\begin{align*}
+	\sigma_{11} & = \pdv[2]{\Phi}{x_2}       \\
+	\sigma_{22} & = \pdv[2]{\Phi}{x_1}       \\
+	\sigma_{12} & = -\pdv[2]{\Phi}{x_1}{x_2}
 \end{align*}
 
 \end{document}
