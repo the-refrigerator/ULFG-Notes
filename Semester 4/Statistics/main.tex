@@ -554,4 +554,422 @@ Assume $y_n$ and $z_n$ are two estimators of the same parameter $\theta$. We say
 
 Assume $y_n$ and $z_n$ are two unbiased estimators of $\theta$, then $y_n$ is more efficient then $z_n$ if and only if $\Var{y_n}<\Var{z_n}$
 
+\chapter{Hypothesis Testing}
+
+\section{Introduction}
+
+In hypothesis testing, we have a null-hypothesis $H_0$ on a sample space $\Omega$ and an alternative hypothesis $H_1$ on $\Omega$. We want to test $H_0$ against $H_1$.\\
+
+To do so we consider a random sample size $n$ and calculate the probability that $H_0$ is within a certain \emph{significane level} and deduce if we can accpet $H_0$.
+
+As an example consider $H_0 = \mu\neq m$, then $H_1$ is
+
+\begin{align*}
+	 & \begin{rcases}
+		   H_1 = \mu > m \\
+		   H_1 = \mu < m \\
+	   \end{rcases}\, \text{One sided test} \\
+	 & \begin{rcases}
+		   H_1 = \mu \neq m
+	   \end{rcases}\, \text{Two sided test}
+\end{align*}
+
+\begin{table}
+	\begin{center}
+		\begin{tabular}[c]{|l|l|l|}
+			\hline
+			             & $H_0$ is true    & $H_0$ is false   \\
+			\hline
+			Accept $H_0$ & Correct decision & Type II error    \\
+			\hline
+			Reject $H_0$ & Type I error     & Correct decision \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+Type I error
+
+\[
+	\alpha = \Pr{\text{Type I error}} = \Pr{\text{Reject }H_0|H_0\text{ is true}}
+	.\]
+
+Type II error
+
+\[
+	\beta = \Pr{\text{Type II error}} = \Pr{\text{Accept }H_0|H_0\text{ is false}}
+	.\]
+
+Power of the test
+
+\[
+	\pi = \begin{cases}
+		\alpha  & \text{if }H_0\text{ is true} \\
+		1-\beta & \text{if }H_1\text{ is true} \\
+	\end{cases}
+\]
+
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+					no markers, domain=-3:3, samples=100,
+					axis lines*=left, xlabel={}, ylabel=$y$,
+					height=5cm, width=12cm,
+					xtick={0}, ytick=\empty,
+					enlargelimits=false, clip=false, axis on top,
+					grid = major
+				]
+				\addplot [fill=cyan!20, draw=none, domain=-3:-1.96] {exp(-x^2/2)/sqrt(2*pi)} \closedcycle;
+				\addplot [fill=cyan!20, draw=none, domain=1.96:3] {exp(-x^2/2)/sqrt(2*pi)} \closedcycle;
+				\addplot [very thick,black] {exp(-x^2/2)/sqrt(2*pi)} node [pos=0.8, anchor=south west] {$\mu_0$};
+				\draw [yshift=-0.6cm, latex-latex](axis cs:-1.96,0) -- node [fill=white] {$1-\alpha$} (axis cs:1.96,0);
+			\end{axis}
+		\end{tikzpicture}
+		\caption*{Rejection region for a 1 (left) sided test}
+	\end{subfigure}
+
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+					no markers, domain=-3:3, samples=100,
+					axis lines*=left, xlabel={}, ylabel=$y$,
+					height=5cm, width=12cm,
+					xtick={0}, ytick=\empty,
+					enlargelimits=false, clip=false, axis on top,
+					grid = major
+				]
+				\addplot [fill=cyan!20, draw=none, domain=1.96:3] {exp(-x^2/2)/sqrt(2*pi)} \closedcycle;
+				\addplot [very thick,black] {exp(-x^2/2)/sqrt(2*pi)} node [pos=0.8, anchor=south west] {$\mu_0$};
+				\draw [yshift=-0.6cm, latex-latex](axis cs:-3,0) -- node [fill=white] {$1-\alpha$} (axis cs:1.96,0);
+			\end{axis}
+		\end{tikzpicture}
+		\caption*{Rejection region for a 2 sided test}
+	\end{subfigure}
+\end{figure}
+
+
+\section{Comparison between a mean and a reference value}
+
+\subsection{Two sided test}
+
+\begin{align*}
+	H_0 & : \mu_0 = \mu    \\
+	H_1 & : \mu_0 \neq \mu
+\end{align*}
+
+\begin{itemize}
+	\ii Assume $\sigma$ is known. Test statistic $T = \frac{\bar{x}_n - \mu_0}{\frac{\sigma}{\sqrt{n}}} $.\\
+
+	Rule of rejection
+	\[
+		\lt|T\rt| > t \quad \begin{cases}
+			\Pr{|T|>t} = \alpha \\
+			T\sim \mathcal{N}(0,1)
+		\end{cases}
+		.\]
+
+	\ii Assume $\sigma$ is unknown. Test statistic $T = \frac{\bar{x}_n - \mu_0}{\frac{S'}{\sqrt{n}}} = \frac{\bar{x}_n - \mu_0}{\frac{S}{\sqrt{n-1}}}$.\\
+
+	Rule of rejection
+	\[
+		\lt|T\rt| > t \quad \begin{cases}
+			\Pr{|T|>t} = \alpha \\
+			T\sim \mathcal{T}_{n-1}
+		\end{cases}
+		.\]
+
+\end{itemize}
+
+\subsection{One sided test}
+
+\subsubsection{Left sided test}
+
+\begin{align*}
+	H_0 & : \mu_0 = \mu \\
+	H_1 & : \mu_0 < \mu
+\end{align*}
+
+\begin{itemize}
+	\ii Assume $\sigma$ is known. Test statistic $T = \frac{\bar{x}_n - \mu_0}{\frac{\sigma}{\sqrt{n}}} $.\\
+
+	Rule of rejection
+	\[
+		T > t \quad \begin{cases}
+			\Pr{T>t} = \alpha \\
+			T\sim \mathcal{N}(0,1)
+		\end{cases}
+		.\]
+
+	\ii Assume $\sigma$ is unknown. Test statistic $T = \frac{\bar{x}_n - \mu_0}{\frac{S'}{\sqrt{n}}} = \frac{\bar{x}_n - \mu_0}{\frac{S}{\sqrt{n-1}}}$.\\
+
+	Rule of rejection
+	\[
+		T > t \quad \begin{cases}
+			\Pr{T>t} = \alpha \\
+			T\sim \mathcal{T}_{n-1}
+		\end{cases}
+		.\]
+\end{itemize}
+
+\subsubsection{Right sided test}
+
+Same as left sided test but with $T < -t$.
+
+\section{Comparison between a proportion and a reference value}
+
+\subsection{Two sided test}
+
+\begin{align*}
+	H_0 & : p_0 = p    \\
+	H_1 & : p_0 \neq p
+\end{align*}
+
+Test statistic $X \sim \mathrm{Bin}(n,p)$.\\
+
+Rule of rejection
+\[
+	\begin{cases}
+		\Pr{X>b_{n,p_0,1-\alpha/2}} = \Pr{X>b_{n,p_0,\alpha/2}} = \frac{\alpha}{2} \\
+		X\sim \mathrm{Bin}(n, p_0)
+	\end{cases}
+	.\]
+
+Acceptance region $[b_{n,p_0,\alpha/2}, b_{n,p_0,1-\alpha/2}]$.
+
+\[
+	\Pr{X\in [b_{n,p_0,\alpha/2}, b_{n,p_0,1-\alpha/2}]} = 1-\alpha
+	.\]
+
+However if $n\geq 30$ we can use the normal approximation.
+
+
+Test statistic $T = \frac{X - np_0}{\sqrt{np_0(1-p_0)}}$.\\
+
+Rule of rejection
+\[
+	\lt|T\rt| > t \quad \begin{cases}
+		\Pr{|T|>t} = \alpha \\
+		T\sim \mathcal{N}(0,1)
+	\end{cases}
+	.\]
+
+\subsection{One sided test}
+
+\begin{align*}
+	H_0 & : p_0 = p \\
+	H_1 & : p_0 < p
+\end{align*}
+
+Test statistic $X \sim \mathrm{Bin}(n,p)$.\\
+
+Rule of rejection
+\[
+	\Pr{X\geq b_{n,p_0,1-\alpha}} = \alpha
+	.\]
+
+Acceptance region $[-\infty, b_{n,p_0,1-\alpha}]$.\\
+
+Normal approximation
+Test statistic $T = \frac{X - np_0}{\sqrt{np_0(1-p_0)}}$.\\
+
+Rule of rejection
+\[
+	T > t \quad \begin{cases}
+		\Pr{T>t} = \alpha \\
+		T\sim \mathcal{N}(0,1)
+	\end{cases}
+	.\]
+
+\section{Comparison between a variance and a reference value}
+
+\subsection{Two sided test}
+
+\begin{align*}
+	H_0 & : \sigma_0^2 = \sigma^2    \\
+	H_1 & : \sigma_0^2 \neq \sigma^2
+\end{align*}
+
+Test statistic
+\[
+	T = \begin{cases}
+		n\frac{Z^2}{\sigma_0^2} \sim {\chi_{n}}^2   & \text{if } \mu \text{ is known}   \\
+		n\frac{S^2}{\sigma_0^2} \sim {\chi_{n-1}}^2 & \text{if } \mu \text{ is unknown}
+	\end{cases}
+	.\]
+
+We reject $H_0$ if $T \notin [v_{\alpha/2}, v_{1-\alpha/2}]$.
+
+\[
+	\Pr{T \notin [v_{\alpha/2}, v_{1-\alpha/2}]} = \frac{\alpha}{2}\\
+	.\]
+
+\subsection{One sided test}
+
+\begin{align*}
+	H_0 & : \sigma^2 = \sigma_0^2 \\
+	H_1 & : \sigma^2 > \sigma_0^2
+\end{align*}
+
+Test statistic
+
+\[
+	T = \begin{cases}
+		n\frac{Z^2}{\sigma_0^2} \sim {\chi_{n}}^2   & \text{if } \mu \text{ is known}   \\
+		n\frac{S^2}{\sigma_0^2} \sim {\chi_{n-1}}^2 & \text{if } \mu \text{ is unknown}
+	\end{cases}
+	.\]
+
+We reject $H_0$ if $T > v_{1-\alpha}$.
+
+\[
+	\Pr{T > v_{1-\alpha}} = \alpha
+	.\]
+
+\section{Critical Probability}
+
+\[
+	\mathrm{P}_\text{c} = \begin{cases}
+		\Pr{|T|\geq|t_0|/\theta=\theta_0} & \text{for one sided tests }        \\
+		\Pr{T\geq t_0/\theta=\theta_0}    & \text{for } H_1: \theta > \theta_0 \\
+		\Pr{T\leq t_0/\theta=\theta_0}    & \text{for } H_1: \theta < \theta_0
+	\end{cases}
+	.\]
+
+
+\section{Comparison between two means}
+
+\subsection{Two sided test}
+
+\begin{align*}
+	H_0 & : \mu_1 = \mu_2    \\
+	H_1 & : \mu_1 \neq \mu_2
+\end{align*}
+
+Test statistic $T = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{\sigma_1^2}{n_1^2} + \frac{\sigma_2^2}{n_2^2}}}$.\\
+
+Rule of rejection
+
+\[
+	\begin{cases}
+		\Pr{|T|>t} = \alpha \\
+		T\sim \mathcal{N}(0,1)
+	\end{cases}
+	.\]
+
+\nt{
+	\begin{align*}
+		\bar{X}_1 - \bar{X}_2       & \sim \mathcal{N}\lt(\mu_1 - \mu_2, \sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}} \rt)
+		\EE(\bar{X}_1 - \bar{X}_2)  & = \mu_1 - \mu_2                                                                                \\
+		\Var{\bar{X}_1 - \bar{X}_2} & = \frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}
+	\end{align*}
+}
+
+\subsection{One sided test}
+
+\begin{align*}
+	H_0 & : \mu_1 = \mu_2 \\
+	H_1 & : \mu_1 > \mu_2
+\end{align*}
+
+Test statistic same as before.\\
+
+Rule of rejection
+
+\[
+	\begin{cases}
+		\Pr{T>t} = \alpha \\
+		T\sim \mathcal{N}(0,1)
+	\end{cases}
+	.\]
+
+\nt{
+	If $\sigma_1$ and $\sigma_2$ are unknown, and $\sigma_1=\sigma_2$ we perform all the same preceding tests but this a new test statistic
+	\[
+		T = \frac{\bar{X}_1 - \bar{X}_2}{S\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}} \sim \mathcal{T}_{n_1+n_2-2}
+		.\]
+	if $\sigma_1 \neq \sigma_2$ we use the preceding tests only if $n_1$ and $n_2$ are sufficiently large ($>30$).
+}
+
+\section{Comparison between 2 proportions}
+
+Consider the following 2 random variables
+
+\[
+	P = \frac{X+Y}{n_1+n_2}\quad S_d^2 = P(1-P)\lt(\frac{1}{n_1} + \frac{1}{n_2}\rt)
+	.\]
+
+\subsection{Two sided test}
+
+\begin{align*}
+	H_0 & : p_1 = p_2    \\
+	H_1 & : p_1 \neq p_2
+\end{align*}
+
+Test statistic $T = \frac{\frac{X}{n_1} - \frac{Y}{n_2}}{S_d}$.\\
+
+Rule of rejection
+
+\[
+	\begin{cases}
+		\Pr{|T|>t} = \alpha \\
+		T\sim \mathcal{N}(0,1)
+	\end{cases}
+	.\]
+
+\subsection{One sided test}
+
+\begin{align*}
+	H_0 & : p_1 = p_2 \\
+	H_1 & : p_1 > p_2
+\end{align*}
+
+Same job as before.
+
+\section{Comparison between two variances}
+
+\subsection{Two sided test}
+
+\begin{align*}
+	H_0 & : {\sigma_1}^2 = {\sigma_2}^2    \\
+	H_1 & : {\sigma_1}^2 \neq {\sigma_2}^2
+\end{align*}
+
+Test statistic $F = \frac{S_1^{'2}}{S_2^{'2}}$.\\
+
+\[
+	F \sim \mathcal{F}_{n_1-1,n_2-1}
+	.\]
+
+where $\mathcal{F}$ is the Fisher distribution.\\
+
+Rule of rejection
+
+\[
+	\begin{cases}
+		\Pr{F<f_{n_1-1,n_2-1,1-\alpha/2}} = \Pr{F>f_{n_1-1,n_2-1,\alpha/2}} = \frac{\alpha}{2} \\
+		F\sim \mathcal{F}_{n_1-1,n_2-1}
+	\end{cases}
+	.\]
+
+\subsection{One sided test}
+
+\begin{align*}
+	H_0 & : {\sigma_1}^2 = {\sigma_2}^2 \\
+	H_1 & : {\sigma_1}^2 < {\sigma_2}^2
+\end{align*}
+
+Rule of rejection
+
+\[
+	\begin{cases}
+		\Pr{F>f_{n_1-1,n_2-1,1-\alpha}} = \frac{\alpha}{2} \\
+		F\sim \mathcal{F}_{n_1-1,n_2-1}
+	\end{cases}
+	.\]
+
 \end{document}
