@@ -972,6 +972,127 @@ Rule of rejection
 	\end{cases}
 	.\]
 
+\nt{
+	Chi-squared test
+	\begin{align*}
+		H_0 & : \text{ the population follows law M }        \\
+		H_1 & : \text{ the population does not follow law M}
+	\end{align*}
 
+	Test statistic
+	\[
+		Y = \sum_{i=1}^{k} \frac{(n_{i} - n_{p_i})^2}{n_{p_i}} \sim {\chi^2}_{k-1}
+		.\]
+
+	Rule of rejection
+	\[
+		\begin{cases}
+			\Pr{Y>t} = \alpha \\
+			Y\sim {\chi^2}_{k-1}
+		\end{cases}
+		.\]
+}
+
+\chapter{Regression}
+
+\[
+	\cov{X,Y} = \EE(XY) - \EE(X)\EE(Y)
+	.\]
+
+\section{Linear Regression}
+
+The objective of linear regression is to find the best linear approximation $D: \alpha x + \beta$ of a set of data points.\\
+
+\begin{tikzpicture}
+	% Figure that shows linear regression on a sample data set with error bars
+	\begin{axis}[
+			axis lines = left,
+			xlabel = $x$,
+			ylabel = {$y$},
+			xmin=0, xmax=10,
+			ymin=0, ymax=10,
+			xtick={0,2,4,6,8,10},
+			ytick={0,2,4,6,8,10},
+			ymajorgrids=true,
+			xmajorgrids=true,
+			grid style=dashed,
+		]
+        %Plot the linear regression
+        \addplot[
+            domain=0:10,
+            samples=2,
+            color=red,
+        ]
+        {0.9*x+0.5};
+		%Plot the data points
+		\addplot[
+			only marks,
+			color=blue,
+			error bars/.cd,
+			y dir=both,
+			y explicit,
+		] coordinates {
+				(1,2) +- (0.5,0.6)
+				(2,2.2) +- (0.2,0.1)
+				(3,4.8) +- (0.5,1.6)
+				(4,3.1) +- (0.5,1)
+				(5,6.2) +- (0.5,1.2)
+				(6,5.9) +- (0.1,0)
+				(7,8.1) +- (0.5,1.3)
+				(8,7.2) +- (0.5,0.5)
+				(9,10.9) +- (0.5,2.3)
+				(10,9.8) +- (0.5,0.3)
+			};
+	\end{axis}
+
+\end{tikzpicture}
+
+The least squares method consists in minimizing the sum $S(\alpha,\beta)$ of the squares of the residuals.\\
+
+\[
+	S(\alpha,\beta) = \frac{1}{n} \sum_{i=1}^p \sum_{j=1}^q n_{ij}(y_j - \alpha x_i - \beta)^2
+	.\]
+
+It can shown that the couple $(a,b)$ that minimizes $S$ is given by
+
+\begin{align*}
+	a & = \frac{\cov{X,Y}}{\Var{X}} \\
+	b & = \EE(Y) - a\EE(X)
+\end{align*}
+
+\[
+	S_{\min} = \Var{Y}\cdot\lt[ 1 - \frac{\cov{X,Y}^2}{\Var{X}\cdot\Var{Y}} \rt]
+	.\]
+
+Similarly, we can construct a regression line $D': a'y + b'$ of $y$ on $x$ where $a'$ and $b'$ are given by
+
+\begin{align*}
+	a' & = \frac{\cov{X,Y}}{\Var{Y}} \\
+	b' & = \EE(X) - a'\EE(Y)
+\end{align*}
+
+\section{Coefficient of linear correlation}
+
+\[
+	\rho(X,Y) = \frac{\cov{X,Y}}{\sqrt{\Var{X}\Var{Y}}} = \frac{\cov{X,Y}}{\sigma_X\sigma_Y}
+	.\]
+
+Some properties of $\rho(X,Y)$
+
+\begin{align*}
+	\rho(X,Y)^2 & \leq 1                                                                        \\
+	\rho(X,Y)^2 & = a\cdot a'                                                                   \\
+	\rho(X,Y)   & = \begin{cases}
+		                \sqrt{a\cdot a'}  & \text{if } a, a' > 0 \,(\cov{X,Y} > 0)  \\
+		                -\sqrt{a\cdot a'} & \text{if } a, a' < 0 \,(\cov{X,Y} < 0)  \\
+		                0                 & \text{if } a = a' = 0 \,(\cov{X,Y} = 0)
+	                \end{cases}                 \\
+	\rho(X,Y)   & \begin{cases}
+		              > 0 & \text{if } X \text{ and } Y \text{ are positively correlated} \\
+		              < 0 & \text{if } X \text{ and } Y \text{ are negatively correlated} \\
+		              = 0 & \text{if } X \text{ and } Y \text{ are not correlated}
+	              \end{cases}\\
+	\rho(X,Y)^2 & = 1 \text{ if and only if } X \text{ and } Y \text{ are perfectly correlated}
+\end{align*}
 
 \end{document}
