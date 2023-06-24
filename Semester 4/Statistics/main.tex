@@ -1095,4 +1095,29 @@ Some properties of $\rho(X,Y)$
 	\rho(X,Y)^2 & = 1 \text{ if and only if } X \text{ and } Y \text{ are perfectly correlated}
 \end{align*}
 
+\section{Residual and non-residual variance}
+
+Consider a double statistical distribution $(n_{ij},x_i,y_j)$ and the regression line $D: y = ax + b$ where
+\begin{align*}
+    a & = \frac{\cov{X,Y}}{\Var{X}} \\
+    b & = \EE(Y) - a\EE(X)
+\end{align*}
+
+The \emph{residual variance} is defined as
+
+\[
+    V_R = S_{\min} = \Var{Y}\cdot\lt[ 1 - \rho(X,Y)^2 \rt]
+    .\]
+
+The \emph{non-residual variance} is defined as
+
+\[
+    V_{E} = \frac{1}{n} \sum_{ij} n_{ij}(\EE(Y) - ax_i -b)^2 
+    .\]
+
+\begin{align*}
+    V_E &= a^2\Var{X} = \rho^2\cdot\Var{Y} \\
+    \Var{Y} &= V_R + V_E
+\end{align*}
+
 \end{document}
