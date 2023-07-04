@@ -41,9 +41,11 @@
 \usepackage{chemfig}
 \usepackage[version=4]{mhchem}
 \usepackage{suffix}
+\usepackage{tabularx}
+\usepackage{subcaption}
 
 
-\setmonofont{Iosevka}
+% \setmonofont{SpaceMono Nerd Font}
 \setminted{fontsize=\footnotesize}
 
 \newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
@@ -558,6 +560,7 @@
 % NOTE BOX
 %================================
 
+\usetikzlibrary{hobby}
 \usetikzlibrary{arrows,calc,shadows.blur}
 \tcbuselibrary{skins}
 \newtcolorbox{note}[1][]{%
