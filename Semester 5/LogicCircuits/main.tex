@@ -1,0 +1,371 @@
+\documentclass{report}
+
+\input{../template/preamble}
+\input{../template/macros}
+\input{../template/letterfonts}
+
+\title{\Huge{Logic Circuits}\\Semester 5}
+\author{\huge{Ahmad Abu Zainab}}
+\date{}
+
+\ctikzset{
+	logic ports=ieee,
+	logic ports/scale=0.7,
+}
+
+\begin{document}
+
+\maketitle
+\newpage% or \cleardoublepage
+% \pdfbookmark[<level>]{<title>}{<dest>}
+\pdfbookmark[section]{\contentsname}{toc}
+\tableofcontents
+\pagebreak
+
+\chapter{Number Systems and Conversion}
+
+\begin{itemize}
+	\ii \textbf{Decimal} (Base 10): 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+	\ii \textbf{Binary} (Base 2): 0, 1
+	\ii \textbf{Octal} (Base 8): 0, 1, 2, 3, 4, 5, 6, 7
+	\ii \textbf{Hexadecimal} (Base 16): 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F
+\end{itemize}
+
+\section{Decimal and Binary}
+
+\subsection{Decimal to Binary}
+
+\begin{enumerate}
+	\ii Divide the decimal number by 2.
+	\ii Keep the remainder.
+	\ii Divide the quotient by 2.
+	\ii Keep the remainder.
+	\ii Repeat until the quotient is 0.
+	\ii The binary number is the remainders in reverse order.
+\end{enumerate}
+
+If the number has a decimal point then we multiply the decimal part by 2 the integer part of the result is the binary digit and the decimal part is multiplied by 2 again and so on until we obtain only a 1.
+
+\ex{
+	Convert $53_{10}$ to binary.
+}{
+	\begin{align*}
+		53/2 & = 26 \text{ remainder } 1 \\
+		26/2 & = 13 \text{ remainder } 0 \\
+		13/2 & = 6 \text{ remainder } 1  \\
+		6/2  & = 3 \text{ remainder } 0  \\
+		3/2  & = 1 \text{ remainder } 1  \\
+		1/2  & = 0 \text{ remainder } 1  \\
+	\end{align*}
+	\[
+		53_{10}  = 110101_2
+		.\]
+}
+
+\ex{
+	Convert $.625_{10}$ to binary
+}{
+	\begin{align*}
+		.625 \times 2 & = 1.25 \\
+		.25 \times 2  & = .5   \\
+		.5 \times 2   & = 1    \\
+	\end{align*}
+	\[
+		.625_{10} = .101_2
+		.\]
+}
+
+\subsection{Binary to Decimal}
+
+\begin{enumerate}
+	\ii Write the binary number.
+	\ii Multiply each digit by $2^n$ where $n$ is the position of the digit.
+	\ii Add the results.
+\end{enumerate}
+
+
+\ex{
+	Convert $110101_2$ to decimal.
+}{
+	\begin{align*}
+		110101_2 & = 1 \times 2^5 + 1 \times 2^4 + 0 \times 2^3 + 1 \times 2^2 + 0 \times 2^1 + 1 \times 2^0 \\
+		         & = 32 + 16 + 0 + 4 + 0 + 1                                                                 \\
+		         & = 53_{10}
+	\end{align*}
+}
+
+\section{Binary and Hexidecimal}
+
+To convert from binary to hexadecimal we group the binary digits into groups of 4 starting from the right and convert each group to a hexadecimal digit.
+
+\[
+	1001101.010111_2 = \underbrace{0100}_{4} \underbrace{1101}_{D} . \underbrace{0101}_{5} \underbrace{1100}_{C} = 4D.5C_{16}
+	.\]
+
+\section{Operations on Binary Numbers}
+
+\subsection{Addition}
+
+\[
+	\arraycolsep=1.4pt
+	\begin{tabular}{r c c c}
+		\text{carry} & 1 &   &   \\
+		             & 0 & 1 & 1 \\
+		+            & 1 & 1 & 0 \\
+		\hline
+		             & 1 & 0 & 1 \\
+	\end{tabular}
+	.\]
+
+\subsection{Subtraction}
+
+\[
+	\arraycolsep=1.4pt
+	\begin{tabular}{r c c c c c c c}
+		\text{borrow} &   & 1 & 1 & 1 &   &   \\
+		              & 1 & 1 & 1 & 0 & 0 & 1 \\
+		-             &   &   & 1 & 0 & 1 & 1 \\
+		\hline
+		              & 1 & 0 & 1 & 1 & 1 & 0
+	\end{tabular}
+	.\]
+
+\subsection{Multiplication}
+
+\begin{align*}
+	0\times 0 & = 0 \\
+	0\times 0 & = 0 \\
+	0\times 1 & = 0 \\
+	1\times 1 & = 1 \\
+\end{align*}
+
+\[
+	\arraycolsep=1.4pt
+	\begin{tabular}{r c c c c c c c c c c}
+		         &  &   &   &   &   & 1 & 1 & 0 & 1 \\
+		$\times$ &  &   &   &   &   & 1 & 0 & 1 & 1 \\
+		\hline
+		         &  &   &   &   &   & 1 & 1 & 0 & 1 \\
+		         &  &   &   &   & 1 & 1 & 0 & 1 &   \\
+		         &  &   &   & 0 & 0 & 0 & 0 &   &   \\
+		         &  &   & 1 & 1 & 0 & 1 &   &   &   \\
+		\hline
+		         &  & 1 & 0 & 0 & 0 & 1 & 1 & 1 & 1 \\
+	\end{tabular}
+	.\]
+
+\subsection{Division}
+
+Binary division is similar to decimal division, except it is much easier because the only two possible quotient digits are 0 and 1.
+
+We start division by comparing the divisor with the upper bits of the dividend.
+
+If we cannot subtract without getting a negative result, we move one place to the right and try again.
+
+If we can subtract, we place a 1 for the quotient above the number we subtracted from and append the next dividend bit to the end of the difference and repeat this process with this modified difference until we run out of bits in the dividend.
+
+\section{Negative Numbers in Binary}
+
+\begin{description}
+	\ii[Sign and Magnitude] The leftmost bit is the sign bit and the rest of the bits are the magnitude.
+	\[
+		-5_{10} = 1101_{2}
+		.\]
+	\ii[One's Complement] To negate a number we flip all the bits. $\bar{N} = (2^n-1) - N$ where $n$ is the number of bits.
+	\[
+		-5_{10} = (2^4 - 1) - 5 = 10_{10} = 1010_2
+		.\]
+	\ii[Two's Complement] To negate a number we flip all the bits and add 1. $N^* = 2^n - N$ where $n$ is the number of bits.
+	\[
+		-5_{10} = 2^4 - 5 = 11_{10} = 1011_2
+		.\]
+\end{description}
+
+Adding a negative number in two's complement is the same as subtracting the positive number. In one's complement we add the numbers and add the carry to the result.
+
+\chapter{Boolean Algebra}
+
+\section{Logic Gates}
+
+\begin{description}
+	\ii[NOT Gate] The output is the inverse of the input.
+	\[
+		\begin{array}{c c}
+			X & \bar{X} \\
+			\hline
+			0 & 1       \\
+			1 & 0       \\
+		\end{array}
+		.\]
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[not port] (not) {};
+			\draw (not.in) -- ++(-1,0) node[left] {$X$};
+			\draw (not.out) -- ++(1,0) node[right] {$\bar{X}$};
+		\end{circuitikz}
+	\end{figure}
+	\ii[AND Gate] The output is 1 if both inputs are 1.
+	\[
+		\begin{array}{c c c}
+			X & Y & X \cdot Y \\
+			\hline
+			0 & 0 & 0         \\
+			0 & 1 & 0         \\
+			1 & 0 & 0         \\
+			1 & 1 & 1         \\
+		\end{array}
+		.\]
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[and port] (and) {};
+			\draw (and.in 1) -- ++(-1,0) node[left] {$X$};
+			\draw (and.in 2) -- ++(-1,0) node[left] {$Y$};
+			\draw (and.out) -- ++(1,0) node[right] {$X \cdot Y$};
+		\end{circuitikz}
+	\end{figure}
+
+	\ii[OR Gate] The output is 1 if either input is 1.
+	\[
+		\begin{array}{c c c}
+			X & Y & X + Y \\
+			\hline
+			0 & 0 & 0     \\
+			0 & 1 & 1     \\
+			1 & 0 & 1     \\
+			1 & 1 & 1     \\
+		\end{array}
+		.\]
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[or port] (or) {};
+			\draw (or.in 1) -- ++(-1,0) node[left] {$X$};
+			\draw (or.in 2) -- ++(-1,0) node[left] {$Y$};
+			\draw (or.out) -- ++(1,0) node[right] {$X + Y$};
+		\end{circuitikz}
+	\end{figure}
+
+	\ii[XOR Gate] The output is 1 if either input is 1 but not both.
+	\[
+		\begin{array}{c c c}
+			X & Y & X \oplus Y \\
+			\hline
+			0 & 0 & 0          \\
+			0 & 1 & 1          \\
+			1 & 0 & 1          \\
+			1 & 1 & 0          \\
+		\end{array}
+		.\]
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[xor port] (xor) {};
+			\draw (xor.in 1) -- ++(-1,0) node[left] {$X$};
+			\draw (xor.in 2) -- ++(-1,0) node[left] {$Y$};
+			\draw (xor.out) -- ++(1,0) node[right] {$X \oplus Y$};
+		\end{circuitikz}
+	\end{figure}
+
+\end{description}
+
+\subsection{Switches}
+If switch $X$ is open, then we will define the value of $X$ to be 0; if switch $X$ is closed, then we will define the value of $X$ to be 1.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[nos,l=$X$] (2,0);
+	\end{circuitikz}
+\end{figure}
+
+\section{Laws and Theorems}
+
+\begin{itemize}
+
+	\ii Operations involving 0 and 1
+	\begin{align*}
+		X + 0     & = X \\
+		X + 1     & = 1 \\
+		X \cdot 1 & = X \\
+		X \cdot 0 & = 0 \\
+	\end{align*}
+
+	\ii Indempotent Laws
+	\begin{align*}
+		X + X     & = X \\
+		X \cdot X & = X \\
+	\end{align*}
+
+	\ii Involution Law
+	\[
+		\overline{\bar{X}} = X
+		.\]
+
+	\ii Laws of complementation
+	\begin{align*}
+		X + \bar{X}     & = 1 \\
+		X \cdot \bar{X} & = 0 \\
+	\end{align*}
+
+	\ii Commutative Laws
+	\begin{align*}
+		X + Y     & = Y + X     \\
+		X \cdot Y & = Y \cdot X \\
+	\end{align*}
+
+	\ii Associative Laws
+	\begin{align*}
+		X + (Y + Z)         & = (X + Y) + Z         \\
+		X \cdot (Y \cdot Z) & = (X \cdot Y) \cdot Z \\
+	\end{align*}
+
+	\ii Distributive Laws
+	\begin{align*}
+		X \cdot (Y + Z) & = X \cdot Y + X \cdot Z \\
+		X + Y \cdot Z   & = (X + Y) \cdot (X + Z) \\
+	\end{align*}
+
+	\ii Simplification Laws
+	\begin{align*}
+		X \cdot Y + X \cdot \bar{Y} & = X         \\
+		X + X\cdot Y                & = X         \\
+		(X + \bar{Y}) \cdot Y       & = X \cdot Y \\
+		(X + Y)\cdot(X + \bar{Y})   & = X         \\
+		X \cdot (X + Y)             & = X         \\
+		X \cdot \bar{Y} + Y         & = X + Y
+	\end{align*}
+\end{itemize}
+
+An expression is in sum of products form if it is a sum of products of literals.
+
+\[
+	A\bar{B} + C\bar{D}E + A\bar{C}\bar{E}
+	.\]
+
+Likewise, an expression is in product of sums form if it is a product of sums of literals.
+
+\[
+	(A + B)(C + D)E
+	.\]
+
+\section{De Morgan's Theorems}
+
+\begin{align*}
+	\overline{X + Y}     & = \bar{X} \cdot \bar{Y} \\
+	\overline{X \cdot Y} & = \bar{X} + \bar{Y}
+\end{align*}
+
+\section{Duality}
+
+Given an expression, we can obtain its dual by replacing all ANDs with ORs and all ORs with ANDs and all 0s with 1s and all 1s with 0s.
+
+\begin{align*}
+	(XYZ\cdots)^D         & = X + Y + Z + \cdots \\
+	(X + Y + Z +\cdots)^D & = XYZ\cdots
+\end{align*}
+
+The dual can also be found by taking the complement of the whole expression then complementing each variable individually
+
+\end{document}
