@@ -282,61 +282,68 @@ If switch $X$ is open, then we will define the value of $X$ to be 0; if switch $
 
 \section{Laws and Theorems}
 
-\begin{itemize}
+\begin{minipage}[t]{0.4\linewidth}
+	\begin{itemize}
 
-	\ii Operations involving 0 and 1
-	\begin{align*}
-		X + 0     & = X \\
-		X + 1     & = 1 \\
-		X \cdot 1 & = X \\
-		X \cdot 0 & = 0 \\
-	\end{align*}
+		\ii Operations involving 0 and 1
+		\begin{align*}
+			X + 0     & = X \\
+			X + 1     & = 1 \\
+			X \cdot 1 & = X \\
+			X \cdot 0 & = 0 \\
+		\end{align*}
 
-	\ii Indempotent Laws
-	\begin{align*}
-		X + X     & = X \\
-		X \cdot X & = X \\
-	\end{align*}
+		\ii Indempotent Laws
+		\begin{align*}
+			X + X     & = X \\
+			X \cdot X & = X \\
+		\end{align*}
 
-	\ii Involution Law
-	\[
-		\overline{\bar{X}} = X
-		.\]
+		\ii Involution Law
+		\[
+			\overline{\bar{X}} = X
+			.\]
 
-	\ii Laws of complementation
-	\begin{align*}
-		X + \bar{X}     & = 1 \\
-		X \cdot \bar{X} & = 0 \\
-	\end{align*}
+		\ii Laws of complementation
+		\begin{align*}
+			X + \bar{X}     & = 1 \\
+			X \cdot \bar{X} & = 0 \\
+		\end{align*}
 
-	\ii Commutative Laws
-	\begin{align*}
-		X + Y     & = Y + X     \\
-		X \cdot Y & = Y \cdot X \\
-	\end{align*}
+	\end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.4\linewidth}
+	\begin{itemize}
+		\ii Commutative Laws
+		\begin{align*}
+			X + Y     & = Y + X     \\
+			X \cdot Y & = Y \cdot X \\
+		\end{align*}
 
-	\ii Associative Laws
-	\begin{align*}
-		X + (Y + Z)         & = (X + Y) + Z         \\
-		X \cdot (Y \cdot Z) & = (X \cdot Y) \cdot Z \\
-	\end{align*}
+		\ii Associative Laws
+		\begin{align*}
+			X + (Y + Z)         & = (X + Y) + Z         \\
+			X \cdot (Y \cdot Z) & = (X \cdot Y) \cdot Z \\
+		\end{align*}
 
-	\ii Distributive Laws
-	\begin{align*}
-		X \cdot (Y + Z) & = X \cdot Y + X \cdot Z \\
-		X + Y \cdot Z   & = (X + Y) \cdot (X + Z) \\
-	\end{align*}
+		\ii Distributive Laws
+		\begin{align*}
+			X \cdot (Y + Z) & = X \cdot Y + X \cdot Z \\
+			X + Y \cdot Z   & = (X + Y) \cdot (X + Z) \\
+		\end{align*}
 
-	\ii Simplification Laws
-	\begin{align*}
-		X \cdot Y + X \cdot \bar{Y} & = X         \\
-		X + X\cdot Y                & = X         \\
-		(X + \bar{Y}) \cdot Y       & = X \cdot Y \\
-		(X + Y)\cdot(X + \bar{Y})   & = X         \\
-		X \cdot (X + Y)             & = X         \\
-		X \cdot \bar{Y} + Y         & = X + Y
-	\end{align*}
-\end{itemize}
+		\ii Simplification Laws
+		\begin{align*}
+			X \cdot Y + X \cdot \bar{Y} & = X         \\
+			X + X\cdot Y                & = X         \\
+			(X + \bar{Y}) \cdot Y       & = X \cdot Y \\
+			(X + Y)\cdot(X + \bar{Y})   & = X         \\
+			X \cdot (X + Y)             & = X         \\
+			X \cdot \bar{Y} + Y         & = X + Y
+		\end{align*}
+	\end{itemize}
+\end{minipage}
 
 An expression is in sum of products form if it is a sum of products of literals.
 
