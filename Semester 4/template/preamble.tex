@@ -12,6 +12,7 @@
 \usepackage{bookmark}
 \usepackage{enumitem}
 \usepackage{hyperref,theoremref}
+\usepackage{xparse}
 \hypersetup{
 	pdftitle={Hamboola my beloved},
 	colorlinks=true, linkcolor=doc!90,
@@ -43,6 +44,7 @@
 \usepackage{suffix}
 \usepackage{tabularx}
 \usepackage{subcaption}
+\usepackage{physics}
 
 
 % \setmonofont{SpaceMono Nerd Font}
@@ -653,8 +655,8 @@
 
 
 % deliminators
-\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
-\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+% \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+% \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
 
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
@@ -672,9 +674,9 @@
 	\hskip\wd\diffdbox
 	\endgroup
 }
-\newcommand{\dd}[1][]{\ensuremath{\mathop{}\!\ifstrempty{#1}{%
-			\slantedromand\@ifnextchar^{\hspace{0.2ex}}{\hspace{0.1ex}}}%
-		{\slantedromand\hspace{0.2ex}^{#1}}}}
+% \newcommand{\dd}[1][]{\ensuremath{\mathop{}\!\ifstrempty{#1}{%
+% 			\slantedromand\@ifnextchar^{\hspace{0.2ex}}{\hspace{0.1ex}}}%
+% 		{\slantedromand\hspace{0.2ex}^{#1}}}}
 \ProvideDocumentCommand\dv{o m g}{%
 	\ensuremath{%
 		\IfValueTF{#3}{%
