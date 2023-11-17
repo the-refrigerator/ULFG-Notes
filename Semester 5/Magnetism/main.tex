@@ -4,6 +4,8 @@
 \input{../template/macros}
 \input{../template/letterfonts}
 
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
 \title{\Huge{Magnetism}\\Semester 5}
 \author{Ahmad Abu Zainab}
 \date{}
@@ -204,5 +206,213 @@ This implies that if $n_1 < n_2$ then $\theta_1 > \theta_2$.
 \[
 	\frac{n_1}{n_2} =\frac{v_2}{v_1}
 	.\]
+
+\section{Young's Double Slit Experiment}
+
+\[
+	d\sin \theta = m\lambda
+	.\]
+
+\[
+	\Delta x = \frac{m\lambda L}{d}
+	.\]
+
+Bright fringes are where the path difference is an integer multiple of the wavelength.
+\[
+	x = \frac{m\lambda L}{d}
+	.\]
+
+Dark fringes are where the path difference is an odd multiple of half the wavelength.
+
+\[
+	x = \frac{\lt( 2m+1 \rt)\lambda L}{2d}
+	.\]
+
+Where $m$ is an integer, $d$ is the distance between the slits, $\lambda$ is the wavelength of the light, $L$ is the distance between the slits and the screen, and $x$ is the distance between the central bright fringe and the $m$th bright fringe.
+
+\section{Diffraction Grating}
+
+\[
+	\sin \theta_1 = \frac{\lambda}{a}
+	.\]
+
+\[
+	\sin \theta_n = n\frac{\lambda}{d}
+	.\]
+
+\chapter{Transmission Lines}
+
+\section{The Phasor}
+
+The phasor is a complex number that represents the amplitude and phase of a sinusoidal function. It is given by 2 forms
+
+\[
+	\text{Rectangular form} = A\cos \lt( \omega t + \varphi \rt) + jA\sin \lt( \omega t + \varphi \rt)
+	.\]
+
+\[
+	\text{Polar form} = Ae^{j\lt( \omega t + \varphi \rt)} = A \phase{\omega t + \varphi}
+	.\]
+
+\section{The Role of Wavelength}
+
+In a transmission line, the wavelength of the signal can affect the impedance of the line. The voltage at the source ($V_{AA'}$) is given by
+
+\[
+	V_{AA'} = V_0 \cos \omega t
+	.\]
+
+The voltage at the load ($V_{BB'}$) (assuming no losses across the transmission line) is given by
+
+\[
+	V_{BB'} = V_0 \cos \lt( \omega t - \varphi_0 \rt)
+	.\]
+
+\[
+	\varphi_0 = \frac{\omega l}{c}
+	.\]
+
+\section{TL lumped element model}
+
+We can model a transmission line using a series of resistors, inductors, and capacitors. The model is given by 4 parameters
+
+\begin{align*}
+	R' & = \text{Resistance per unit length } [\unit{\ohm\per\meter}]      \\
+	L' & = \text{Inductance per unit length } [\unit{\henry\per\meter}]    \\
+	C' & = \text{Capacitance per unit length } [\unit{\farad\per\meter}]   \\
+	G' & = \text{Conductance per unit length } [\unit{\siemens\per\meter}]
+\end{align*}
+
+{
+\renewcommand{\arraystretch}{2.5}
+\everymath{\displaystyle}
+\begin{table}[H]
+	\centering
+	\begin{tabularx}{\linewidth}{|c|YYYc|}
+		\hline
+		\textbf{Parameter} & \textbf{Coaxial}                                       & \textbf{Two-Wire}                                             & \textbf{Parallel-Plate}   & \textbf{Unit}               \\
+		\hline
+		$R'$               & $\frac{R_s}{2\pi} \lt( \frac{1}{a} + \frac{1}{b} \rt)$ & $\frac{2R_s}{\pi d}$                                          & $\frac{2R_s}{w}$          & $\unit{\ohm\per\meter}$     \\
+		$L'$               & $\frac{\mu}{2\pi}\ln b/a $                             & $\frac{\mu}{\pi}\ln\lt[ (D/d)+\sqrt{(D/d)^2-1} \rt]$          & $\frac{\mu h}{w}$         & $\unit{\henry\per\meter}$   \\
+		$G'$               & $\frac{2\pi \sigma}{\ln b/a}$                          & $\frac{\pi \sigma}{\ln\lt[ (D/d)+\sqrt{(D/d)^2-1} \rt]}$      & $\frac{\sigma w}{h}$      & $\unit{\siemens\per\meter}$ \\
+		$C'$               & $\frac{2\pi \varepsilon}{\ln b/a}$                     & $\frac{\pi \varepsilon}{\ln\lt[ (D/d)+\sqrt{(D/d)^2-1} \rt]}$ & $\frac{\varepsilon w}{h}$ & $\unit{\farad\per\meter}$   \\
+		\hline
+	\end{tabularx}
+\end{table}
+}
+Where $\mu$, $\varepsilon$, and $\sigma$ are the permeability, permittivity, and conductivity of the medium respectively. $R_s=\sqrt{\pi f \mu_c/\sigma_c}$ is the resistance of the conductor, $a$ is the radius of the inner conductor, $b$ is the radius of the outer conductor, $D$ is the distance between the two wires, $d$ is the diameter of the wire, $w$ is the width of the plate, and $h$ is the height of the plate.\\
+
+\section{The Telegrapher's Equations}
+
+The wave equation is given by
+
+\[
+	\dv[2]{\tilde{V}(z)}{z} - \lt( R' + j\omega L' \rt) \lt( G' + j\omega C' \rt) \tilde{V}(z) = 0
+	.\]
+
+Thus, we define the complex propagation constant $\gamma$ as
+\[
+	\gamma = \alpha + j\beta
+	.\]
+
+Where $\alpha$ is the attenuation constant and $\beta$ is the phase constant.
+
+\begin{align*}
+	\alpha & = \Re \lt( \gamma \rt)\quad [\unit{\neper\per\meter}]  \\
+	\beta  & = \Im \lt( \gamma \rt)\quad [\unit{\radian\per\meter}]
+\end{align*}
+
+In uncoupled form, the telegrapher's equations are given by
+
+\begin{align*}
+	\dv[2]{\tilde{V}(z)}{z} - \gamma^2 \tilde{V}(z) & = 0 \\
+	\dv[2]{\tilde{I}(z)}{z} - \gamma^2 \tilde{I}(z) & = 0
+\end{align*}
+
+The general solution to the wave equation is given by
+
+\begin{align*}
+	\tilde{V}(z) & = {V_0}^+ e^{-\gamma z} + {V_0}^- e^{\gamma z} \\
+	\tilde{I}(z) & = {I_0}^+ e^{-\gamma z} + {I_0}^- e^{\gamma z}
+\end{align*}
+
+Where ${V_0}^+$ and ${I_0}^+$ are the incident voltage and current respectively and ${V_0}^-$ and ${I_0}^-$ are the reflected voltage and current respectively.\\
+
+The characteristic impedance of the transmission line is given by
+
+\[
+	Z_0 = \frac{R' + j\omega L'}{\gamma} = \sqrt{\frac{R' + j\omega L'}{G' + j\omega C'}} \quad [\unit{\ohm}]
+	.\]
+
+\section{Lossless Transmission Line}
+
+In a lossless transmission line, the resistance and conductance per unit length are zero. I.E. $R'\ll \omega L'$ and $G'\ll \omega C'$. Thus, the characteristic impedance is given by
+
+\begin{align*}
+	\alpha  & = 0                                                                                                               \\
+	\beta   & = \omega \sqrt{L'C'} = \omega \sqrt{\mu\varepsilon}                                                               \\
+	Z_0     & = \sqrt{\frac{L'}{C'}}                                                                                            \\
+	\lambda & = \frac{2\pi}{\beta} = \frac{2\pi}{\omega \sqrt{L'C'}}                                                            \\
+	u_p     & = \frac{\omega}{\beta} = \frac{1}{\sqrt{L'C'}} = \frac{1}{\sqrt{\mu\varepsilon}} \quad [\unit{\meter\per\second}]
+\end{align*}
+
+\section{Voltage Reflection Coefficient}
+
+The voltage reflection coefficient is given by
+
+\begin{align*}
+	\Gamma & = \frac{{V_0}^-}{{V_0}^+}     \\
+	       & = \frac{Z_L - Z_0}{Z_L + Z_0} \\
+	       & = \frac{z_L -1}{z_L + 1}
+\end{align*}
+
+Where $z_L = Z_L/Z_0$ is the load impedance in terms of the characteristic impedance.\\
+
+We represent the voltage and current on the transmission line as
+
+\begin{align*}
+	\tilde{V}(z) & = {V_0}^+ \lt( e^{-j\beta z} + \Gamma e^{j\beta z} \rt)             \\
+	\tilde{I}(z) & = \frac{{V_0}^+}{Z_0} \lt( e^{-j\beta z} - \Gamma e^{j\beta z} \rt)
+\end{align*}
+
+\[
+	{V_0}^- = \Gamma {V_0}^+
+	.\]
+
+\section{Special Line Conditions}
+
+\begin{enumerate}
+	\ii Matched Line: $Z_L = Z_0 \Rightarrow \Gamma = 0$ $V_\text{ref} = 0$
+	\ii Open Circuit: $Z_L = \infty \Rightarrow \Gamma = 1$ $V_\text{ref} = V_\text{inc}$
+	\ii Short Circuit: $Z_L = 0 \Rightarrow \Gamma = -1$ $V_\text{ref} = -V_\text{inc}$
+\end{enumerate}
+
+{
+\renewcommand{\arraystretch}{2.5}
+\everymath{\displaystyle}
+\begin{table}[H]
+	\centering
+	\begin{tabularx}{0.8\linewidth}{|c|YY|}
+		\hline
+		\textbf{Load}              & $\bm{|\Gamma|}$                                       & $\bm{\theta_r}$                                                          \\
+		\hline
+		$Z_L = (r + jx)Z_0$        & $\lt[ \frac{(r-1)^2 + x^2}{(r+1)^2 + x^2} \rt]^{1/2}$ & $\tan^{-1} \lt( \frac{x}{r-1} \rt) - \tan^{-1} \lt( \frac{x}{r+1} \rt) $ \\
+		$Z_L = Z_0$                & 0                                                     & Irrelevant                                                               \\
+		(short)                    & 1                                                     & $\pm\pi$ (phase opposite)                                                \\
+		(open)                     & 1                                                     & 0                                                                        \\
+		$jX = j\omega L$           & 1                                                     & $\pm\pi - 2\tan^{-1}x$                                                   \\
+		$jX = -\frac{j}{\omega C}$ & 1                                                     & $\pm 2\tan^{-1}x$                                                        \\
+		\hline
+	\end{tabularx}
+\end{table}
+}
+
+% \section{Standing Waves} 
+%
+% Standing waves are waves that do not propagate. They are formed when two waves of the same frequency and amplitude travel in opposite directions. The equation of a standing wave is given by 
+%
+% \[
+%     V(z,t) = V_0 \cos \lt( \omega t \rt) \lt[ e^{-j\beta z} + \Gamma e^{j\beta z} \rt]
+%     .\]
 
 \end{document}
