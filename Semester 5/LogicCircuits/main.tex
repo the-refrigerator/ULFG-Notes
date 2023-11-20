@@ -4,6 +4,8 @@
 \input{../template/macros}
 \input{../template/letterfonts}
 
+\usepackage{karnaugh-map}
+
 \title{\Huge{Logic Circuits}\\Semester 5}
 \author{\huge{Ahmad Abu Zainab}}
 \date{}
@@ -268,6 +270,27 @@ Adding a negative number in two's complement is the same as subtracting the posi
 		\end{circuitikz}
 	\end{figure}
 
+	\ii[Equivalence Gate] The output is 1 if both inputs are the same.
+	\[
+		\begin{array}{c c c}
+			X & Y & X \equiv Y \\
+			\hline
+			0 & 0 & 1          \\
+			0 & 1 & 0          \\
+			1 & 0 & 0          \\
+			1 & 1 & 1          \\
+		\end{array}
+		.\]
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[xnor port] (xnor) {};
+			\draw (xnor.in 1) -- ++(-1,0) node[left] {$X$};
+			\draw (xnor.in 2) -- ++(-1,0) node[left] {$Y$};
+			\draw (xnor.out) -- ++(1,0) node[right] {$X \equiv Y$};
+		\end{circuitikz}
+	\end{figure}
+
 \end{description}
 
 \subsection{Switches}
@@ -282,7 +305,7 @@ If switch $X$ is open, then we will define the value of $X$ to be 0; if switch $
 
 \section{Laws and Theorems}
 
-\begin{minipage}[t]{0.4\linewidth}
+\begin{minipage}[t]{0.5\linewidth}
 	\begin{itemize}
 
 		\ii Operations involving 0 and 1
@@ -312,7 +335,6 @@ If switch $X$ is open, then we will define the value of $X$ to be 0; if switch $
 
 	\end{itemize}
 \end{minipage}
-\hfill
 \begin{minipage}[t]{0.4\linewidth}
 	\begin{itemize}
 		\ii Commutative Laws
@@ -329,8 +351,11 @@ If switch $X$ is open, then we will define the value of $X$ to be 0; if switch $
 
 		\ii Distributive Laws
 		\begin{align*}
-			X \cdot (Y + Z) & = X \cdot Y + X \cdot Z \\
-			X + Y \cdot Z   & = (X + Y) \cdot (X + Z) \\
+			X \cdot (Y + Z)       & = X \cdot Y + X \cdot Z     \\
+			X + Y \cdot Z         & = (X + Y) \cdot (X + Z)     \\
+			X \cdot (Y+Z)         & = X\cdot Y + X \cdot Z      \\
+			(X+Y)\cdot(X+Z)       & = X + Y \cdot Z             \\
+			(X+Y)\cdot(\bar{X}+Z) & = X\cdot Z + \bar{X}\cdot Y
 		\end{align*}
 
 		\ii Simplification Laws
@@ -344,6 +369,30 @@ If switch $X$ is open, then we will define the value of $X$ to be 0; if switch $
 		\end{align*}
 	\end{itemize}
 \end{minipage}
+
+\begin{align*}
+	X\oplus 0            & = X                                                                               \\
+	X\oplus 1            & = \bar{X}                                                                         \\
+	X\oplus X            & = 0                                                                               \\
+	X\oplus \bar{X}      & = 1                                                                               \\
+	X\oplus Y            & = Y\oplus X                                                                       \\
+	X\oplus (Y\oplus Z)  & = (X\oplus Y)\oplus Z = X\oplus Y\oplus Z                                         \\
+	X\cdot (Y\oplus Z)   & = X\cdot Y\oplus X\cdot Z                                                         \\
+	\overline{X\oplus Y} & = \bar{X}\oplus Y = X\oplus \bar{Y} = X\cdot Y + \bar{X}\cdot \bar{Y} = X\equiv Y
+\end{align*}
+
+Consensus Theorem
+
+\[
+	X\cdot Y + \bar{X}\cdot Z + Y\cdot Z = X\cdot Y + \bar{X}\cdot Z
+	.\]
+
+in dual form
+
+\[
+	(X + Y)(\bar{X} + Z)(Y + Z) = (X + Y)(\bar{X} + Z)
+	.\]
+
 
 An expression is in sum of products form if it is a sum of products of literals.
 
@@ -375,4 +424,146 @@ Given an expression, we can obtain its dual by replacing all ANDs with ORs and a
 
 The dual can also be found by taking the complement of the whole expression then complementing each variable individually
 
+\section{Minterm and Maxterm Expansions}
+
+\begin{description}
+	\ii[Minterm] A product term containing all the variables of the function in either true or complemented form.
+	\ii[Maxterm] A sum term containing all the variables of the function in either true or complemented form.
+\end{description}
+
+Any Boolean function can be expressed as a sum of minterms or a product of maxterms.
+
+\ex{Minterm}{
+	\[
+		f(A,B,C) =
+		\underbrace{\bar{A}\bar{B}\bar{C}}_{000}+
+		\underbrace{\bar{A}\bar{B}C}_{001}+
+		\underbrace{\bar{A}BC}_{011}+
+		\underbrace{\bar{A}B\bar{C}}_{010}+
+		\underbrace{ABC}_{111}
+		=
+		\Sigma m(0,1,3,2,7)
+		.\]
+}
+
+\ex{Maxterm}{
+	\[
+		f(A,B,C) =
+		(\underbrace{\bar{A}+\bar{B}+\bar{C}}_{111})\cdot
+		(\underbrace{\bar{A}+\bar{B}+C}_{110})\cdot
+		(\underbrace{\bar{A}+B+C}_{100})\cdot
+		(\underbrace{\bar{A}+B+\bar{C}}_{101})\cdot
+		(\underbrace{A+B+C}_{000})
+		=
+		\Pi M(7,6,4,5,0)
+		.\]
+}
+
+\chapter{Karnaugh Maps}
+
+A Karnaugh map is a graphical representation of a truth table.\\
+
+It is useful for simplifying Boolean expressions, by grouping together adjacent cells containing 1s.\\
+
+We first draw a grid with the number of rows and columns equal to the number of variables.\\
+
+We then label the rows and columns with the binary values of the variables using a Gray code. (000, 001, 011, 010, 110, 111, 101, 100) No 2 adjacent numbers differ by more than 1 bit\\
+
+We then fill in the cells with the output of the function.\\
+
+We then group together adjacent cells containing 1s in powers of 2 (1, 2, 4, 8, 16, 32, 64, 128, 256, etc.)\\
+
+We then go over the groups and write down the variables that remain the same throughout the group.\\
+
+\ex{Two Variable K-map}{
+	Take the following K-map
+
+	\begin{figure}[H]
+	\centering
+	\begin{karnaugh-map}(label=corner)[2][2][1][$A$][$B$]
+	\minterms{0,2,3}
+	\implicant{0}{2}
+	\implicant{2}{3}
+	\end{karnaugh-map}
+	\end{figure}
+
+	We look at the first group is 0 and 2(vertical), in this group $A$ is not changing and it's value is 0. So the first group corresponds to $\bar{A}$.\\
+
+	The second group is 2 and 3(horizontal), in this group $B$ is not changing and it's value is 1. So the second group corresponds to $B$.\\
+
+	Therefore the simplified expression is
+	\[
+		f(A,B) = \bar{A} + B
+		.\]
+}
+
+\ex{Three Variable K-map}{
+	Take the following function in min-term form
+	\[
+		f(A,B,C) = \Sigma m(0,1,3,4,5,7)
+		.\]
+
+	We can represent this function in a K-map as follows
+	\begin{figure}[H]
+	\centering
+	\begin{karnaugh-map}(label=corner)[2][4][1][$A$][$C$][$B$]
+	\minterms{0,1,2,5,6,7}
+	\implicant{0}{1}
+	\implicant{7}{5}
+	\implicant{2}{6}
+	\end{karnaugh-map}
+	\end{figure}
+
+	First group(red) the only changing variable is $A$. So it's excluded in the term of the group which is $\bar{B}\bar{C}$.\\
+	Second group(yellow) the only changing variable is $B$. So it's excluded in the term of the group which is $\bar{A}C$.\\
+	Third group(green) the only changing variable is $C$. So it's excluded in the term of the group which is $AB$.\\
+
+	Therefore the simplified expression is
+	\[
+		f(A,B,C) = \bar{B}\bar{C} + \bar{A}C + AB
+		.\]
+}
+
+\ex{Four Variable K-map}{
+	Take the following function in min-term form
+	\[
+		f(A,B,C,D) = \Sigma m(0,1,2,3,5,7,8,10)
+		.\]
+
+	We can represent this function in a K-map as follows
+	\begin{figure}[H]
+	\centering
+	\begin{karnaugh-map}[4][4][1][$AB$][$CD$]
+	\minterms{0,1,2,3,5,7,8,10}
+	\implicant{1}{7}
+	\implicant{1}{7}
+	\implicantcorner
+	\end{karnaugh-map}
+	\begin{karnaugh-map}[4][4][1][$AB$][$CD$]
+	\minterms{0,1,2,3,5,7,8,10}
+	\implicant{0}{2}
+	\implicant{5}{7}
+	\implicantedge{8}{8}{10}{10}
+	\end{karnaugh-map}
+	\end{figure}
+
+	First K-map gives us the simplified form as
+	\[
+		f(A,B,C,D) = B\bar{C} + \bar{B}\bar{D}
+		.\]
+
+	And the second K-map gives us
+	\[
+		f(A,B,C,D) = \bar{C}\bar{D} + B\bar{C}D + \bar{B}C\bar{D}
+		.\]
+}
+
+To untilize maxterms in a K-map we first fill the maxterm cells with 0s and the rest with 1s, and then we follow the same procedure as before. This will give us $\bar{f}$ then we simply compute the inverse to get $f$.
+
+\nt{
+	Sometimes we don't care about some of the outputs of a function (Don't care conditions). We can represent this in a K-map by filling the cells with don't care conditions with an X. An example is
+	\[
+		f(A,B,C) = \Sigma m(0,1,3,4,5,7) + d(2,6)
+		.\]
+}
 \end{document}
