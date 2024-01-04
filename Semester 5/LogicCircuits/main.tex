@@ -13,6 +13,8 @@
 \ctikzset{
 	logic ports=ieee,
 	logic ports/scale=0.7,
+	logic ports/fill=lightgray,
+    muxdemuxes/fill=lightgray
 }
 
 \begin{document}
@@ -566,4 +568,830 @@ To untilize maxterms in a K-map we first fill the maxterm cells with 0s and the 
 		f(A,B,C) = \Sigma m(0,1,3,4,5,7) + d(2,6)
 		.\]
 }
+
+\chapter{Combinational Logic}
+
+\begin{description}
+	\ii[Combinational Logic] A logic circuit whose output depends only on the current input values.
+	\ii[Sequential Logic] A logic circuit whose output depends on the current input values and the past input values.
+\end{description}
+
+The maximum number of gates cascaded in series between a circuit input and the output is referred to as the number of \emph{levels} of gates.
+
+\ex{}{
+	We need to realize the 2 level circuit and the 3 level circuit. The 2 level circuit is realized by cascading 2 gates in series and the 3 level circuit is realized by cascading 3 gates in series.
+	\[
+		f(a,b,c,d) = \Sigma m(1, 5, 6, 10, 13, 14)
+		.\]
+
+	First we construct the k-map
+
+	\begin{figure}[H]
+	\centering
+	\begin{karnaugh-map}(label=corner)[4][4][1][$AB$][$CD$]
+	\minterms{4,5,7,9,10,11}
+	\implicant{4}{5}
+	\implicant{5}{7}
+	\implicant{9}{11}
+	\implicant{11}{10}
+	\end{karnaugh-map}
+	\end{figure}
+
+	Giving us
+	\[
+		f = a'c'd + bc'd + bcd' + acd'
+		.\]
+
+	Yielding the following circuit
+
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			% \draw (0,0) node[xor port , number inputs=3](XOR1){};
+			\draw (0,0) node[and port , number inputs=3](AND1){};
+			\draw (AND1.in 1) -- ++(0,0) node[left]{$a'$};
+			\draw (AND1.in 2) -- ++(0,0) node[left]{$c'$};
+			\draw (AND1.in 3) -- ++(0,0) node[left]{$d$};
+
+			\draw (0,-1) node[and port , number inputs=3](AND2){};
+			\draw (AND2.in 1) -- ++(0,0) node[left]{$b$};
+			\draw (AND2.in 2) -- ++(0,0) node[left]{$c'$};
+			\draw (AND2.in 3) -- ++(0,0) node[left]{$d$};
+
+			\draw (0,-2) node[and port , number inputs=3](AND3){};
+			\draw (AND3.in 1) -- ++(0,0) node[left]{$b$};
+			\draw (AND3.in 2) -- ++(0,0) node[left]{$c$};
+			\draw (AND3.in 3) -- ++(0,0) node[left]{$d'$};
+
+			\draw (0,-3) node[and port , number inputs=3](AND4){};
+			\draw (AND4.in 1) -- ++(0,0) node[left]{$a$};
+			\draw (AND4.in 2) -- ++(0,0) node[left]{$c$};
+			\draw (AND4.in 3) -- ++(0,0) node[left]{$d'$};
+
+			\draw (3, -1.5) node[or port , number inputs=4](OR1){};
+			\draw (AND1.out) -- ++(1,0) |- (OR1.in 1);
+			\draw (AND2.out) -- ++(0.5,0) |- (OR1.in 2);
+			\draw (AND3.out) -- ++(0.5,0) |- (OR1.in 3);
+			\draw (AND4.out) -- ++(1,0) |- (OR1.in 4);
+			\draw (OR1.out) -- ++(1,0) node[right]{$f$};
+		\end{circuitikz}
+	\end{figure}
+
+	The 3 level circuit is realized by cascading 3 gates in series. We obtain the expression for the 3 level circuit by factoring $f$ as follows
+
+	\[
+		f = c'd(a' + b) + cd'(a + b)
+		.\]
+
+	Giving us the following circuit
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[or port , number inputs=2](OR1){};
+			\draw (OR1.in 1) -- ++(0,0) node[left]{$a'$};
+			\draw (OR1.in 2) -- ++(0,0) node[left]{$b$};
+
+			\draw (2,-1) node[and port , number inputs=3](AND1){};
+			\draw (OR1.out) |- (AND1.in 1);
+			\draw (AND1.in 2) -- ++(0,0) node[left]{$c'$};
+			\draw (AND1.in 3) -- ++(0,0) node[left]{$d$};
+
+			\draw (0,-2) node[or port , number inputs=2](OR2){};
+			\draw (OR2.in 1) -- ++(0,0) node[left]{$a$};
+			\draw (OR2.in 2) -- ++(0,0) node[left]{$b$};
+
+			\draw (2,-3) node[and port , number inputs=3](AND2){};
+			\draw (OR2.out) |- (AND2.in 1);
+			\draw (AND2.in 2) -- ++(0,0) node[left]{$c$};
+			\draw (AND2.in 3) -- ++(0,0) node[left]{$d'$};
+
+			\draw (3.5,-2) node[or port , number inputs=2](OR3){};
+			\draw (AND1.out) |- (OR3.in 1);
+			\draw (AND2.out) |- (OR3.in 2);
+			\draw (OR3.out) -- ++(1,0) node[right]{$f$};
+		\end{circuitikz}
+	\end{figure}
+
+	We do this again for max-term form. Then we compare all the circuits and choose the one with the least number of gates.
+}
+
+\section{NAND and NOR Gates}
+
+\begin{description}
+	\ii[NAND Gate] The output is 0 if both inputs are 1.
+	\[
+		\begin{array}{c c c}
+			X & Y & X \uparrow Y \\
+			\hline
+			0 & 0 & 1            \\
+			0 & 1 & 1            \\
+			1 & 0 & 1            \\
+			1 & 1 & 0            \\
+		\end{array}
+		.\]
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[nand port] (nand) {};
+			\draw (nand.in 1) -- ++(-1,0) node[left] {$X$};
+			\draw (nand.in 2) -- ++(-1,0) node[left] {$Y$};
+			\draw (nand.out) -- ++(1,0) node[right] {$X \uparrow Y$};
+		\end{circuitikz}
+	\end{figure}
+
+	\ii[NOR Gate] The output is 1 if both inputs are 0.
+	\[
+		\begin{array}{c c c}
+			X & Y & X \downarrow Y \\
+			\hline
+			0 & 0 & 1              \\
+			0 & 1 & 0              \\
+			1 & 0 & 0              \\
+			1 & 1 & 0              \\
+		\end{array}
+		.\]
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[nor port] (nor) {};
+			\draw (nor.in 1) -- ++(-1,0) node[left] {$X$};
+			\draw (nor.in 2) -- ++(-1,0) node[left] {$Y$};
+			\draw (nor.out) -- ++(1,0) node[right] {$X \downarrow Y$};
+		\end{circuitikz}
+	\end{figure}
+\end{description}
+
+A set of gates is said to be functionally complete if all Boolean functions can be realized using only gates from the set.
+AND and NOT gates are functionally complete since we can realize all Boolean functions using only AND and NOT gates (including OR).\\
+
+Since we can realize AND and NOT gates using only NAND gates, NAND gates are also functionally complete.\\
+
+\begin{enumerate}
+	\ii \textbf{NOT}
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[nand port] (nand) {};
+			\draw (nand.in 1) -- ++(-0.5,0) node[left] {$X$};
+			\draw (nand.in 2) |- (nand.in 1);
+			\draw (nand.out) -- ++(0.5,0) node[right] {$\bar{X}$};
+		\end{circuitikz}
+	\end{figure}
+
+	\ii \textbf{AND}
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[nand port] (nand1) {};
+			\draw (nand1.in 1) -- ++(-0.5,0) node[left] {$X$};
+			\draw (nand1.in 2) -- ++(-0.5,0) node[left] {$Y$};
+			\draw (2,0) node[nand port] (nand2) {};
+			\draw (nand2.in 1) |- (nand1.out);
+			\draw (nand2.in 2) |- (nand2.in 1);
+			\draw (nand2.out) -- ++(0.5,0) node[right] {$X \cdot Y$};
+		\end{circuitikz}
+	\end{figure}
+
+	\ii \textbf{OR}
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[nand port] (nand1) {};
+			\draw (nand1.in 1) -- ++(-0.5,0) node[left] {$X$};
+			\draw (nand1.in 2) |- (nand1.in 1);
+			\draw (0,-1) node[nand port] (nand2) {};
+			\draw (nand2.in 1) -- ++(-0.5,0) node[left] {$Y$};
+			\draw (nand2.in 2) |- (nand2.in 1);
+			\draw (2,-0.5) node[nand port] (nand3) {};
+			\draw (nand3.in 1) |- (nand1.out);
+			\draw (nand3.in 2) |- (nand2.out);
+			\draw (nand3.out) -- ++(0.5,0) node[right] {$X + Y$};
+		\end{circuitikz}
+	\end{figure}
+\end{enumerate}
+
+\section{Design of Two-Level NAND and NOR-Gate Circuits}
+
+A circuit composed of AND and OR gates can be converted to a circuit composed of NAND and NOR gates by using the formula $f = \overline{f'}$.\\
+
+\ex{}{
+	Given the function
+	\[
+		F = A + BC' + B'CD
+		.\]
+
+	We can convert it to several forms
+	\begin{align*}
+		F & = [(A + BC' + B'CD)']' \quad                      & \text{AND-OR}    \\
+		  & = [A' \cdot (B + C')' \cdot (B' + C + D)']' \quad & \text{NAND-NAND} \\
+		  & = [A' \cdot (B' + C) \cdot (B + C' + D')]' \quad  & \text{OR-NAND}   \\
+		  & = A + (B' + C)' + (B + C' + D')' \quad            & \text{NOR-OR}
+	\end{align*}
+}
+
+The procedure for designing a two-level NAND-NAND circuit is as follows
+
+\begin{enumerate}
+	\ii Find a minimum sum-of-products expression for F.
+	\ii raw the corresponding two-level AND-OR circuit.
+	\ii Replace all gates with NAND gates leaving the gate interconnections unchanged.
+	\ii If the output gate has any single literals as inputs, complement these literals.
+\end{enumerate}
+
+The procedure for designing a two-level NOR-NOR circuit is as follows
+
+\begin{enumerate}
+	\ii Find a minimum product-of-sums expression for F.
+	\ii Draw the corresponding two-level OR-AND circuit.
+	\ii Replace all gates with NOR gates leaving the gate interconnections unchanged.
+	\ii If the output gate has any single literals as inputs, complement these literals.
+\end{enumerate}
+
+To design a multi-level NAND-gate circuit we perform the following procedure
+
+\begin{enumerate}
+	\ii Simplify the function.
+	\ii Draw the corresponding AND-OR circuit. The output gate should be an OR gate.
+	\ii Replace all gates with NAND gates leaving the gate interconnections unchanged.
+	\ii Take the output-gate at level 1. The literal inputs to even levels remain unchanged while the literal inputs to odd levels are complemented.
+\end{enumerate}
+
+\subsection{Alternative Representations}
+We will sometimes use a shorter circuit representation
+% circuit using notcirc
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[buffer port] (not) {};
+		\draw (not.out) -- ++(1,0) node[right] {$X$};
+		\draw (not.in) -- ++(-1,0) node[left] {$\bar{X}$};
+		\node at (not.in) [ocirc, right] {};
+	\end{circuitikz}
+\end{figure}
+to represent a circuit using a NOT gate.
+\begin{enumerate}
+	\ii \textbf{AND}
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[nor port] (nor) {};
+			\draw (nor.in 1) -- ++(-0.5,0) node[left] {$X$};
+			\draw (nor.in 2) -- ++(-0.5,0) node[left] {$Y$};
+			\draw (nor.out) -- ++(0.5,0) node[right] {$(X' + Y')' = X \cdot Y$};
+			\node at (nor.in 1) [ocirc, right] {};
+			\node at (nor.in 2) [ocirc, right] {};
+		\end{circuitikz}
+	\end{figure}
+
+	\ii \textbf{OR}
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[nand port] (nand) {};
+			\draw (nand.in 1) -- ++(-0.5,0) node[left] {$X$};
+			\draw (nand.in 2) -- ++(-0.5,0) node[left] {$Y$};
+			\draw (nand.out) -- ++(0.5,0) node[right] {$(X' \cdot Y')' = X + Y$};
+			\node at (nand.in 1) [ocirc, right] {};
+			\node at (nand.in 2) [ocirc, right] {};
+		\end{circuitikz}
+	\end{figure}
+
+	\ii \textbf{NAND}
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[or port] (or) {};
+			\draw (or.in 1) -- ++(-0.5,0) node[left] {$X$};
+			\draw (or.in 2) -- ++(-0.5,0) node[left] {$Y$};
+			\draw (or.out) -- ++(0.5,0) node[right] {$X' + Y' = X \uparrow Y$};
+			\node at (or.in 1) [ocirc, right] {};
+			\node at (or.in 2) [ocirc, right] {};
+		\end{circuitikz}
+	\end{figure}
+
+	\ii \textbf{NOR}
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[and port] (and) {};
+			\draw (and.in 1) -- ++(-0.5,0) node[left] {$X$};
+			\draw (and.in 2) -- ++(-0.5,0) node[left] {$Y$};
+			\draw (and.out) -- ++(0.5,0) node[right] {$X' \cdot Y' = X \downarrow Y$};
+			\node at (and.in 1) [ocirc, right] {};
+			\node at (and.in 2) [ocirc, right] {};
+		\end{circuitikz}
+	\end{figure}
+\end{enumerate}
+
+These alternative representations are useful for simplifying circuits when converting to and from NAND-NAND and AND-OR.
+
+The following procedure may be used to convert to a NAND (or NOR) circuit:
+
+\begin{enumerate}
+	\ii We add an inversion bubble to the input of the odd levels.
+	\ii If an inverted input is connected to an inverted output, we leave it as is.
+	\ii If an inverted input is connected to a non-inverted output (or vice-versa), we add an inversion bubble to the non-inverted terminal to cancel the inversion.
+	\ii If an literal is connected to an inverted input, we complement the literal.
+\end{enumerate}
+
+\section{Design of Combinational Circuits}
+
+Digital design systems' solution often requires implementing multiple functions. While we can implement each function separately, it is often more efficient to implement all the functions together.\\
+
+\ex{}{
+	We need to implement the following functions
+	\begin{align*}
+		f_1 & = \Sigma m(11, 12, 13, 14, 15)   \\
+		f_2 & = \Sigma m(3, 7, 11, 12, 13, 15) \\
+		f_3 & = \Sigma m(3, 7, 12, 13, 14, 15)
+	\end{align*}
+
+	We can implement each function separately as follows
+	\begin{figure}[H]
+	\centering
+	\resizebox{0.28\linewidth}{!}{
+		\begin{karnaugh-map}(label=corner)[4][4][1][$AB$][$CD$]
+		\minterms{11,14,15,3,7}
+		\implicant{15}{14}
+		\implicant{3}{11}
+		\end{karnaugh-map}
+	}
+
+	\resizebox{0.28\linewidth}{!}{
+		\begin{karnaugh-map}(label=corner)[4][4][1][$AB$][$CD$]
+		\minterms{12,13,14,15,3,7}
+		\implicant{12}{14}
+		\implicant{3}{7}
+		\end{karnaugh-map}
+	}
+	\resizebox{0.28\linewidth}{!}{
+		\begin{karnaugh-map}(label=corner)[4][4][1][$AB$][$CD$]
+		\minterms{12,13,15,3,7,11}
+		\implicant{12}{13}
+		\implicant{3}{11}
+		\end{karnaugh-map}
+	}
+	\end{figure}
+
+	\begin{align*}
+		f_1 & = ab + acd  \\
+		f_2 & = abc' + cd \\
+		f_3 & = a'cd + ab
+	\end{align*}
+
+	The obtained circuit for all 3 separately looks like
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[and port, number inputs=3] (AND1) {};
+			\draw (AND1.in 1) -- ++(-0.5,0) node[left] {$a$};
+			\draw (AND1.in 2) -- ++(-0.5,0) node[left] {$c$};
+			\draw (AND1.in 3) -- ++(-0.5,0) node[left] {$d$};
+
+			\draw (0,-1) node[and port] (AND2) {};
+			\draw (AND2.in 1) -- ++(-0.5,0) node[left] {$a$};
+			\draw (AND2.in 2) -- ++(-0.5,0) node[left] {$b$};
+
+			\draw (1.5,-0.5) node[or port] (OR1) {};
+			\draw (AND1.out) |- (OR1.in 1);
+			\draw (AND2.out) |- (OR1.in 2);
+			\draw (OR1.out) -- ++(0.5,0) node[right] {$f_1$};
+
+			\draw (0,-2) node[and port, number inputs=3] (AND3) {};
+			\draw (AND3.in 1) -- ++(-0.5,0) node[left] {$a$};
+			\draw (AND3.in 2) -- ++(-0.5,0) node[left] {$b$};
+			\draw (AND3.in 3) -- ++(-0.5,0) node[left] {$c'$};
+
+			\draw (0,-3) node[and port] (AND4) {};
+			\draw (AND4.in 1) -- ++(-0.5,0) node[left] {$c$};
+			\draw (AND4.in 2) -- ++(-0.5,0) node[left] {$d$};
+
+			\draw (1.5,-2.5) node[or port] (OR2) {};
+			\draw (AND3.out) |- (OR2.in 1);
+			\draw (AND4.out) |- (OR2.in 2);
+			\draw (OR2.out) -- ++(0.5,0) node[right] {$f_2$};
+
+			\draw (0,-4) node[and port, number inputs=3] (AND5) {};
+			\draw (AND5.in 1) -- ++(-0.5,0) node[left] {$a'$};
+			\draw (AND5.in 2) -- ++(-0.5,0) node[left] {$c$};
+			\draw (AND5.in 3) -- ++(-0.5,0) node[left] {$d$};
+
+			\draw (0,-5) node[and port] (AND6) {};
+			\draw (AND6.in 1) -- ++(-0.5,0) node[left] {$a$};
+			\draw (AND6.in 2) -- ++(-0.5,0) node[left] {$b$};
+
+			\draw (1.5,-4.5) node[or port] (OR3) {};
+			\draw (AND5.out) |- (OR3.in 1);
+			\draw (AND6.out) |- (OR3.in 2);
+			\draw (OR3.out) -- ++(0.5,0) node[right] {$f_3$};
+		\end{circuitikz}
+	\end{figure}
+
+	By grouping terms we can simplify the circuit to
+
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[and port] (AND1) {};
+			\draw (AND1.in 1) -- ++(-0.5,0) node[left] {$a$};
+			\draw (AND1.in 2) -- ++(-0.5,0) node[left] {$b$};
+
+			\draw (0,-1) node[and port, number inputs=3] (AND2) {};
+			\draw (AND2.in 1) -- ++(-0.5,0) node[left] {$a$};
+			\draw (AND2.in 2) -- ++(-0.5,0) node[left] {$c$};
+			\draw (AND2.in 3) -- ++(-0.5,0) node[left] {$d$};
+
+			\draw (0,-2) node[and port, number inputs=3] (AND3) {};
+			\draw (AND3.in 1) -- ++(-0.5,0) node[left] {$a$};
+			\draw (AND3.in 2) -- ++(-0.5,0) node[left] {$b$};
+			\draw (AND3.in 3) -- ++(-0.5,0) node[left] {$c'$};
+
+			\draw (0,-3) node[and port, number inputs=3] (AND4) {};
+			\draw (AND4.in 1) -- ++(-0.5,0) node[left] {$a'$};
+			\draw (AND4.in 2) -- ++(-0.5,0) node[left] {$c$};
+			\draw (AND4.in 3) -- ++(-0.5,0) node[left] {$d$};
+
+			\draw (2,-0.5) node[or port] (OR1) {};
+			\draw (AND1.out) |- (OR1.in 1);
+			\draw (OR1.out) -- ++(0.5,0) node[right] {$f_1$};
+
+			\draw (2,-1.5) node[or port, number inputs=3] (OR2) {};
+			\draw (AND2.out) |- (OR2.in 1) node[pos=0.7] (JUNC1) {};
+			\draw (AND3.out) |- (OR2.in 2);
+			\draw (OR2.out) -- ++(0.5,0) node[right] {$f_2$};
+
+			\draw (2,-2.5) node[or port] (OR3) {};
+			\draw (AND4.out) |- (OR3.in 1);
+			\draw (OR3.out) -- ++(0.5,0) node[right] {$f_3$};
+
+			\draw (JUNC1) to[short,*-] ++(0,0) |- (OR1.in 2);
+			\draw (OR1.in 1) ++(-0.1,0) to[short,*-] ++(0,0) |- (OR3.in 2);
+			\draw (OR2.in 3) to[short, -*] (OR3.in 1);
+		\end{circuitikz}
+	\end{figure}
+
+	The simplified circuit has 7 gates while the original circuit has 9 gates.
+}
+
+\section{Design of Circuits with Limited Gate Fan-In}
+
+When designing a circuit we may be limited by the number of inputs a gate can have. We can overcome this by factoring the function into a multi-level circuit.\\
+
+\ex{}{
+	We need to implement the following function using only 3 input NOR gates.
+	\[
+		f = \Sigma m(0, 3, 4, 5, 8, 9, 10, 14, 15)
+		.\]
+
+	\begin{figure}[H]
+	\centering
+	\begin{karnaugh-map}(label=corner)[4][4][1][$AB$][$CD$]
+	\maxterms{3,4,7,8,9,13,14}
+	\minterms{0,1,2,5,6,12,15,10,11}
+	\implicant{4}{4}
+	\implicant{3}{7}
+	\implicant{8}{9}
+	\implicant{13}{9}
+	\implicant{14}{14}
+	\end{karnaugh-map}
+	\end{figure}
+
+	The simplest form (two-level) requires 2 4-input gate and 1 5-input gate. We can factor the function to remedy this
+
+	\begin{align*}
+		f' & = b'd(a'c' + ac) + a'c(b+d') + abc'                      \\
+		f  & = [b + d' + (a + c)(a' + c')][a + c' + b'd][a' + b' + c]
+	\end{align*}
+
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[nor port] (NOR1) {};
+			\draw (NOR1.in 1) -- ++(-0.25,0) node[left] {$a$};
+			\draw (NOR1.in 2) -- ++(-0.25,0) node[left] {$c$};
+
+			\draw (0,-1) node[nor port] (NOR2) {};
+			\draw (NOR2.in 1) -- ++(-0.25,0) node[left] {$a'$};
+			\draw (NOR2.in 2) -- ++(-0.25,0) node[left] {$c'$};
+
+			\draw (2,1) node[nor port] (NOR3) {};
+			\draw (NOR3.in 1) -- ++(-0.25,0) node[left] {$b$};
+			\draw (NOR3.in 2) -- ++(-0.25,0) node[left] {$d'$};
+
+			\draw (2,-0.5) node[nor port] (NOR4) {};
+			\draw (NOR1.out) |- (NOR4.in 1);
+			\draw (NOR2.out) |- (NOR4.in 2);
+
+			\draw (4,1.5) node[nor port, number inputs=3] (NOR5) {};
+			\draw (NOR5.in 1) -- ++(-0.25,0) node[left] {$a$};
+			\draw (NOR5.in 2) -- ++(-0.25,0) node[left] {$c'$};
+			\draw (NOR3.out) |- (NOR5.in 3);
+
+			\draw (4,0.5) node[nor port, number inputs=3] (NOR6) {};
+			\draw (NOR6.in 1) -- ++(-0.25,0) node[left] {$a'$};
+			\draw (NOR6.in 2) -- ++(-0.25,0) node[left] {$b'$};
+			\draw (NOR6.in 3) -- ++(-0.25,0) node[left] {$c$};
+
+			\draw (4,-0.5) node[nor port, number inputs=3] (NOR7) {};
+			\draw (NOR7.in 1) -- ++(-0.25,0) node[left] {$b$};
+			\draw (NOR4.out) |- (NOR7.in 2);
+			\draw (NOR7.in 3) -- ++(-0.25,0) node[left] {$d'$};
+
+			\draw (6,0.5) node[nor port, number inputs=3] (NOR8) {};
+			\draw (NOR5.out) |- (NOR8.in 1);
+			\draw (NOR6.out) |- (NOR8.in 2);
+			\draw (NOR7.out) |- (NOR8.in 3);
+			\draw (NOR8.out) -- ++(0.25,0) node[right] {$f$};
+		\end{circuitikz}
+	\end{figure}
+}
+
+\section{Gate Delays and Timing Diagrams}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		% X
+		\draw[->,thick] (-0.25,0)--(5,0) node[right]{time};
+		\draw[thick] (0,-0.25)--(0,2.25) node[left, pos=0.5]{$X$};
+		\draw[blue, thick] (0,0.25) -- (1,0.25) --  (1.05,2) -- (3,2) -- (3.05,0.25) -- (4.5,0.25);
+
+		% X'
+		\draw[->,thick] (-0.25,3)--(5,3) node[right]{time};
+		\draw[thick] (0,-0.25+3)--(0,5.25) node[left, pos=0.5]{$X'$};
+		\draw[red, thick] (0,5) -- (1,5) parabola[bend at end] (1.25,3.25) -- (3,3.25) parabola (3.5,5) -- (4.5,5);
+
+		% Error label 
+		\draw[{latex[reversed]}-{latex[reversed]}, densely dotted] (0.9,-0.5) -- (1.35,-0.5) node[below, pos=0.5] () {$\varepsilon_1$};
+		\draw[help lines, color=gray!50, dashed] (1,-0.5) -- (1,5.25);
+		\draw[help lines, color=gray!50, dashed] (1.25,-0.5) -- (1.25,5.25);
+
+		\draw[{latex[reversed]}-{latex[reversed]}, densely dotted] (2.9,-0.5) -- (3.6,-0.5) node[below, pos=0.5] () {$\varepsilon_2$};
+		\draw[help lines, color=gray!50, dashed] (3,-0.5) -- (3,5.25);
+		\draw[help lines, color=gray!50, dashed] (3.5,-0.5) -- (3.5,5.25);
+	\end{tikzpicture}
+\end{figure}
+
+\chapter{Multiplexers, Decoders, and Programmable Logic Devices}
+
+\section{Multiplexers}
+
+A multiplexer is a combinational circuit that selects one of many inputs and directs it to a single output.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[muxdemux , muxdemux def={NL=2, NR=1, NB=1, w=1.5, Lh=2, Rh=1, square pins=1}] (MUX) {};
+		\draw (MUX.lpin 1) -- ++(-0.5,0) node[left] {$I_0$};
+		\draw (MUX.lpin 2) -- ++(-0.5,0) node[left] {$I_1$};
+		\draw (MUX.bpin 1) -- ++(0,-0.5) node[below] {$S$};
+		\draw (MUX.rpin 1) -- ++(0.5,0) node[right] {$Y$};
+	\end{circuitikz}
+\end{figure}
+
+\[
+	Y = S' \cdot I_0 + S \cdot I_1
+	.\]
+
+The multiplexer has $2^n$ inputs, $n$ select inputs, and 1 output. The select inputs determine which input is connected to the output.\\
+
+\begin{figure}[H]
+	\centering
+	% n input mux
+	\begin{circuitikz}
+		\draw (0,0) node[muxdemux , muxdemux def={NL=4, NR=1, NB=2, w=2, Lh=4, Rh=2}] (MUX) {};
+		\draw (MUX.lpin 1) -- ++(-0.5,0) node[left] {$I_0$};
+		\draw (MUX.lpin 2) -- ++(-0.5,0) node[left] {$I_1$};
+		\draw (MUX.lpin 3) -- ++(-0.5,0) node[left] {$I_2$};
+		\draw (MUX.lpin 4) -- ++(-0.5,0) node[left] {$I_3$};
+		\draw (MUX.bpin 1) -- ++(0,-0.5) node[below] {$S_0$};
+		\draw (MUX.bpin 2) -- ++(0,-0.5) node[below] {$S_1$};
+		\draw (MUX.rpin 1) -- ++(0.5,0) node[right] {$Y$};
+	\end{circuitikz}
+\end{figure}
+
+\[
+	Y = S_0' S_1' I_0 + S_0' S_1 I_1 + S_0 S_1' I_2 + S_0 S_1 I_3
+	.\]
+
+Multiplexers are typically used in digital design systems to select data to be processed.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[muxdemux , muxdemux def={NL=2, NR=1, NB=1, w=1.5, Lh=2, Rh=1}, rotate=90] (MUX1) {};
+		\draw (MUX1.lpin 1) -- ++(0,-0.5) node[below] {$x_1$};
+		\draw (MUX1.lpin 2) -- ++(0,-0.5) node[below] {$y_1$};
+		\draw (MUX1.rpin 1) -- ++(0,0.75) node[above] {$z_1$};
+
+		\draw (2,0) node[muxdemux , muxdemux def={NL=2, NR=1, NB=1, w=1.5, Lh=2, Rh=1}, rotate=90] (MUX2) {};
+		\draw (MUX2.lpin 1) -- ++(0,-0.5) node[below] {$x_2$};
+		\draw (MUX2.lpin 2) -- ++(0,-0.5) node[below] {$y_2$};
+		\draw (MUX2.rpin 1) -- ++(0,0.75) node[above] {$z_2$};
+
+		\draw (4,0) node[muxdemux , muxdemux def={NL=2, NR=1, NB=1, w=1.5, Lh=2, Rh=1}, rotate=90] (MUX3) {};
+		\draw (MUX3.lpin 1) -- ++(0,-0.5) node[below] {$x_3$};
+		\draw (MUX3.lpin 2) -- ++(0,-0.5) node[below] {$y_3$};
+		\draw (MUX3.rpin 1) -- ++(0,0.75) node[above] {$z_3$};
+
+		\draw (6,0) node[muxdemux , muxdemux def={NL=2, NR=1, NB=1, w=1.5, Lh=2, Rh=1}, rotate=90] (MUX4) {};
+		\draw (MUX4.lpin 1) -- ++(0,-0.5) node[below] {$x_4$};
+		\draw (MUX4.lpin 2) -- ++(0,-0.5) node[below] {$y_4$};
+		\draw (MUX4.rpin 1) -- ++(0,0.75) node[above] {$z_4$};
+
+		\draw (8,1) node[above] {$A$} -- (1,1);
+		\draw (7,1) to[short,*-] (7,1) |- (MUX4.bpin 1);
+		\draw (5,1) to[short,*-] (5,1) |- (MUX3.bpin 1);
+		\draw (3,1) to[short,*-] (3,1) |- (MUX2.bpin 1);
+		\draw (1,1) to[short,*-] (1,1) |- (MUX1.bpin 1);
+	\end{circuitikz}
+\end{figure}
+
+\section{Three-State Buffers}
+
+A three-state buffer is a circuit that can be in one of three states: high, low, or high impedance. It is used to connect multiple outputs to a single input.\\
+
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\ctikzset{bipoles/cuteswitch/thickness=0.5}
+		\draw (0,0) node[buffer port] (buf) {};
+		\draw (buf.in) -- ++(-0.5,0) node[left] {$A$};
+		\draw (buf.out) -- ++(0.5,0) node[right] {$C$};
+		\draw (buf.up) -- ++(0,0.5) node[above] {$B$};
+
+		\draw (2,0) node {$\equiv$};
+
+		\draw (4,0) node[buffer port] (buf2) {};
+		\draw (buf2.in) -- ++(-0.5,0) node[left] {$A$};
+		\draw (buf2.out) -- ++(0,0) node[cuteopenswitchshape,right] (sw) {};
+		\draw[densely dashed] (sw.mid) -- ++(0,0.5) node[above] {$B$};
+		\draw (sw.out) -- ++(0.5,0) node[right] {$C$};
+	\end{circuitikz}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+
+	\begin{circuitikz}
+		\ctikzset{bipoles/cuteswitch/thickness=0.5}
+
+		\begin{scope}[yshift=0cm]
+			\draw (0,0) node[buffer port] (buf) {};
+			\draw (buf.in) -- ++(-0.5,0) node[left] {$A$};
+			\draw (buf.out) -- ++(0.5,0) node[right] {$C$};
+			\draw (buf.up) -- ++(0,0.5) node[above] {$B$};
+
+			\draw (3,0) node {
+				\begin{tabular}{cc|c}
+					$B$ & $A$ & $C$ \\
+					\hline
+					0   & 0   & $Z$ \\
+					0   & 1   & $Z$ \\
+					1   & 0   & 0   \\
+					1   & 1   & 1   \\
+				\end{tabular}
+			};
+		\end{scope}
+
+		\begin{scope}[yshift=-2.5cm]
+			\draw (0,0) node[buffer port] (buf) {};
+			\draw (buf.in) -- ++(-0.5,0) node[left] {$A$};
+			\draw (buf.out) node[ocirc,left]{} -- ++(0.5,0) node[right] {$C$};
+			\draw (buf.up) -- ++(0,0.5) node[above] {$B$};
+			\draw (3,0) node {
+				\begin{tabular}{cc|c}
+					$B$ & $A$ & $C$ \\
+					\hline
+					0   & 0   & $Z$ \\
+					0   & 1   & $Z$ \\
+					1   & 0   & 1   \\
+					1   & 1   & 0   \\
+				\end{tabular}
+			};
+		\end{scope}
+
+		\begin{scope}[yshift=-5cm]
+			\draw (0,0) node[buffer port] (buf) {};
+			\draw (buf.in) -- ++(-0.5,0) node[left] {$A$};
+			\draw (buf.out) -- ++(0.5,0) node[right] {$C$};
+			\draw (buf.up) node[ocirc,above]{} -- ++(0,0.5) node[above] {$B$};
+
+			\draw (3,0) node {
+				\begin{tabular}{cc|c}
+					$B$ & $A$ & $C$ \\
+					\hline
+					0   & 0   & 0   \\
+					0   & 1   & 1   \\
+					1   & 0   & $Z$ \\
+					1   & 1   & $Z$ \\
+				\end{tabular}
+			};
+		\end{scope}
+
+		\begin{scope}[yshift=-7.5cm]
+			\draw (0,0) node[buffer port] (buf) {};
+			\draw (buf.in) -- ++(-0.5,0) node[left] {$A$};
+			\draw (buf.out) node[ocirc,left]{} -- ++(0.5,0) node[right] {$C$};
+			\draw (buf.up) node[ocirc,above]{} -- ++(0,0.5) node[above] {$B$};
+
+			\draw (3,0) node {
+				\begin{tabular}{cc|c}
+					$B$ & $A$ & $C$ \\
+					\hline
+					0   & 0   & 1   \\
+					0   & 1   & 0   \\
+					1   & 0   & $Z$ \\
+					1   & 1   & $Z$ \\
+				\end{tabular}
+			};
+		\end{scope}
+	\end{circuitikz}
+\end{figure}
+
+\section{Decoders}
+
+A decoder is a combinational circuit that converts a binary code to the associated minterm for that pin.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[muxdemux , muxdemux def={NL=3, NR=8, NB=0, w=3, Lh=6, Rh=6}] (DEC) {};
+		\draw (DEC.lpin 1) -- ++(-0.5,0) node[left] {$a$};
+		\draw (DEC.lpin 2) -- ++(-0.5,0) node[left] {$b$};
+		\draw (DEC.lpin 3) -- ++(-0.5,0) node[left] {$c$};
+
+		\draw (DEC.rpin 1) -- ++(0.5,0) node[right] {$y_0=a'b'c'$};
+		\draw (DEC.rpin 2) -- ++(0.5,0) node[right] {$y_1=a'b'c$};
+		\draw (DEC.rpin 3) -- ++(0.5,0) node[right] {$y_2=a'bc'$};
+		\draw (DEC.rpin 4) -- ++(0.5,0) node[right] {$y_3=a'bc$};
+		\draw (DEC.rpin 5) -- ++(0.5,0) node[right] {$y_4=ab'c'$};
+		\draw (DEC.rpin 6) -- ++(0.5,0) node[right] {$y_5=ab'c$};
+		\draw (DEC.rpin 7) -- ++(0.5,0) node[right] {$y_6=abc'$};
+		\draw (DEC.rpin 8) -- ++(0.5,0) node[right] {$y_7=abc$};
+	\end{circuitikz}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ccc|cccccccc}
+		$a$ & $b$ & $c$ & $y_0$ & $y_1$ & $y_2$ & $y_3$ & $y_4$ & $y_5$ & $y_6$ & $y_7$ \\
+		\hline
+		0   & 0   & 0   & 1     & 0     & 0     & 0     & 0     & 0     & 0     & 0     \\
+		0   & 0   & 1   & 0     & 1     & 0     & 0     & 0     & 0     & 0     & 0     \\
+		0   & 1   & 0   & 0     & 0     & 1     & 0     & 0     & 0     & 0     & 0     \\
+		0   & 1   & 1   & 0     & 0     & 0     & 1     & 0     & 0     & 0     & 0     \\
+		1   & 0   & 0   & 0     & 0     & 0     & 0     & 1     & 0     & 0     & 0     \\
+		1   & 0   & 1   & 0     & 0     & 0     & 0     & 0     & 1     & 0     & 0     \\
+		1   & 1   & 0   & 0     & 0     & 0     & 0     & 0     & 0     & 1     & 0     \\
+		1   & 1   & 1   & 0     & 0     & 0     & 0     & 0     & 0     & 0     & 1
+	\end{tabular}
+\end{table}
+
+\section{Encoders}
+
+An encoder is a combinational circuit that performs the inverse operation of a decoder. It converts a minterm to the associated binary code.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[muxdemux , muxdemux def={NL=8, NR=3, NB=0, w=3, Lh=6, Rh=6}] (ENC) {};
+		\draw (ENC.lpin 1) -- ++(-0.5,0) node[left] {$y_0$};
+		\draw (ENC.lpin 2) -- ++(-0.5,0) node[left] {$y_1$};
+		\draw (ENC.lpin 3) -- ++(-0.5,0) node[left] {$y_2$};
+		\draw (ENC.lpin 4) -- ++(-0.5,0) node[left] {$y_3$};
+		\draw (ENC.lpin 5) -- ++(-0.5,0) node[left] {$y_4$};
+		\draw (ENC.lpin 6) -- ++(-0.5,0) node[left] {$y_5$};
+		\draw (ENC.lpin 7) -- ++(-0.5,0) node[left] {$y_6$};
+		\draw (ENC.lpin 8) -- ++(-0.5,0) node[left] {$y_7$};
+
+		\draw (ENC.rpin 1) -- ++(0.5,0) node[right] {$a$};
+		\draw (ENC.rpin 2) -- ++(0.5,0) node[right] {$b$};
+		\draw (ENC.rpin 3) -- ++(0.5,0) node[right] {$c$};
+	\end{circuitikz}
+\end{figure}
+
+\section{Read-Only Memory}
+
+A read-only memory (ROM) consists of an array of semiconductor devices that are interconnected to store an array of binary data. Once binary data is stored in the ROM, it can be read out whenever desired, but the data that is stored cannot be changed under normal operating conditions.
+
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[muxdemux , muxdemux def={NL=3, NR=0, NB=4, w=3, Lh=2, Rh=2}] (ROM) {};
+		\draw (ROM.lpin 1) -- ++(-0.5,0) node[left] {$a$};
+		\draw (ROM.lpin 2) -- ++(-0.5,0) node[left] {$b$};
+		\draw (ROM.lpin 3) -- ++(-0.5,0) node[left] {$c$};
+
+		\draw (ROM.bpin 1) -- ++(0,-0.5) node[below] {$f_0$};
+		\draw (ROM.bpin 2) -- ++(0,-0.5) node[below] {$f_1$};
+		\draw (ROM.bpin 3) -- ++(0,-0.5) node[below] {$f_2$};
+		\draw (ROM.bpin 4) -- ++(0,-0.5) node[below] {$f_3$};
+	\end{circuitikz}
+\end{figure}
+
+The truth table for the ROM depends on the data stored. The ROM can be thought off as an array of values and the input $abc$ acts an index to the array.
+
 \end{document}
