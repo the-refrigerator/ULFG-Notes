@@ -10,6 +10,12 @@
 \author{Ahmad Abu Zainab}
 \date{}
 
+\newcommand{\midlabelline}[3]{
+   \node (midlabel) at ($ (#1)!.5!(#2) $) {#3};
+   \draw[{latex}-,thick] (#1) --  (midlabel);
+   \draw[-{latex},thick] (midlabel) -- (#2);
+}
+
 \begin{document}
 
 \maketitle
@@ -283,6 +289,29 @@ We can model a transmission line using a series of resistors, inductors, and cap
 	G' & = \text{Conductance per unit length } [\unit{\siemens\per\meter}]
 \end{align*}
 
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american]
+		\draw (-1,0) node[above] {$N$} to[R=$R' \Delta z$,i>_=$i(z{,}t)$, o-] (2,0) to[L=$L' \Delta z$] (4,0) node[above] {$N+1$} to[short,i=$i(z+\Delta z {,} t)$, -o] (8,0);
+		\draw (4,0) to[short, *-*] (4,-1);
+		\draw (4,-1) to[short] (3.5,-1) to[C,l_=$C' \Delta z$] (3.5,-3) to[short, -*] (4,-3);
+		\draw (4,-1) to[short] (4.5,-1) to[R=$G' \Delta z$] (4.5,-3) to[short, -*] (4,-3);
+		\draw (4,-3) to[short, *-*] (4,-4);
+		\draw (-1,-4) to[short, o-o] (8,-4);
+
+		% \draw[<->] (-1,-0.5) -- node {$v(z{,}t)$} -- (-1,-3.5);
+		\midlabelline{-1,-0.5}{-1,-3.5}{$v(z{,}t)$}
+		\midlabelline{8,-0.5}{8,-3.5}{$v(z + \Delta z{,}t)$}
+		\node[left] at (-1,-0.5) {$+$};
+		\node[left] at (-1,-3.5) {$-$};
+
+		\node[right] at (8,-0.5) {$+$};
+		\node[right] at (8,-3.5) {$-$};
+
+		\midlabelline{-1,-4.25}{8,-4.25}{$\Delta z$}
+	\end{circuitikz}
+\end{figure}
+
 {
 \renewcommand{\arraystretch}{2.5}
 \everymath{\displaystyle}
@@ -370,14 +399,23 @@ Where $z_L = Z_L/Z_0$ is the load impedance in terms of the characteristic imped
 
 We represent the voltage and current on the transmission line as
 
+\[
+	{V_0}^- = \Gamma {V_0}^+
+	.\]
+
 \begin{align*}
 	\tilde{V}(z) & = {V_0}^+ \lt( e^{-j\beta z} + \Gamma e^{j\beta z} \rt)             \\
 	\tilde{I}(z) & = \frac{{V_0}^+}{Z_0} \lt( e^{-j\beta z} - \Gamma e^{j\beta z} \rt)
 \end{align*}
 
-\[
-	{V_0}^- = \Gamma {V_0}^+
-	.\]
+And their magnitudes are given by
+
+\begin{align*}
+	\abs{\tilde{V}(d)} & = \abs{{V_0}^+} \lt[ 1 + \abs{\Gamma}^2 + 2 \abs{\Gamma} \cos(2\beta d - \theta_r) \rt]^{1/2}             \\
+	\abs{\tilde{I}(d)} & = \frac{\abs{{V_0}^+}}{Z_0} \lt[ 1 + \abs{\Gamma}^2 - 2 \abs{\Gamma} \cos(2\beta d - \theta_r) \rt]^{1/2}
+\end{align*}
+
+where $d=-z$
 
 \section{Special Line Conditions}
 
@@ -407,12 +445,187 @@ We represent the voltage and current on the transmission line as
 \end{table}
 }
 
-% \section{Standing Waves} 
-%
-% Standing waves are waves that do not propagate. They are formed when two waves of the same frequency and amplitude travel in opposite directions. The equation of a standing wave is given by 
-%
-% \[
-%     V(z,t) = V_0 \cos \lt( \omega t \rt) \lt[ e^{-j\beta z} + \Gamma e^{j\beta z} \rt]
-%     .\]
+\section{Standing Waves}
+
+Standing waves are waves that do not propagate. They are formed when two waves of the same frequency and amplitude travel in opposite directions.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[>=latex]
+		\begin{scope}[yshift=0cm]
+			\begin{axis}
+				[
+					axis x line*=bottom,
+					axis y line*=right,
+					y axis line style={-stealth},
+					x axis line style={stealth-},
+					height=4cm,
+					width=10cm,
+					clip=false,
+					ymin=0,
+					ymax=1.6,
+					ytick={0,0.2,...,1.6},
+					yticklabels={$0$,$0.2$,$0.4$,$0.6$,$0.8$,$1.0$,$1.2$,$1.4$,$1.6\unit{\volt}$},
+					ylabel={$\abs{\tilde{V}(d)}$},
+					xmin=-4.1,
+					xmax=0,
+					xlabel={$d$},
+					xtick={-4,...,0},
+					xticklabels={$\lambda$,$\frac{3}{4}\lambda$,$\frac{1}{2}\lambda$,$\frac{1}{4}\lambda$,$0$},
+				]
+				\addplot[blue, thick, samples=1000, domain=-4:0] {0.35*cos(deg(pi*x + 4*pi/25))+1.05};
+				\addplot[red, dashed, samples=1000, domain=-4:0] {1.4} node[above, pos=0] {$\abs{\tilde{V}}_\text{max}$};
+				\addplot[red, dashed, samples=1000, domain=-4:0] {0.7} node[below, pos=0] {$\abs{\tilde{V}}_\text{min}$};
+				\draw[dashed,green] (axis cs:-0.16,1.4) -- (axis cs:-0.16,0) node[anchor=north east] {$d_\text{max}$};
+				\draw[dashed,green] (axis cs:-1.16,0.7) -- (axis cs:-1.16,0) node[anchor=north east] {$d_\text{min}$};
+			\end{axis}
+		\end{scope}
+
+		\begin{scope}[yshift=-4.5cm]
+			\begin{axis}
+				[
+					axis x line*=bottom,
+					axis y line*=right,
+					y axis line style={-stealth},
+					x axis line style={stealth-},
+					height=4cm,
+					width=10cm,
+					clip=false,
+					ymin=0,
+					ymax=1.6,
+					ytick={0,0.2,...,1.6},
+					yticklabels={0,5,...,35,$40\unit{\milli\ampere}$},
+					ylabel={$\abs{\tilde{I}(d)}$},
+					xmin=-4.1,
+					xmax=0,
+					xlabel={$d$},
+					xtick={-4,...,0},
+					xticklabels={$\lambda$,$\frac{3}{4}\lambda$,$\frac{1}{2}\lambda$,$\frac{1}{4}\lambda$,$0$},
+				]
+				\addplot[blue, thick, samples=1000, domain=-4:0] {-0.35*cos(deg(pi*x + 4*pi/25))+1.05};
+				\addplot[red, dashed, samples=1000, domain=-4:0] {1.4} node[above, pos=0] {$\abs{\tilde{I}}_\text{max}$};
+				\addplot[red, dashed, samples=1000, domain=-4:0] {0.7} node[below, pos=0] {$\abs{\tilde{I}}_\text{min}$};
+				\draw[dashed,green] (axis cs:-1.16,1.4) -- (axis cs:-1.16,0) node[anchor=north east] {$d_\text{max}$};
+				\draw[dashed,green] (axis cs:-0.16,0.7) -- (axis cs:-0.16,0) node[anchor=north east] {$d_\text{min}$};
+			\end{axis}
+		\end{scope}
+
+	\end{tikzpicture}
+\end{figure}
+
+The figure above, shows the voltage and current on a transmission line. The voltage and current are in phase opposition. This general graph applies for all values of $\Gamma$ with the exception of 3 lines conditions. \\
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{scope}[yshift=0cm]
+			\begin{axis}
+				[
+					axis x line*=bottom,
+					axis y line*=right,
+					y axis line style={-stealth},
+					x axis line style={stealth-},
+					height=4cm,
+					width=10cm,
+					clip=false,
+					ymin=0,
+					ymax=1.6,
+					ytick={0,0.7},
+					yticklabels={$0$, $\abs{{V_0}^+}$},
+					ylabel={$\abs{\tilde{V}(d)}$},
+					xmin=-4.1,
+					xmax=0,
+					xlabel={$d$},
+					xtick={-4,...,0},
+					xticklabels={$\lambda$,$\frac{3}{4}\lambda$,$\frac{1}{2}\lambda$,$\frac{1}{4}\lambda$,$0$},
+				]
+				\addplot[blue, thick, samples=1000, domain=-4:0] {0.7} node[above, red, pos=0.1] {Matched Line $Z_L = Z_0$};
+			\end{axis}
+		\end{scope}
+
+		\begin{scope}[yshift=-4cm]
+			\begin{axis}
+				[
+					axis x line*=bottom,
+					axis y line*=right,
+					y axis line style={-stealth},
+					x axis line style={stealth-},
+					height=4cm,
+					width=10cm,
+					clip=false,
+					ymin=0,
+					ymax=1.6,
+					ytick={0,1.4},
+					yticklabels={$0$, $2\abs{{V_0}^+}$},
+					ylabel={$\abs{\tilde{V}(d)}$},
+					xmin=-4.1,
+					xmax=0,
+					xlabel={$d$},
+					xtick={-4,...,0},
+					xticklabels={$\lambda$,$\frac{3}{4}\lambda$,$\frac{1}{2}\lambda$,$\frac{1}{4}\lambda$,$0$},
+				]
+				\addplot[blue, thick, samples=1000, domain=-4:0] {1.4 * sqrt(cos(deg(pi*x + pi)) + 1)/sqrt(2)} node[above, red, pos=0.1] {Short-circuited line $Z_L = 0$};
+			\end{axis}
+		\end{scope}
+
+		\begin{scope}[yshift=-8cm]
+			\begin{axis}
+				[
+					axis x line*=bottom,
+					axis y line*=right,
+					y axis line style={-stealth},
+					x axis line style={stealth-},
+					height=4cm,
+					width=10cm,
+					clip=false,
+					ymin=0,
+					ymax=1.6,
+					ytick={0,1.4},
+					yticklabels={$0$, $2\abs{{V_0}^+}$},
+					ylabel={$\abs{\tilde{V}(d)}$},
+					xmin=-4.1,
+					xmax=0,
+					xlabel={$d$},
+					xtick={-4,...,0},
+					xticklabels={$\lambda$,$\frac{3}{4}\lambda$,$\frac{1}{2}\lambda$,$\frac{1}{4}\lambda$,$0$},
+				]
+				\addplot[blue, thick, samples=1000, domain=-4:0] {1.4 * sqrt(cos(deg(pi*x)) + 1)/sqrt(2)} node[above, red, pos=0.1] {Open-circuited line $Z_L = \infty$};
+			\end{axis}
+		\end{scope}
+
+	\end{tikzpicture}
+\end{figure}
+
+We want to find the minimum and maximum values of the voltage magnitude.
+
+\begin{align*}
+	d_\text{max} & = \frac{\theta_r +2n\pi}{2\beta} = \frac{\theta_r\lambda}{4\pi} + \frac{n\lambda}{2} \\
+	             & \begin{cases}
+		               n=1,2,3,\ldots & \text{if } \theta_r < 0    \\
+		               n=0,1,2,\ldots & \text{if } \theta_r \geq 0
+	               \end{cases}
+\end{align*}
+
+\[
+	d_\text{min} = \begin{cases}
+		d_\text{max} + \frac{\lambda}{4} & \text{if } d_\text{max} < \lambda/4    \\
+		d_\text{max} - \frac{\lambda}{4} & \text{if } d_\text{max} \geq \lambda/4
+	\end{cases}
+\]
+
+The ratio of $\abs{\tilde{V}}_\text{max}$ to $\abs{\tilde{V}}_\text{min}$ is called the voltage standing wave ratio $S$ (VSWR or SWR) and is given by
+
+\[
+	S = \frac{\abs{\tilde{V}}_\text{max}}{\abs{\tilde{V}}_\text{min}} = \frac{1 + \abs{\Gamma}}{1 - \abs{\Gamma}}
+	.\]
+
+And it represents the mismatch between the load and the transmission line. For a matched load line $\Gamma=0$ and $S=1$. For an open circuit or short circuit line $\Gamma=1$ and $S=\infty$.\\
+
+\nt{
+	The average power on a transmission line is given by
+	\[
+		P_\text{avg} = \frac{\abs{{V_0}^+}^2}{2Z_0} \lt( 1 - \abs{\Gamma}^2 \rt)
+		.\]
+}
 
 \end{document}
