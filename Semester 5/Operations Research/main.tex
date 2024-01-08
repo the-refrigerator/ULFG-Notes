@@ -443,36 +443,141 @@ We can solve this problem by adding a new variable $u$ and adding the following 
 
 where $u$ is unconstrained in sign.
 
-% \chapter{Network Optimization Models}
-%
-% Consider a network with $n$ nodes and $m$ arcs. Let $x_{ij}$ be the flow on arc $(i, j)$, and let $c_{ij}$ be the cost of sending one unit of flow on arc $(i, j)$.
-% We want to find the maximum flow from node 1 to node $n$.
-%
-% The conservation of flow at each node is given by
-%
-% \[
-% 	\sum_{i=1}^{n} x_{ij} - \sum_{i=1}^{n} x_{ji} = \text{Net supply at node $j$}
-% 	.\]
-%
-% The objective function is given by
-%
-% \[
-% 	\max Z = \sum_{i=1}^{n} \sum_{j=1}^{n} c_{ij} x_{ij}
-% 	.\]
-%
-% Where $c_{ij}$ is the cost of sending one unit of flow on arc $(i, j)$.
-%
-% So the LP model is
-%
-% \[
-% 	\max Z = \sum_{i=1}^{n} \sum_{j=1}^{n} c_{ij} x_{ij}
-% 	.\]
-%
-% Subject to
-%
-% \[
-% 	\sum_{i=1}^{n} x_{ij} - \sum_{i=1}^{n} x_{ji} = \text{Net supply at node $j$}
-% 	.\]
-%
+\chapter{Network Optimization Models}
+
+\section{Max Flow Problem}
+
+Consider a directed graph $G=(V,E)$ with a source node $s$ and a sink node $t$. Each edge $(i,j)\in E$ has a capacity $u_{ij}$. The max flow problem is to find the maximum flow from $s$ to $t$.
+
+\paragraph{LP Model}
+
+\[
+	\max Z = \sum_{i\in\delta^+(s)} x_{si}
+	.\]
+
+or
+
+\[
+	\max Z = \sum_{i\in\delta^-(t)} x_{it}
+	.\]
+
+where $\delta^+(s)$ is the set of nodes that are flowing out of to $s$ and $\delta^-(t)$ is the set of nodes that are flowing in to $t$.\\
+
+Subject to
+
+\[
+	-u_{ij} \leq x_{ij} \leq u_{ij}
+	.\]
+
+and
+
+\[
+	\sum_{i\in\delta^+(j)} x_{ij} = \sum_{i\in\delta^-(j)} x_{ji} \quad \forall j\in V\setminus\{s,t\}
+	.\]
+
+\section{Min Cost Flow Problem}
+
+Consider a directed graph $G=(V,E)$. Each edge $(i,j)\in E$ has a capacity $u_{ij}$, a cost $c_{ij}$, and a supply $b_i$. The min cost flow problem is to find the minimum cost flow within this network.
+
+\paragraph{LP Model}
+
+\[
+	\min Z = \sum_{(i,j)\in E} c_{ij}x_{ij}
+	.\]
+
+Subject to
+
+\[
+	\sum_{i\in\delta^+(j)} x_{ji} - \sum_{i\in\delta^-(j)} x_{ij} = b_j \quad \forall j\in V
+	.\]
+
+and
+
+\[
+	x_{ij} \leq u_{ij} \quad \forall (i,j)\in E
+	.\]
+
+\nt{
+	The supply $b_i$ is positive if the node is a source, negative if the node is a sink, and zero if the node is a transshipment node.
+}
+
+\nt{
+	If the capacity $u_{ij}$ is not specified, we can assume it is $\infty$. (The edge is unconstrained in capacity)
+}
+
+\subsection{Special Cases}
+
+\subsubsection{Transportation Problem}
+
+Sources have $b_i>0$, sinks have $b_i<0$, and transshipment nodes have $b_i=0$. All nodes have unlimited capacity, and edges all have a cost $c_{ij}$.
+
+\subsubsection{Shortest Path Problem}
+
+Sources have $b_i=1$, sinks have $b_i=-1$, and transshipment nodes have $b_i=0$. All nodes have unlimited capacity, and edges all have a cost $c_{ij}$.
+
+\subsubsection{Sink Tree Problem}
+
+Sources have $b_i=\text{number of nodes in the network}$, and at every other node $b_i=-1$. All nodes have unlimited capacity, and edges all have a cost $c_{ij}$.
+
+\subsubsection{Max Flow Problem}
+
+At the source we set $b=M$, where $M$ is a very large number, and we set $b=-M$ for target nodes. We then create a dummy node $d$ and connect it to the source and target nodes with unlimited capacity and cost 1. The simplex algorithm will route flow through the non-dummy links since they have 0 cost.
+
+\thm{Integrality Theorem}{
+	If all $b_i$ and $u_{ij}$ are integers, then there exists an optimal solution where all $x_{ij}$ are integers.
+}
+
+\section{Shortest Path Problem}
+
+Given a directed graph $G=(V,E)$ with a source node $s$ and a sink node $t$. Each edge $(i,j)\in E$ has a cost $c_{ij}$. The shortest path problem is to find the shortest path (minimum cost) from $s$ to $t$.
+
+\paragraph{LP Model}
+
+\[
+	\min Z = \sum_{(i,j)\in E} c_{ij}x_{ij}
+	.\]
+
+Subject to
+
+\[
+	\sum_{i\in\delta^+(j)} x_{ji} - \sum_{i\in\delta^-(j)} x_{ij} = \begin{cases}
+		1  & \text{if } j=s   \\
+		-1 & \text{if } j=t   \\
+		0  & \text{otherwise}
+	\end{cases}
+	.\]
+
+where $x_{ij}$ is a binary value (0 or 1).
+
+\subsection{Dijkstra's Algorithm}
+
+Given the same setup as the shortest path problem, we can solve it using Dijkstra's algorithm. The algorithm is as follows
+
+\begin{enumerate}
+	\ii Set $d(s)=0$ and $d(i)=\infty$ for all other nodes.
+	\ii Set $S=\emptyset$ (the set of visited nodes).
+	\ii Set $i=s$.
+	\ii Find the node $j$ with the smallest $d(j)$ such that $j\notin S$.
+	\ii Add $j$ to $S$.
+	\ii For all $k\notin S$, set $d(k)=\min(d(k),d(j)+c_{jk})$.
+	\ii If $j\neq t$, set $i=j$ and go to step 4.
+	\ii Repeat step 4 until $S=V$.
+\end{enumerate}
+
+\section{Minimum Spanning Tree Problem}
+
+Given a connected undirected graph $G=(V,E)$ with a cost $c_{ij}$ for each edge $(i,j)\in E$. The minimum spanning tree problem is to find the minimum cost tree that connects all nodes.\\
+
+We can solve this using an algorithm called Prim's algorithm. The algorithm is as follows
+
+\begin{enumerate}
+	\ii Set $S=\{s\}$ (the set of visited nodes).
+	\ii Set $i=s$.
+	\ii Find the edge $(i,j)$ with the smallest $c_{ij}$ such that $j\notin S$.
+	\ii Add $j$ to $S$.
+	\ii If $S=V$, stop.
+	\ii Set $i=j$ and go to step 3.
+\end{enumerate}
+
 
 \end{document}
