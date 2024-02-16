@@ -564,6 +564,28 @@ Given the same setup as the shortest path problem, we can solve it using Dijkstr
 	\ii Repeat step 4 until $S=V$.
 \end{enumerate}
 
+\begin{algorithm}
+	\SetAlgoLined
+	\KwResult{Shortest path from $s$ to $t$}
+	\SetKwFunction{FMain}{Dijkstra}
+	\SetKwProg{Fn}{Function}{:}{}
+	\Fn{\FMain{$G,s,t$}}{
+	$S\gets\emptyset$\;
+	$d(s)\gets 0$\;
+	\While{$t\notin S$}{
+	$j\gets\argmin_{j\notin S} d(j)$\;
+	$S\gets S\cup\{j\}$\;
+	\For{$k\notin S$}{
+	$d(k)\gets\min(d(k),d(j)+c_{jk})$\tcc*[r]{$c_{ij}$ being the cost of the edge}
+	}
+	}
+	\Return{$d(t)$}\;
+	}
+	\caption{Dijkstra's Algorithm}
+\end{algorithm}
+
+\newpage
+
 \section{Minimum Spanning Tree Problem}
 
 Given a connected undirected graph $G=(V,E)$ with a cost $c_{ij}$ for each edge $(i,j)\in E$. The minimum spanning tree problem is to find the minimum cost tree that connects all nodes.\\
@@ -578,6 +600,568 @@ We can solve this using an algorithm called Prim's algorithm. The algorithm is a
 	\ii If $S=V$, stop.
 	\ii Set $i=j$ and go to step 3.
 \end{enumerate}
+
+\begin{algorithm}
+	\SetAlgoLined
+	\KwResult{Minimum spanning tree}
+	\SetKwFunction{FMain}{Prim}
+	\SetKwProg{Fn}{Function}{:}{}
+	\Fn{\FMain{$G$}}{
+		$S\leftarrow\{s\}$\;
+		\While{$S\neq V$}{
+			$(i,j)\leftarrow\argmin_{j\notin S} c_{ij}$\;
+			$S\leftarrow S\cup\{j\}$\;
+		}
+		\Return{$S$}\;
+	}
+	\caption{Prim's Algorithm}
+\end{algorithm}
+
+\chapter{Transportation and Assignment Problems}
+
+\section{Transportation Problem}
+
+The transportation problem is an LP problem where we have a set of $m$ supply nodes and a set of $n$ demand nodes. Each supply node has a supply (capacity) $s_i$ and each demand node has a demand $-d_j$. The cost of transporting one unit $x_{ij} = 1$ from supply node $i$ to demand node $j$ is $c_{ij}$ . The transportation problem is to find the minimum cost of transporting the supply to the demand. The total cost of shipping is
+
+\[
+	\sum_{i=1}^{m}\sum_{j=1}^{n} c_{ij}x_{ij}
+	.\]
+
+In a balanced transportation problem, the total supply is equal to the total demand.
+
+\[
+	\sum_{i=1}^{m} s_i = \sum_{j=1}^{n} d_j
+	.\]
+
+\subsection{LP Model}
+
+\[
+	\min Z = \sum_{i=1}^{m}\sum_{j=1}^{n} c_{ij}x_{ij}
+	.\]
+
+Subject to
+
+\begin{align*}
+	\sum_{j=1}^{n} x_{ij} & = s_i \quad \forall i    \\
+	\sum_{i=1}^{m} x_{ij} & = d_j \quad \forall j    \\
+	x_{ij}                & \geq 0 \quad \forall i,j
+\end{align*}
+
+The LP has
+
+\begin{itemize}
+	\ii $mn$ variables
+	\ii $m+n$ equality constraints
+	\ii One redundant constraint
+	\ii The effective number of constraints is $m+n-1$
+	\ii The rank of the constraint matrix is $m+n-1$
+\end{itemize}
+
+Due to the shape of the problem the simplex method is not efficient for solving the transportation problem. Instead we use the transportation algorithm
+
+\begin{enumerate}
+	\ii For the non-redundant constraints, we select the next basic variable according to a rule (northwest corner rule or the Vogel rule).
+	\ii Set that basic varaible to the largest possible value. This is either the remaining supply or the remaining demand, whichever is smaller.
+	\ii Update the supply and demand and remove the constraint.
+\end{enumerate}
+
+If both the supply and demand are zero, then we eliminate the row and assume that the demand is 0. We will have a degenerate basic variable in the final solution.
+
+\thm{Northwest rule}{
+	We start at the northwest corner of the cost matrix and allocate as much as possible to the basic variable regardless of the cost.
+}
+
+\thm{Vogel's rule}{
+	We calculate the difference between the two smallest costs for each row and each column. We then select the row or column with the largest difference and allocate as much as possible to the basic variable.
+}
+
+\subsection{Special Cases}
+
+\begin{description}
+	\ii[Prohibited Routes] If a route is prohibited, we can set the cost to $M$ ($\infty$).
+	\ii[Excess Supply] If there is excess supply, we can add a dummy demand node with a demand of the excess supply and a cost of 0. The quantity shipped to the dummy node is "throw away".
+	\ii[Excess Demand(shortage)] If there is excess demand, we can add a dummy supply node with a supply of the excess demand and a cost of 0. The quantity shipped from the dummy node is "how much the destination will be missing out".
+	\begin{itemize}
+		\ii Distribute the available production with minimal shipping cost, ignoring fairness.
+		\ii Guarantee some "minimum" to some (or all) destinations. Split destination $D_j$ in 2:
+		\begin{itemize}
+			\ii $D_j^1$ with demand $d_j^1=$ minimum demand and cost $c_{ij}^1=\infty$.
+			\ii $D_j^2$ with the remaining demand ($d_j^2=d_j-d_j^1$) and cost $c_{ij}^2=0$.
+		\end{itemize}
+		\ii \textbf{Proportional shortage} No dummy source. Adjust the demands proportionally to match the available supply. All destinations receive the same “proportion” of their demand. For example, if the supply is $85\%$ of the total demand, each destination receives $85\%$ of its need. For each destination $D_j$ modify the demand $d_j = d_j \times \text{total supply}/\text{total demand}$
+	\end{itemize}
+\end{description}
+
+\section{Assignment Problem}
+
+The assignment problem is a special case of the transportation problem where the supply and demand are both equal to 1. The assignment problem is to find the minimum cost of assigning $n$ tasks to $n$ workers.
+The decision variables are binary, $x_{ij}=1$ if task $i$ is assigned to worker $j$, and $x_{ij}=0$ otherwise. The total cost of the assignment is
+
+\[
+	\sum_{i=1}^{n}\sum_{j=1}^{n} c_{ij}x_{ij}
+	.\]
+
+In its standard form, AP is balanced (the total number of workers is equal to the total number of tasks). When not balanced, we can add dummy workers or tasks to balance the problem. Its dedicated algorithm is the Hungarian algorithm.
+
+\subsection{LP Model}
+
+\[
+	\min Z = \sum_{i=1}^{n}\sum_{j=1}^{n} c_{ij}x_{ij}
+	.\]
+
+Subject to (with on redundant constraint)
+
+\begin{align*}
+	\sum_{j=1}^{n} x_{ij} & = 1 \quad \forall i      \\
+	\sum_{i=1}^{n} x_{ij} & = 1 \quad \forall j      \\
+	x_{ij}                & \geq 0 \quad \forall i,j
+\end{align*}
+
+\subsection{The Hungarian Algorithm}
+
+\thm{}{
+	The ordering by cost of feasible solutions does not change if in the cost table
+	\begin{itemize}
+		\ii we add or subtract a constant from all the elements of a row
+		\ii we add or subtract a constant from all the elements of a column
+		\ii we add or subtract a constant from all the elements of the table
+	\end{itemize}
+}
+
+The Hungarian algorithm is a method for solving the assignment problem. The algorithm is as follows
+
+\begin{enumerate}
+	\ii Subtract the smallest element in each row from all the elements in that row.
+	\ii Subtract the smallest element in each column from all the elements in that column.
+	\ii Find the smallest number of lines that can cover all the zeros in the matrix. If the number of lines is equal to $n$, stop.
+	\ii Find the smallest number not covered by the lines and subtract it from all the uncovered elements and add it to the elements that are covered by two lines.
+	\ii Go to step 3.
+\end{enumerate}
+
+We then allocate the tasks to the workers according to the zeros in the matrix. If there are multiple zeros in a row or column, we allocate the task to the worker who has the least amount of zeros in his row and column.
+
+\subsection{Special Cases}
+
+\begin{description}
+	\ii[Prohibited Assignments] If an assignment is prohibited, we can set the cost to $M$ ($\infty$).
+	\ii[Unbalanced Assignment] If the number of workers is not equal to the number of tasks, we can add dummy workers or tasks to balance the problem.
+	\ii[Maximization] When we have a profit table ($p_{ij}$) instead of a cost table, we can convert the problem to a minimization problem by:
+	\begin{enumerate}
+		\ii Find a number $k$ that is greater or equal all elements: $k \geq p_{ij}$ for all $i, j$ (we can choose $k$ as the highest profit in the matrix)
+		\ii Replace each profit element $p_{ij}$ by a cost $c_{ij} = k - p_{ij}$
+		\ii Solve the minimization problem
+	\end{enumerate}
+\end{description}
+
+\chapter{Nonlinear Programming}
+
+\nt{
+	\begin{itemize}
+		\ii If $f$ concave and has a local maximum, it is a global maximum.
+		\ii If $f$ convex and has a local minimum, it is a global minimum.
+	\end{itemize}
+}
+
+\section{Univariate Unconstrained Optimization}
+
+\subsection{Bisection Method}
+
+Given a function $f(x)$, we can find the local maximum by using the bisection method given 2 numbers $a<b$ such that $f'(a)>0>f'(b)$. The algorithm is as follows
+
+\begin{enumerate}
+	\ii Given 2 numbers $a$ and $b$.
+	\ii Set $x=\frac{a+b}{2}$.
+	\ii If $\frac{b-a}{2} \leq \varepsilon$, stop.
+	\ii If $f'(x)>0$, set $a=x$.
+	\ii Else, set $b=x$.
+	\ii Repeat steps 2-5.
+\end{enumerate}
+
+\begin{algorithm}
+	\SetAlgoLined
+	\KwResult{Minimum of $f(x)$}
+	\SetKwFunction{FMain}{Bisection}
+	\SetKwProg{Fn}{Function}{:}{}
+	\Fn{\FMain{$f(x),a,b,\varepsilon$}}{
+		$x\gets\frac{a+b}{2}$\;
+		\While{$\frac{b-a}{2}>\varepsilon$}{
+			\eIf{$f'(x)>0$}{
+				$a\gets x$\;
+			}{
+				$b\gets x$\;
+			}
+			$x\gets\frac{a+b}{2}$\;
+		}
+		\Return{$x$}\;
+	}
+	\caption{Bisection Method}
+\end{algorithm}
+
+\subsection{Newton's Method}
+
+Given a function $f(x)$, we can find the local maximum by using Newton's method given a number $x_0$. This function garantees a local maximum if $f$ is concave (minimum if $f$ is convex). The algorithm is as follows
+
+\begin{enumerate}
+	\ii Given a number $x_0$.
+	\ii Set $x=x_0-\frac{f'(x_0)}{f''(x_0)}$.
+	\ii If $|x-x_0| \leq \varepsilon$, stop.
+	\ii Set $x_0=x$.
+	\ii Repeat steps 2-4.
+\end{enumerate}
+
+\begin{algorithm}
+	\SetAlgoLined
+	\KwResult{Minimum of $f(x)$}
+	\SetKwFunction{FMain}{Newton}
+	\SetKwProg{Fn}{Function}{:}{}
+	\Fn{\FMain{$f(x),x_0,\varepsilon$}}{
+		$x\gets x_0-\frac{f'(x_0)}{f''(x_0)}$\;
+		\While{$|x-x_0|>\varepsilon$}{
+			$x_0\gets x$\;
+			$x\gets x_0-\frac{f'(x_0)}{f''(x_0)}$\;
+		}
+		\Return{$x$}\;
+	}
+	\caption{Newton's Method}
+\end{algorithm}
+
+\section{Multivariate Unconstrained Optimization}
+
+\subsection{Gradient Descent}
+
+Given a function $f(x)$, we can find the local maximum by using the gradient descent method given a number $x_0$. The function doesn't garantee a local maximum except when $f$ is convex/concave. We consider an initial guess $x_0$ and a step size $t$, then we update the guess $x_1=x_0+t\grad{f(x_0)}$ and repeat the process. We find the step size $t$ by using the exact line search method. The algorithm is as follows
+
+\begin{enumerate}
+	\ii Given a number $x_0$ and calculate $\grad{f(x_0)}$.
+	\ii Maximize the univariate function $g(t)=f(x_0+t\grad{f(x_0)})$. (Exact line search)
+	\ii Set $x_1=x_0+t\grad{f(x_0)}$.
+	\ii If $|x_1-x_0| \leq \varepsilon$, stop.
+\end{enumerate}
+
+\begin{algorithm}
+	\SetAlgoLined
+	\KwResult{Minimum of $f(x)$}
+	\SetKwFunction{FMain}{GradientDescent}
+	\SetKwProg{Fn}{Function}{:}{}
+	\Fn{\FMain{$f(x),x_0,\varepsilon$}}{
+		\While{$|x_1-x_0|>\varepsilon$}{
+			$t\gets\argmin_t f(x_0+t\grad{f(x_0)})$\;
+			$x_1\gets x_0+t\grad{f(x_0)}$\;
+			$x_0\gets x_1$\;
+		}
+		\Return{$x_1$}\;
+	}
+	\caption{Gradient Descent Method}
+\end{algorithm}
+
+\subsection{Newton's Method}
+
+Given a function $f$ and an initial guess $x_0$
+
+\[
+	f(x_0) + \grad{f(x_0)(x-x_0)} + \frac{1}{2}(x-x_0)^T\grad^2f(x_0)(x-x_0)
+	.\]
+
+\[
+	x_{i+1} = x_i - \grad^2f(x_i)^{-1}\grad{f(x_i)}
+	.\]
+
+Iterate until some convergence criteria is met $\norm{x_{i+1} - x_i} \leq \varepsilon$ or $\max_j \norm{{x_j}^{i+1} - {x_j}^i} \leq \varepsilon$.\\
+
+The algorithm is as follows
+
+\begin{algorithm}
+	\SetAlgoLined
+	\KwResult{Minimum of $f(x)$}
+	\SetKwFunction{FMain}{Newton}
+	\SetKwProg{Fn}{Function}{:}{}
+	\Fn{\FMain{$f(x),x_0,\varepsilon$}}{
+		\While{$\norm{x_{i+1} - x_i}>\varepsilon$}{
+			$x_{i+1}\gets x_i - \grad^2f(x_i)^{-1}\grad{f(x_i)}$\;
+			$x_i\gets x_{i+1}$\;
+		}
+		\Return{$x_{i+1}$}\;
+	}
+	\caption{Newton's Method}
+\end{algorithm}
+
+\section{Convex Sets}
+
+A set $S$ is convex if for any $x,y\in S$ and any $\lambda\in[0,1]$, we have $\lambda x + (1-\lambda)y\in S$.
+
+\section{Hessian Matrix and Definiteness}
+
+The Hessian matrix is the matrix of second derivatives of a function. It is defined as
+
+\[
+	\grad^2f(x,y) = \begin{bmatrix}
+		\pdv[2]{f}{x} & \pdv{f}{x}{y} \\
+		\pdv{f}{y}{x} & \pdv[2]{f}{y}
+	\end{bmatrix}
+	.\]
+
+\[
+	f \text{ strictly convex } \Leftrightarrow \grad^2f(x) \text{ positive definite }
+	.\]
+
+\[
+	H^{n \times n} \text{ positive definite } \Leftrightarrow \text{ eigenvalues} > 0 \Leftrightarrow \forall \vb{v} \in \RR^n, \vb{v}^TH\vb{v} > 0 \Leftrightarrow \text{ all leading principal minors are positive}
+	.\]
+
+\[
+	f \text{ convex } \Leftrightarrow \grad^2f(x) \text{ positive semi-definite }
+	.\]
+
+\[
+	H^{n \times n} \text{ positive semi-definite } \Leftrightarrow \text{ eigenvalues} \geq 0 \Leftrightarrow \forall \vb{v} \in \RR^n, \vb{v}^TH\vb{v} \geq 0 \Leftrightarrow \text{ all leading principal minors } \geq 0
+	.\]
+
+\section{Langrange Multipliers}
+
+Given a function $f(x)$ and a set of constraints $g_i(x)=0$, we can find the local maximum by using the Langrange multipliers method. At $x^*$ the gradient of $f$ is orthogonal to the curve of the constraints.\\
+
+The optimality conditions are
+
+\[
+	\grad{f(x^*)} = \lambda \grad{g(x^*)}
+	.\]
+
+Points that verify these conditions are called stationary points.\\
+
+Langrange unified the constraints and the objective function into a single function $L(x,\lambda) = f(x) - \lambda g(x)$. We find the stationary points of $L$ and verify that the constraints are satisfied.\\
+
+\[
+	\pdv{L}{x} = 0 \implies \grad{f} - \lambda \grad{g} = 0 \qq*{Optimality condition}
+	.\]
+
+\[
+	\pdv{L}{\lambda} = 0 \implies g(x) = 0 \qq*{Constraint}
+	.\]
+
+When there are multiple constraints $L$ is defined as
+
+\[
+	L(x,\lambda) = f(x) - \sum_i \lambda_i g_i(x) = f(x) - \vb*{\lambda}^T\vb{g}(x)
+	.\]
+
+When the constraints are inequalities $g_i(x)\leq 0$, we define the Lagrangian as
+
+\[
+	L(x,\lambda) = f(x) - \sum_i u_i g_i(x) = f(x) - \vb*{u}^T\vb{g}(x)
+	.\]
+
+The KKT conditions are
+
+\begin{enumerate}
+	\ii For $i=1,\ldots,m$
+	\begin{enumerate}
+		\ii $g_i(x) \leq 0$
+		\ii $u_i \geq 0$
+		\ii $u_ig_i(x) = 0$
+	\end{enumerate}
+	\ii For $j=1,\ldots,n$
+	\[
+		\pdv{L}{x_j} = 0
+		.\]
+\end{enumerate}
+
+\nt{
+	For equality constraints we drop the $u_i \geq 0$ and the $u_ig_i(x) = 0$ conditions.
+}
+
+If we have non-negativity constraints $x_i\geq 0$, we define the Lagrangian as
+
+\[
+	L(x,\lambda) = f(x) - \sum_i u_i x_i + \sum_j a_j x_j
+	.\]
+
+Where we substitute
+
+\[
+	a_j = -\pdv{f}{x_j} + \sum_i u_i \pdv{g_i}{x_j}
+	.\]
+
+The KKT conditions are
+
+\begin{enumerate}
+	\ii For $i=1,\ldots,n$
+	\begin{enumerate}
+		\ii $g_i \leq 0$
+		\ii $u_i \geq 0$
+		\ii $u_ig_i = 0$
+	\end{enumerate}
+	\ii For $j=1,\ldots,n$
+	\begin{enumerate}
+		\ii $\pdv{f}{x_j} - \sum_i u_i \pdv{g_i}{x_j} \leq 0$
+		\ii $x_j(\pdv{f}{x_j} - \sum_i u_i \pdv{g_i}{x_j}) = 0$
+		\ii $x_j \geq 0$
+	\end{enumerate}
+\end{enumerate}
+
+\paragraph{Problem Statement}
+
+\[
+	\max Z = f(\vb{x})
+	.\]
+
+Subject to
+\begin{align*}
+	g_i(\vb{x}) & \leq b_i \quad i=1,\ldots,m \\
+	x_j         & \leq 0 \quad j=1,\ldots,n
+\end{align*}
+
+We define the Lagrangian by adding $m$ dual variables $u_i$
+
+\[
+	L(\vb{x},\vb{u}) = f(\vb{x}) - \sum_{i=1} u_i(g_i(\vb{x}) - b_i)
+	.\]
+
+The KKT conditions are
+
+\begin{enumerate}
+	\ii For $j=1,\ldots,m$
+	\begin{enumerate}
+		\ii $\pdv{f}{x_j} - \sum_i u_i \pdv{g_i}{x_j} \leq 0$
+		\ii $x_j(\pdv{f}{x_j} - \sum_i u_i \pdv{g_i}{x_j}) = 0$
+		\ii $x_j \leq 0$
+	\end{enumerate}
+	\ii For $i=1,\ldots,m$
+	\begin{enumerate}
+		\ii $g_i(\vb{x}) - b_i \leq 0$
+		\ii $u_i \geq 0$
+		\ii $u_i(g_i(\vb{x}) - b_i) = 0$
+	\end{enumerate}
+\end{enumerate}
+
+\nt{
+	The KKT conditions are necessary conditions for optimality. They are not sufficient conditions. They are only valid for local optima. \\
+	However, if $f$ is concave and the constraints are convex, then the KKT conditions are also sufficient.
+}
+
+\section{Convex Programming}
+
+A convex programming problem is a problem where the objective function and the constraints are convex. The KKT conditions are necessary and sufficient for optimality.
+
+\nt{
+	Important properties of convex programming problems:
+	\begin{itemize}
+		\ii Any local extremum is a global extremum.
+		\ii The KKT conditions are sufficient as well as necessary.
+	\end{itemize}
+}
+
+\subsection{Quadratic Programming}
+
+A quadratic programming problem is a convex programming problem where the objective function is quadratic and the constraints are linear. The problem has the following shape
+
+\[
+	\vb{A}\vb{x} \leq \vb{b} \quad \vb{x} \geq 0
+	.\]
+
+Quadratic polynomials can be written as
+
+\[
+	\vb{c}\vb{x} - \frac{1}{2}\vb{x}^T\vb{Q}\vb{x}
+	.\]
+
+Where $\vb{Q}$ is the Hessian matrix of the quadratic function times $-1$.
+
+\[
+	\vb{Q} = -\grad^2f(\vb{x})
+	.\]
+
+\ex{}{
+	Consider the following quadratic programming problem
+	\[
+		\max Z = = 15x_1 + 30x_2 + 4x_1x_2 - 2{x_1}^2 - 4{x_2}^2
+		.\]
+
+	Subject to
+	\[
+		x_1 + 2x_2 \leq 30
+		.\]
+
+	\begin{align*}
+		\vb{A} & = \begin{bmatrix}
+			           1 & 2
+		           \end{bmatrix}  \\
+		\vb{b} & = \begin{bmatrix}
+			           30
+		           \end{bmatrix}  \\
+		\vb{c} & = \begin{bmatrix}
+			           15 \\ 30
+		           \end{bmatrix}  \\
+		\vb{Q} & = \begin{bmatrix}
+			           4 & -4 \\ -4 & 8
+		           \end{bmatrix}
+	\end{align*}
+}
+
+If $Q$ is PSD (positive semi-definite), then the problem is convex. Any method would solve the problem however there exists a modified simplex method that is more efficient.
+
+\subsection{Modified Simplex Method}
+
+\begin{itemize}
+	\ii Begin by writing down the KKT conditions.
+	\ii Add slack variables $y_i, v_i$ for each inequality constraint.
+	\ii Add artificial variables $z_i$ for feasibility.
+	\ii Solve the problem using the simplex method with the Restricted-Entry Rule which states that we should avoid having complimentary variables in the BFS. Always select an entering basic variable that its complementary variable is not in the base (not necessarily the one that has the highest increase rate).
+\end{itemize}
+
+\ex{}{
+	Consider the following quadratic programming problem
+	\[
+		\max Z = = 15x_1 + 30x_2 + 4x_1x_2 - 2{x_1}^2 - 4{x_2}^2
+		.\]
+
+	Subject to
+	\[
+		x_1 + 2x_2 \leq 30
+		.\]
+	The KKT conditions are
+	\[
+		L = 15x_1 + 30x_2 + 4x_1x_2 - 2{x_1}^2 - 4{x_2}^2 - \lambda_1(x_1 + 2x_2 - 30)
+		.\]
+
+	\begin{align*}
+		15 + 4x_2 - 4x_1 - \lambda_1       & \leq 0 \\
+		30 + 4x_1 - 8x_2 - 2\lambda_1      & \leq 0 \\
+		x_1 + 2x_2 - 30                    & \leq 0 \\
+		                                   &        \\
+		x_1(15 - 4x_1 + 4x_2 - \lambda_1)  & = 0    \\
+		x_2(30 + 4x_1 - 8x_2 - 2\lambda_1) & = 0    \\
+		\lambda_1(x_1 + 2x_2 - 30)         & = 0    \\
+	\end{align*}
+
+	Now we add slack variables $y_1, v_1$ for the inequality constraints
+
+	\begin{align*}
+		4x_1 - 4x_2 + \lambda_1 - y_1   & = 15 \quad x_1y_1 = 0 \text{ complementarity constraint}       \\
+		-4x_1 + 8x_2 + 2\lambda_1 - y_2 & = 30 \quad x_2y_2 = 0 \text{ complementarity constraint}       \\
+		x_1 + 2x_2 + v_1                & = 30 \quad \lambda_1v_1 = 0 \text{ complementarity constraint} \\
+	\end{align*}
+
+	One constraint summarizes all complementarity constraints
+
+	\[
+		x_1y_1 + x_2y_2 + \lambda_1v_1 = 0
+		.\]
+
+	We add artificial variables $z_1, z_2, z_3$ for feasibility
+
+	\[
+		\min z_1 + z_2
+		.\]
+
+	\begin{align*}
+		4x_1 - 4x_2 + \lambda_1 - y_1 + z_1   & = 15 \\
+		-4x_1 + 8x_2 + 2\lambda_1 - y_2 + z_2 & = 30 \\
+		x_1 + 2x_2 + v_1                      & = 30 \\
+	\end{align*}
+
+
+
+}
 
 
 \end{document}

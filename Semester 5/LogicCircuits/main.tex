@@ -5,6 +5,7 @@
 \input{../template/letterfonts}
 
 \usepackage{karnaugh-map}
+\usepackage{tikz-timing}
 
 \title{\Huge{Logic Circuits}\\Semester 5}
 \author{\huge{Ahmad Abu Zainab}}
@@ -14,7 +15,8 @@
 	logic ports=ieee,
 	logic ports/scale=0.7,
 	logic ports/fill=lightgray,
-    muxdemuxes/fill=lightgray
+    muxdemuxes/fill=lightgray,
+    flipflops/fill=lightgray,
 }
 
 \begin{document}
@@ -98,7 +100,7 @@ If the number has a decimal point then we multiply the decimal part by 2 the int
 	\end{align*}
 }
 
-\section{Binary and Hexidecimal}
+\section{Binary and Hexadecimal}
 
 To convert from binary to hexadecimal we group the binary digits into groups of 4 starting from the right and convert each group to a hexadecimal digit.
 
@@ -793,7 +795,7 @@ The procedure for designing a two-level NAND-NAND circuit is as follows
 
 \begin{enumerate}
 	\ii Find a minimum sum-of-products expression for F.
-	\ii raw the corresponding two-level AND-OR circuit.
+	\ii Draw the corresponding two-level AND-OR circuit.
 	\ii Replace all gates with NAND gates leaving the gate interconnections unchanged.
 	\ii If the output gate has any single literals as inputs, complement these literals.
 \end{enumerate}
@@ -825,7 +827,8 @@ We will sometimes use a shorter circuit representation
 		\draw (0,0) node[buffer port] (not) {};
 		\draw (not.out) -- ++(1,0) node[right] {$X$};
 		\draw (not.in) -- ++(-1,0) node[left] {$\bar{X}$};
-		\node at (not.in) [ocirc, right] {};
+		% \node at (not.in) [circleinv] {};
+		\draw (not.bin) node[notcirc,left] {};
 	\end{circuitikz}
 \end{figure}
 to represent a circuit using a NOT gate.
@@ -838,8 +841,8 @@ to represent a circuit using a NOT gate.
 			\draw (nor.in 1) -- ++(-0.5,0) node[left] {$X$};
 			\draw (nor.in 2) -- ++(-0.5,0) node[left] {$Y$};
 			\draw (nor.out) -- ++(0.5,0) node[right] {$(X' + Y')' = X \cdot Y$};
-			\node at (nor.in 1) [ocirc, right] {};
-			\node at (nor.in 2) [ocirc, right] {};
+			\draw (nor.bin 1) node[notcirc, left] {};
+			\draw (nor.bin 2) node[notcirc, left] {};
 		\end{circuitikz}
 	\end{figure}
 
@@ -851,8 +854,8 @@ to represent a circuit using a NOT gate.
 			\draw (nand.in 1) -- ++(-0.5,0) node[left] {$X$};
 			\draw (nand.in 2) -- ++(-0.5,0) node[left] {$Y$};
 			\draw (nand.out) -- ++(0.5,0) node[right] {$(X' \cdot Y')' = X + Y$};
-			\node at (nand.in 1) [ocirc, right] {};
-			\node at (nand.in 2) [ocirc, right] {};
+			\draw (nand.bin 1) node[notcirc, left] {};
+			\draw (nand.bin 2) node[notcirc, left] {};
 		\end{circuitikz}
 	\end{figure}
 
@@ -864,8 +867,8 @@ to represent a circuit using a NOT gate.
 			\draw (or.in 1) -- ++(-0.5,0) node[left] {$X$};
 			\draw (or.in 2) -- ++(-0.5,0) node[left] {$Y$};
 			\draw (or.out) -- ++(0.5,0) node[right] {$X' + Y' = X \uparrow Y$};
-			\node at (or.in 1) [ocirc, right] {};
-			\node at (or.in 2) [ocirc, right] {};
+			\draw (or.bin 1) node[notcirc, left] {};
+			\draw (or.bin 2) node[notcirc, left] {};
 		\end{circuitikz}
 	\end{figure}
 
@@ -877,8 +880,8 @@ to represent a circuit using a NOT gate.
 			\draw (and.in 1) -- ++(-0.5,0) node[left] {$X$};
 			\draw (and.in 2) -- ++(-0.5,0) node[left] {$Y$};
 			\draw (and.out) -- ++(0.5,0) node[right] {$X' \cdot Y' = X \downarrow Y$};
-			\node at (and.in 1) [ocirc, right] {};
-			\node at (and.in 2) [ocirc, right] {};
+			\draw (and.bin 1) node[notcirc, left] {};
+			\draw (and.bin 2) node[notcirc, left] {};
 		\end{circuitikz}
 	\end{figure}
 \end{enumerate}
@@ -891,7 +894,7 @@ The following procedure may be used to convert to a NAND (or NOR) circuit:
 	\ii We add an inversion bubble to the input of the odd levels.
 	\ii If an inverted input is connected to an inverted output, we leave it as is.
 	\ii If an inverted input is connected to a non-inverted output (or vice-versa), we add an inversion bubble to the non-inverted terminal to cancel the inversion.
-	\ii If an literal is connected to an inverted input, we complement the literal.
+	\ii If a literal is connected to an inverted input, we complement the literal.
 \end{enumerate}
 
 \section{Design of Combinational Circuits}
@@ -1393,5 +1396,308 @@ A read-only memory (ROM) consists of an array of semiconductor devices that are 
 \end{figure}
 
 The truth table for the ROM depends on the data stored. The ROM can be thought off as an array of values and the input $abc$ acts an index to the array.
+
+\chapter{Latches and Flip-Flops}
+
+\section{Sequential Circuits}
+
+A sequential circuit is a circuit that has memory. The output of a sequential circuit depends on the current input and the current state of the circuit. We say that a circuit has feedback if an output of the circuit is connected to an input of the circuit.\\
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[not port] (NOT) {};
+		\draw (NOT.out) -- ++(0,0.5) -| (NOT.in);
+		\draw (NOT.out) node [right] {$X$};
+
+		\draw (0,-1) node {
+			\scalebox{1.25}{
+				\begin{tikztimingtable}[timing/draw grid]
+					$X$              & 7{L H} \\
+					\extracode
+					\tablerules
+				\end{tikztimingtable}
+			}
+		};
+	\end{circuitikz}
+\end{figure}
+
+An example of a stable circuit with feedback is
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\begin{scope}
+			\draw (0,0) node[not port] (NOT1) {};
+			\draw (2,0) node[not port] (NOT2) {};
+			\draw (NOT1.out) node[above] {1} -- (NOT2.in) node[above] {1};
+			\draw (NOT2.out) node[above right] {0} -- ++(0,1) -| (NOT1.in) node[above left] {0};
+		\end{scope}
+
+		\begin{scope}[yshift=-2cm]
+			\draw (0,0) node[not port] (NOT1) {};
+			\draw (2,0) node[not port] (NOT2) {};
+			\draw (NOT1.out) node[above] {0} -- (NOT2.in) node[above] {0};
+			\draw (NOT2.out) node[above right] {1} -- ++(0,1) -| (NOT1.in) node[above left] {1};
+		\end{scope}
+	\end{circuitikz}
+\end{figure}
+
+\section{Latches}
+
+A latch is a sequential circuit that is level sensitive. The output of a latch depends on the current input and the current state of the circuit.\\
+
+\subsection{SR(Set-Reset) Latch}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\begin{scope}
+			\draw (0,0) node[nor port] (NOR2) {};
+			\draw (NOR2.in 1) ++(-2,0) node[nor port] (NOR1) {};
+			\draw[-o] (NOR1.in 2) -| ++(-0.25,-0.5) node[left] {$S$} node[right] {0};
+			\draw[-o] (NOR2.in 2) -| ++(-0.25,-0.5) node[left] {$R$} node[right] {0};
+			\draw (NOR2.out) node[above] {$Q$} node[below] {0} -| ++(0.5,1) -| (NOR1.in 1);
+			\draw (NOR1.out) node[above] {$P$} node[below] {1} -| (NOR2.in 1);
+		\end{scope}
+
+		\begin{scope}[yshift=-2.5cm]
+			\draw (0,0) node[nor port] (NOR2) {};
+			\draw (NOR2.in 1) ++(-2,0) node[nor port] (NOR1) {};
+			\draw[-o] (NOR1.in 2) -| ++(-0.25,-0.5) node[left] {$S$} node[right] {1};
+			\draw[-o] (NOR2.in 2) -| ++(-0.25,-0.5) node[left] {$R$} node[right] {0};
+			\draw (NOR2.out) node[above] {$Q$} node[below] {1} -| ++(0.5,1) -| (NOR1.in 1);
+			\draw (NOR1.out) node[above] {$P$} node[below] {0} -| (NOR2.in 1);
+		\end{scope}
+
+		\begin{scope}[yshift=-5cm]
+			\draw (0,0) node[nor port] (NOR2) {};
+			\draw (NOR2.in 1) ++(-2,0) node[nor port] (NOR1) {};
+			\draw[-o] (NOR1.in 2) -| ++(-0.25,-0.5) node[left] {$S$} node[right] {0};
+			\draw[-o] (NOR2.in 2) -| ++(-0.25,-0.5) node[left] {$R$} node[right] {1};
+			\draw (NOR2.out) node[above] {$Q$} node[below] {0} -| ++(0.5,1) -| (NOR1.in 1);
+			\draw (NOR1.out) node[above] {$P$} node[below] {1} -| (NOR2.in 1);
+		\end{scope}
+	\end{circuitikz}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[nor port, rotate=90] (NOR1) {};
+		\draw (1.5,0) node[nor port, rotate=90] (NOR2) {};
+		\draw (NOR1.in 1) -- ++(0,-0.25) node[below] {$R$};
+		\draw (NOR2.in 2) -- ++(0,-0.25) node[below] {$S$};
+		\draw (NOR2.out) -- ++(-0.3,0) -- ($ (NOR1.in 2) + (0.2,0) $) -- (NOR1.in 2);
+		\draw (NOR1.out) -- ++(0.3,0) -- ($ (NOR2.in 1) - (0.2,0) $) -- (NOR2.in 1);
+		\draw (NOR1.out) -- ++(0,0.25) node[above] {$Q$};
+		\draw (NOR2.out) -- ++(0,0.25) node[above] {$\overline{Q}$};
+
+		\draw (4,0) node [flipflop SR, rotate=90] (FF) {};
+	\end{circuitikz}
+\end{figure}
+
+Let $Q^+$ be the next state of $Q$, then
+\begin{itemize}
+	\ii If $S=1$ (Set), then $Q^+=1$.
+	\ii If $R=1$ (Reset), then $Q^+=0$.
+	\ii If $S=R=0$, then $Q^+=Q$. (no change)
+	\ii If $S=R=1$, then $Q^+$ is undefined as it's value keeps alternating between 1 and 0.
+\end{itemize}
+
+\[
+	Q^+ = S + R' Q
+	.\]
+
+An alternate representation of the SR latch is made using NAND gates.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[nand port, rotate=90] (NOR1) {};
+		\draw (1.5,0) node[nand port, rotate=90] (NOR2) {};
+		\draw (NOR1.in 1) -- ++(0,-0.25) node[below] {$\overline{S}$};
+		\draw (NOR2.in 2) -- ++(0,-0.25) node[below] {$\overline{R}$};
+		\draw (NOR2.out) -- ++(-0.3,0) -- ($ (NOR1.in 2) + (0.2,0) $) -- (NOR1.in 2);
+		\draw (NOR1.out) -- ++(0.3,0) -- ($ (NOR2.in 1) - (0.2,0) $) -- (NOR2.in 1);
+		\draw (NOR1.out) -- ++(0,0.25) node[above] {$Q$};
+		\draw (NOR2.out) -- ++(0,0.25) node[above] {$\overline{Q}$};
+
+		\draw (4,0) node [flipflop SR, rotate=90] (FF) {};
+		\draw (FF.bpin 1) node[ocirc, below]{};
+		\draw (FF.bpin 3) node[ocirc, below]{};
+	\end{circuitikz}
+\end{figure}
+
+\subsubsection{Switch Debouncing with an S-R Latch}
+
+An S-R latch can be used to debounce a switch. (The pull-down resistors ensure $\text{S}=\text{R}=0$ while the switch switched from a to b).
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\ctikzset{bipoles/cuteswitch/thickness=0.5}
+		\ctikzset{bipoles/length=2cm}
+		\draw (0,0) node[cute spdt mid arrow] (SW) {};
+		\draw (5,0) node[flipflop SR] (FF) {};
+		\draw (SW.in) -- ++(-0.5,0) node[left] {+V};
+		\draw (SW.out 1) -- ++(0.1,0) |- (FF.pin 1) node[pos=0.75] (S1) {};
+		\draw (S1) to[short, *-, /tikz/circuitikz/bipoles/length=1cm] ++(0,-0.1) to[R,/tikz/circuitikz/bipoles/length=0.9cm] ++(0,-1) node[ground, scale=0.7] {};
+		\draw (SW.out 2) -- ++(0.1,0) |- (FF.pin 3) node[pos=0.75] (S2) {};
+		\draw (S2) to[short, *-, /tikz/circuitikz/bipoles/length=1cm] ++(0,-0.1) to[R,/tikz/circuitikz/bipoles/length=0.9cm] ++(0,-1) node[ground, scale=0.7] {};
+
+		\draw (SW.out 1) node[anchor=south east] {a};
+		\draw (SW.out 2) node[anchor=north east] {b};
+
+		\draw (FF.pin 6) to[short,-o] ++(0.1,0);
+	\end{circuitikz}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\scalebox{1.25}{
+		\begin{tikztimingtable}[
+				timing/name/.style={font=\rmfamily},
+				timing/draw grid
+			]
+			\centering
+			S                       & 20L N(S1) 8{c} N(S2) 6C \\
+			R                       & 6H N(R1) 8{c} N(R2) 20C \\
+			Q                       & [blue] 19C 0.25FL 10T \\
+			$\overline{\mathrm{Q}}$ & [red] 19H 0.25FH 10T \\
+			\begin{extracode}
+				\tablerules
+				\begin{pgfonlayer}{background}
+					\draw[decoration={brace,mirror,raise=5pt},decorate] let \p{R1}=(R1), \p{R2}=(R2) in (\x{R1},-7.5) -- node[below=6pt] {
+							\rmfamily
+							\begin{tabular}{c}
+								Bounce \\
+								at a
+							\end{tabular}
+						}
+					(\x{R2},-7.5);
+					\draw[decoration={brace,mirror,raise=5pt},decorate] let \p{S1}=(S1), \p{S2}=(S2) in (\x{S1},-7.5) -- node[below=6pt] {
+							\rmfamily
+							\begin{tabular}{c}
+								Bounce \\
+								at b
+							\end{tabular}
+						}
+					(\x{S2},-7.5);
+					\draw[thin, lightgray, densely dashed] let \p{R1}=(R1), \p{R2}=(R2) in (R1) -- (\x{R1},-8);
+					\draw[thin, lightgray, densely dashed] let \p{R1}=(R1), \p{R2}=(R2) in (R2) -- (\x{R2},-8);
+					\draw[thin, lightgray, densely dashed] let \p{S1}=(S1), \p{S2}=(S2) in (S1) -- (\x{S1},-8);
+					\draw[thin, lightgray, densely dashed] let \p{S1}=(S1), \p{S2}=(S2) in (S2) -- (\x{S2},-8);
+					\draw let \p{R1}=(R1) in (\x{R1},-9) node[left] {
+							\rmfamily
+							\begin{tabular}{c}
+								Switch \\
+								at a
+							\end{tabular}
+						};
+					\draw let \p{S1}=(S1) in (\x{S1},-9) node[left] {
+							\rmfamily
+							\begin{tabular}{c}
+								Switch b/w \\
+								a and b
+							\end{tabular}
+						};
+					\draw let \p{S2}=(S2) in (\x{S2},-9) node[right] {
+							\rmfamily
+							\begin{tabular}{c}
+								Switch \\
+								at b
+							\end{tabular}
+						};
+				\end{pgfonlayer}
+			\end{extracode}
+		\end{tikztimingtable}
+	}
+\end{figure}
+
+\subsection{Gated D Latch}
+
+A gated D latch consists of 2 inputs, a data input $D$ and a gate input $G$. The output of the latch is $Q$. When $G=1$, the latch is enabled and the output $Q$ follows the input $D$. When $G=0$, the latch is disabled and the output $Q$ remains unchanged. This latch is sometimes called a transparent latch.\\
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[flipflop SR] (FF) {};
+		\draw (FF.pin 1) -- ++(-1,0) node[and port] (AND1) {};
+		\draw (FF.pin 3) -- ++(-1,0) node[and port] (AND2) {};
+		\draw (AND1.in 1) -- ++(-1.5,0) node[above] (D) {} -- ++(-0.2,0) node[left] {$D$};
+		\draw (AND2.in 2) -- ++(-0.75,0) node[not port] {} -| (D);
+		\draw ($(AND1.in 2)!0.5!(AND2.in 1)$) ++(-0.5,0) node (G) {};
+		\draw (AND1.in 2) |- (G);
+		\draw (AND2.in 1) |- (G) node[left] {$G$};
+	\end{circuitikz}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\scalebox{1.25}{
+		\begin{tikztimingtable}[
+				timing/name/.style={font=\rmfamily},
+				timing/draw grid
+			]
+			\centering
+			G                       & 10C N(G1)12C N(G2)6C \\
+			D                       & 2C 2C 4C 4C 2C 4C 2C 6C 2C \\
+			Q                       & [blue] 0.25f10T 2T 2T 4T 2T 0.25b8T \\
+			\begin{extracode}
+				\tablerules
+				\begin{pgfonlayer}{background}
+					\draw[thin, gray, densely dashed] (G1) -- ++(0,-5);
+					\draw[thin, gray, densely dashed] (G2) -- ++(0,-5);
+				\end{pgfonlayer}
+			\end{extracode}
+		\end{tikztimingtable}
+	}
+\end{figure}
+
+\[
+	Q^+ = G D + G' Q
+	.\]
+
+\subsection{Edge-Triggered D Flip-Flop}
+
+A D flip-flop is a circuit that samples the input $D$ and changes the output $Q$ only at the edge of the clock signal $Ck$.
+If the output is triggered by the clock changing from 0 to a 1 then the flip-flop is called a \emph{rising edge}.
+If the output is triggered by the clock changing from 1 to a 0 then the flip-flop is called a \emph{falling edge}, an inversion bubble at the clock input indicates a falling edge.\\
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[flipflop D, flipflop def={t3={Ck}}] (FF) {};
+		\draw (0,-2) node {Rising Edge Trigger};
+
+		\draw (4,0) node[flipflop D, flipflop def={t3={Ck}}] (FF) {};
+		\draw (FF.bpin 3) node[notcirc, left]{};
+		\draw (4,-2) node {Falling Edge Trigger};
+	\end{circuitikz}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\scalebox{1.25}{
+		\begin{tikztimingtable}[
+				timing/name/.style={font=\rmfamily},
+				timing/draw grid
+			]
+			\centering
+			D                       & 5H 4C 8C 4C C 2.5C \\
+			Ck                      & 2C 2C N(N1) 2C 2C N(N2) 2C 2C N(N3) 2C 2C N(N4) 2C 2C N(N5) 2C 2C N(N6) c\\
+			Q                       & [blue] 0.25f4C 4C 4C 8C 0.75f4C \\
+			\begin{extracode}
+				\tablerules
+				\begin{pgfonlayer}{background}
+					\foreach \x in {1,...,6}{
+							\draw[thin, gray, densely dashed] (N\x) ++(0,2) -- ++(0,-5);
+						};
+				\end{pgfonlayer}
+			\end{extracode}
+		\end{tikztimingtable}
+	}
+\end{figure}
 
 \end{document}
