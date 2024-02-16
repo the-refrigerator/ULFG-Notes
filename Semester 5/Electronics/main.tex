@@ -700,7 +700,7 @@ In this mode, the MOSFET is on ($i_D \neq 0$). The MOSFET conducts current from 
 	\centering
 	\begin{circuitikz}
 		\draw (-2,0) node (G1) {} node[left] {G} to[short, o-o] ++(0.5,0);
-		\draw (-2,-3) node (G2) {} to[short, o-o] ++(5,0) node (D2) {};
+		\draw (-2,-3) node (G2) {} to[short, o-o] ++(7,0) node (D2) {};
 		\draw (2.5, -3) to[short, *-o] ++(0,-0.5) node[below] {S};
 		\draw (3.5,-3) to[american, cisource, invert, *-, l=$g_m v_{gs}$] ++(0,3) to [short, -o] ++(1.5,0) node (D1) {} node[right] {D};
 
