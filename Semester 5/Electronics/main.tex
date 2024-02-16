@@ -25,8 +25,6 @@
 
 \chapter{Amplifiers}
 
-\section{Gain of Amplifiers}
-
 \begin{align*}
 	\text{Voltage Gain} & = \frac{v_{out}}{v_{in}} \\
 	\text{Current Gain} & = \frac{i_{out}}{i_{in}} \\
@@ -702,7 +700,7 @@ In this mode, the MOSFET is on ($i_D \neq 0$). The MOSFET conducts current from 
 	\centering
 	\begin{circuitikz}
 		\draw (-2,0) node (G1) {} node[left] {G} to[short, o-o] ++(0.5,0);
-		\draw (-2,-3) node (G2) {} to[short, o-o] ++(7,0) node (D2) {};
+		\draw (-2,-3) node (G2) {} to[short, o-o] ++(5,0) node (D2) {};
 		\draw (2.5, -3) to[short, *-o] ++(0,-0.5) node[below] {S};
 		\draw (3.5,-3) to[american, cisource, invert, *-, l=$g_m v_{gs}$] ++(0,3) to [short, -o] ++(1.5,0) node (D1) {} node[right] {D};
 
@@ -718,7 +716,6 @@ In this mode, the MOSFET is on ($i_D \neq 0$). The MOSFET conducts current from 
 
 			\draw (G1) to[american, open, v=$v_{GS}$] (G2);
 			\draw (D1) to[american, open, v^=$v_{DS}$] (D2);
-
 		\end{scope}
 	\end{circuitikz}
 \end{figure}
@@ -832,7 +829,7 @@ An operational amplifier is a high gain differential amplifier. It has two input
 		\draw (0,0) node[op amp] (opamp) {};
 		\draw (opamp.+) to[short] ++(-0.5,0) node[ground] {};
 		\draw (opamp.-) to[R, l_=$R$, -o] ++(-2,0) to[short] ++(-1,0) to[sV, l=$v_i$] ++(0,-1.25) node[ground] {};
-		\draw (opamp.-) to[short, *-] ++(0,1) to[C=$C$, v^=$v_C$] ++(2,0) -| (opamp.out);
+		\draw (opamp.-) to[short, *-] ++(0,1.5) to[C,l_=$C$, v^=$v_C$] ++(2,0) -| (opamp.out);
 		\draw (opamp.out) to[short, *-o] ++(1,0) node[right] {$\displaystyle v_o = -\frac{1}{RC}\int_0^t\!v_i(t)\dd{t} - V_C$};
 	\end{circuitikz}
 \end{figure}
