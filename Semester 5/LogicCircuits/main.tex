@@ -6,6 +6,7 @@
 
 \usepackage{karnaugh-map}
 \usepackage{tikz-timing}
+\usetikzlibrary {arrows.meta,automata,positioning}
 
 \title{\Huge{Logic Circuits}\\Semester 5}
 \author{\huge{Ahmad Abu Zainab}}
@@ -1493,7 +1494,7 @@ A latch is a sequential circuit that is level sensitive. The output of a latch d
 		\draw (NOR1.out) -- ++(0,0.25) node[above] {$Q$};
 		\draw (NOR2.out) -- ++(0,0.25) node[above] {$\overline{Q}$};
 
-		\draw (4,0) node [flipflop SR, rotate=90] (FF) {};
+		\draw (4,0) node [flipflop SR, rotate=90, rotated numbers] (FF) {};
 	\end{circuitikz}
 \end{figure}
 
@@ -1523,7 +1524,7 @@ An alternate representation of the SR latch is made using NAND gates.
 		\draw (NOR1.out) -- ++(0,0.25) node[above] {$Q$};
 		\draw (NOR2.out) -- ++(0,0.25) node[above] {$\overline{Q}$};
 
-		\draw (4,0) node [flipflop SR, rotate=90] (FF) {};
+		\draw (4,0) node [flipflop SR, rotate=90, rotated numbers] (FF) {};
 		\draw (FF.bpin 1) node[ocirc, below]{};
 		\draw (FF.bpin 3) node[ocirc, below]{};
 	\end{circuitikz}
@@ -1659,6 +1660,8 @@ A gated D latch consists of 2 inputs, a data input $D$ and a gate input $G$. The
 	Q^+ = G D + G' Q
 	.\]
 
+\section{Flip-Flops}
+
 \subsection{Edge-Triggered D Flip-Flop}
 
 A D flip-flop is a circuit that samples the input $D$ and changes the output $Q$ only at the edge of the clock signal $Ck$.
@@ -1699,5 +1702,161 @@ If the output is triggered by the clock changing from 1 to a 0 then the flip-flo
 		\end{tikztimingtable}
 	}
 \end{figure}
+
+\subsection{SR Flip-Flop}
+
+An SR flip-flop is an SR latch with an additional clock input.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\tikzset{flipflop SR/.style={flipflop JK, flipflop def={t1={S},t2={Ck},t3={R}}}}
+		\draw (0,0) node[flipflop SR] (FF) {};
+	\end{circuitikz}
+\end{figure}
+
+\subsection{JK Flip-Flop}
+
+A JK flip-flop is an extended version of an SR flip-flop. It has 2 inputs, $J$ and $K$, and a clock input $Ck$. The J input is the set input and the K input is the reset input. The main difference between the and JK flip-flop and an SR flip-flop is that the JK flip-flop allows for both inputs to be raised to $1$ at the same time, which will result in the state to be flipped on the next clock pulse.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[flipflop JK, flipflop def={t2={Ck}}] (FF) {};
+	\end{circuitikz}
+\end{figure}
+
+\begin{table}
+	\centering
+	\begin{tabular}{cc|c}
+		$J$ & $K$ & $Q^+$          \\
+		\hline
+		0   & 0   & $Q$            \\
+		0   & 1   & 0              \\
+		1   & 0   & 1              \\
+		1   & 1   & $\overline{Q}$
+	\end{tabular}
+\end{table}
+
+\[
+	Q^+ = J Q' + K' Q
+	.\]
+
+\subsection{T Flip-Flop}
+
+The T flip-flop toggles the output on every clock pulse. It has a single toggle input $T$ and a clock input $Ck$.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[flipflop T,flipflop def={t3={Ck}}] (FF) {};
+	\end{circuitikz}
+\end{figure}
+
+\begin{table}
+	\centering
+	\begin{tabular}{c|c}
+		$T$ & $Q^+$          \\
+		\hline
+		0   & $Q$            \\
+		1   & $\overline{Q}$
+	\end{tabular}
+\end{table}
+
+\[
+	Q^+ = T' Q + T Q' = Q \oplus T
+	.\]
+
+\section{Binary Counters}
+
+A binary counter is a sequential circuit that counts in certain binary sequence.
+
+\ex{}{
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[flipflop D, flipflop def={t3={Ck}}] (FF1) {1};
+			\draw (3,0) node[flipflop D, flipflop def={t3={Ck}}] (FF2) {2};
+			\draw (6,0) node[flipflop D, flipflop def={t3={Ck}}] (FF3) {3};
+
+			\draw (FF1.pin 6) -- (FF2.pin 1);
+			\draw (FF2.pin 6) -- (FF3.pin 1);
+			\draw (FF3.pin 4) -- ++(0.5,0) -- ++(0,3) -| (FF1.pin 1);
+
+			\draw (-2,-1.5) node[left] (Ck) {Ck} -- ++(6.5,0) -| (FF3.pin 3);
+			\draw let \p{Ck}=(Ck), \p{FF}=(FF1.pin 3) in (FF1.pin 3) to[short,-*] (\x{FF}, \y{Ck});
+			\draw let \p{Ck}=(Ck), \p{FF}=(FF2.pin 3) in (FF2.pin 3) to[short,-*] (\x{FF}, \y{Ck});
+			% \draw let \p{Ck}=(Ck), \p{FF}=(FF3.pin 3) in (FF3.pin 3) to[short,-*] (\x{FF}, \y{Ck});
+		\end{circuitikz}
+	\end{figure}
+
+	The resulting state graph is
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[shorten >=1pt,node distance=1cm,>={Stealth[round]},
+			every state/.style={draw=blue!50,very thick,fill=blue!20}]
+			\begin{scope}
+				\node[state] (000) {000};
+				\node[state] (100) [below right=of 000] {100};
+				\node[state] (110) [below=of 100] {110};
+				\node[state] (111) [below left=of 110] {111};
+				\node[state] (011) [above left=of 111] {011};
+				\node[state] (001) [above=of 011] {001};
+
+				\path[->] (000) edge [bend left] (100)
+				(100) edge [bend left] (110)
+				(110) edge [bend left] (111)
+				(111) edge [bend left] (011)
+				(011) edge [bend left] (001)
+				(001) edge [bend left] (000);
+			\end{scope}
+			\begin{scope}[xshift=3cm]
+				\node[state] (010) {010};
+				\node[state] (101) [below right=of 010] {101};
+
+				\path[->] (010) edge[bend left] (101)
+				(101) edge[bend left] (010);
+			\end{scope}
+		\end{tikzpicture}
+	\end{figure}
+}
+
+\newpage
+
+To derive an eqaution for the next state, we map the previous states to the next states, then map each digit of the next state to a 1 or a 0 depending on the type of flip-flop that is being used.
+\[
+	D = Q^+
+	.\]
+
+\begin{center}
+	\begin{minipage}[t]{0.3\textwidth}
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{ccc|cc}
+				$Q$ &       & $Q^+$ & $S$ & $R$ \\
+				\hline
+				0   & $\to$ & 0     & 0   & X   \\
+				0   & $\to$ & 1     & 1   & 0   \\
+				1   & $\to$ & 0     & 0   & 1   \\
+				1   & $\to$ & 1     & X   & 0   \\
+			\end{tabular}
+		\end{table}
+	\end{minipage}
+	\begin{minipage}[t]{0.3\textwidth}
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{ccc|cc}
+				$Q$ &       & $Q^+$ & $J$ & $K$ \\
+				\hline
+				0   & $\to$ & 0     & 0   & X   \\
+				0   & $\to$ & 1     & 1   & X   \\
+				1   & $\to$ & 0     & X   & 1   \\
+				1   & $\to$ & 1     & X   & 0   \\
+			\end{tabular}
+		\end{table}
+	\end{minipage}
+\end{center}
+
 
 \end{document}
