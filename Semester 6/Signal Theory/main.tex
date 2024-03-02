@@ -1,0 +1,680 @@
+\documentclass{report}
+
+\input{../template/preamble}
+\input{../template/macros}
+\input{../template/letterfonts}
+
+\title{\Huge{Signal Theory}\\Semester 6}
+\author{\huge{Ahmad Abu Zainab}}
+\date{}
+
+\newcommand{\scalar}[1]{\lt\langle #1 \rt\rangle}
+\newcommand{\Ft}[1]{\SF_f\!\lt\{ #1 \rt\}}
+\newcommand{\Fti}[1]{\SF_f^{-1}\!\lt\{ #1 \rt\}}
+
+\DeclareMathOperator{\rect}{rect}
+\DeclareMathOperator{\tri}{tri}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\sgn}{sgn}
+
+\pgfmathdeclarefunction{u}{1}{
+\pgfmathparse{
+((#1<0)  * 0 )  +
+((#1>=0) * 1 )
+}
+}
+
+\pgfmathdeclarefunction{rect}{2}{
+\pgfmathparse{
+((#1>= -#2/2) * (#1<=#2/2) * 1 )
+}
+}
+
+\pgfmathdeclarefunction{tri}{2}{
+\pgfmathparse{
+((#1>= -#2) * (#1<=#2) * (1-abs(#1)/#2) ) 
+}
+}
+
+\pgfmathdeclarefunction{sinc}{1}{
+\pgfmathparse{
+    sin(deg(pi*#1))/(pi*#1)
+}
+}
+
+\pgfmathdeclarefunction{sgn}{1}{
+\pgfmathparse{
+    (#1>0)  -  (#1<0)
+}
+}
+
+
+\begin{document}
+
+\maketitle
+\newpage% or \cleardoublepage
+% \pdfbookmark[<level>]{<title>}{<dest>}
+\pdfbookmark[section]{\contentsname}{toc}
+\tableofcontents
+\pagebreak
+
+\chapter{Definition of a Signal}
+
+A signal is a function that conveys information about a phenomenon. A signal can be a function of time, space, or any other variable. A signal can be continuous or discrete.
+Examples of signals include:
+\begin{itemize}
+	\ii Speech
+	\ii Images
+	\ii Audio
+	\ii Video
+	\ii Temperature
+	\ii Pressure
+	\ii Voltage
+	\ii Current
+	\ii etc.
+\end{itemize}
+
+\section{Classification of Signals}
+
+\begin{description}
+	\ii[Continuous-Time Signals] A signal that is defined for all values of time.
+	\ii[Discrete-Time Signals] A signal that is defined only at discrete values of time.
+	\ii[Analog Signals] A signal that can take any value in a given range.
+	\ii[Digital Signals] A signal that can take only a finite number of values.
+	\ii[Periodic Signals] A signal that repeats itself after a certain period of time.
+	\ii[Energy Signals] A signal that has finite energy.
+	\[
+		E \coloneq \int_{-\infty}^{\infty} \abs{x(t)}^2 \dd{t}
+		.\]
+	\ii[Power Signals] A signal that has finite power.
+	\[
+		P_{(t_1,t_2)} \coloneq \lim_{T\to\infty} \frac{1}{2T} \int_{-T}^{T} \abs{x(t)}^2 \dd{t}
+		.\]
+	\ii [Even/Odd Signals] A signal is even if $x(t) = x(-t)$ and odd if $x(t) = -x(-t)$. Any signal can be represented as the sum of an even and odd signal.
+	\[
+		x(t) = \underbrace{\frac{x(t) + x(-t)}{2}}_{\text{Even}} + \underbrace{\frac{x(t) - x(-t)}{2}}_{\text{Odd}}
+		.\]
+\end{description}
+
+\section{Operations on Signals}
+
+\subsection{Unary Operations}
+
+\begin{description}
+	\ii[Inverse] The inverse of a signal $x(t)$ is $x(-t)$.
+	\nt{
+		The inverse of $x(t-1)$ is $x(-t-1)$.
+	}
+	\ii[Time Shift] The time shift of a signal $x(t)$ by $t_0$ is $x(t+t_0)$. If $t_0$ is negative then the signal is shifted to the left.
+	\nt{
+		The time shift of $x(-t-1)$ by $1$ is $x(-(t+1)-1)$.
+	}
+	\ii[Time Scaling] The time scaling of a signal $x(t)$ by $a$ is $x(at)$. If $a$ is greater than $1$ then the signal is compressed and if $a$ is less than $1$ then the signal is expanded.
+\end{description}
+
+\ex{}{
+	Given a signal $x(t)$, to get the signal $x(-2t+4)$ we have 2 methods:
+	\begin{enumerate}
+		\ii $\displaystyle x(t) \xrightarrow{\text{Shift to the left}} x(t+4) \xrightarrow{\text{Inverse}} x(-t+4) \xrightarrow{\text{Time Scaling}} x(-2t+4)$
+		\ii $\displaystyle x(t) \xrightarrow{\text{Time Scaling}} x(2t) \xrightarrow{\text{Inverse}} x(-2t) \xrightarrow{\text{Shift to the right}} x(-2(t-2)) = x(-2t+4)$
+	\end{enumerate}
+}
+
+\subsection{Binary Operations}
+
+\begin{description}
+	\ii[Convolution]
+	\[
+		z(t) = x(t) * y(t) \coloneq \int_{-\infty}^{\infty} x(u)\,y(t-u)\dd{u}
+		.\]
+
+	The convolution operation is
+
+	\begin{enumerate}
+		\ii Commutative
+
+		\[
+			x(t) * y(t) = y(t) * x(t)
+			.\]
+
+		\ii Associative
+
+		\[
+			(x(t) * y(t)) * z(t) = x(t) * (y(t) * z(t)) = x(t) * y(t) * z(t)
+			.\]
+
+		\ii Distributive over addition
+
+		\[
+			x(t) * (y(t) + z(t)) = x(t) * y(t) + x(t) * z(t)
+			.\]
+
+		\nt{
+			Generally speaking,
+			\[
+				x(at) * y(at) \neq a(x(t) * y(t)) \quad \text{for } a \neq 1
+				.\]
+		}
+	\end{enumerate}
+
+	\nt{
+		When convolving two signals aim to have the signal $y(t-u)$ be the signal with the simplest $t$ input.
+	}
+
+	\ii[Scalar Product]
+
+	\[
+		\scalar{x(t), y^*(t)} \coloneq \int_{t_1}^{t_2} x(t)\, y^*(t) \dd{t}
+		.\]
+
+	If the scalar product is zero, then the two signals are orthogonal in the interval $[t_1, t_2]$.
+	The scalar product is not commutative.
+	\[
+		\scalar{x(t), y^*(t)} \neq \scalar{y(t), x^*(t)} = \int_{t_1}^{t_2} y(t)\, x^*(t) \dd{t} = \lt( \int_{t_1}^{t_2} x(t)\, y^*(t) \dd{t} \rt)^* = \scalar{x(t), y^*(t)}^*
+		.\]
+
+	\nt{
+		\begin{align*}
+			(A+B)^* & = A^* + B^* \\
+			(AB)^*  & = A^*B^*
+		\end{align*}
+	}
+
+	\ii[Correlation]
+
+	\[
+		\varphi_{xy}(\tau) \coloneq \int_{-\infty}^{\infty} x^*(u)\, y(u+\tau) \dd{u}
+		.\]
+
+	The correlation operation is not commutative.
+	\[
+		\varphi_{xy}(\tau) \neq \varphi_{yx}(\tau)
+		.\]
+
+	\begin{align*}
+		x(t) & \neq y(t) \quad \text{intercorrelation} \\
+		x(t) & = y(-t) \quad \text{autocorrelation}
+	\end{align*}
+	\nt{
+		\[
+			\varphi_{xy}(\tau) = x^*(-\tau) * y(\tau)
+			.\]
+	}
+\end{description}
+
+\section{Particular Signals}
+
+\begin{description}
+	\ii[Unit Step Signal]
+
+	\[
+		u(t) \coloneq \begin{cases}
+			1 & t \geq 0 \\
+			0 & t < 0
+		\end{cases}
+	\]
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+					axis lines = center,
+					xlabel = $t$,
+					ylabel = $u(t)$,
+					legend pos = north west,
+					xmin = -2,
+					xmax = 2,
+					ymin = -0.5,
+					ymax = 1.25,
+					xtick = {0},
+					ytick = {0,1},
+					ymajorgrids=true,
+					grid,
+					grid style=dashed,
+				]
+
+				\addplot[domain=-2:2, samples=500, cyan, very thick] {u(x)};
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+
+	\ii[Rectangular Signal]
+
+	\[
+		\rect\lt(\frac{t}{T}\rt) \coloneq \begin{cases}
+			1 & -\frac{T}{2} \leq t \leq \frac{T}{2} \\
+			0 & \text{otherwise}
+		\end{cases}
+	\]
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+					axis lines = center,
+					xlabel = $t$,
+					ylabel = $\text{rect}\lt(\frac{t}{T}\rt)$,
+					legend pos = north west,
+					xmin = -2,
+					xmax = 2,
+					ymin = -0.5,
+					ymax = 1.25,
+					xtick = {-1,1},
+					xticklabels = {$-\frac{T}{2}$,$\frac{T}{2}$},
+					ytick = {0,1},
+				]
+
+				\addplot[domain=-2:2, samples=500, cyan, very thick] {rect(x,2)};
+
+				\draw[dashed, thin, <->] (axis cs:-1,-0.25) -- (axis cs:1,-0.25) node[below right, midway] {$T$};
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+
+	\nt{
+		The rect function is typically used to sample a signal over a period of time. The signal is sampled at the points where the rect function is equal to 1. For example
+		\[
+			x(t) \, \text{rect}\lt(\frac{t-2}{4}\rt)
+			.\]
+
+		This signal is sampled in the interval $[2,6]$.
+	}
+
+	\ii[Triangular Signal]
+
+	\[
+		\tri\lt( \frac{t}{T} \rt) \coloneq \begin{cases}
+			\frac{t}{T} + 1  & -T \leq t \leq 0 \\
+			-\frac{t}{T} + 1 & 0 \leq t \leq T  \\
+			0                & \text{otherwise}
+		\end{cases} =
+		\begin{cases}
+			1 - \frac{\abs{t}}{T} & -T \leq t \leq T \\
+			0                     & \text{otherwise}
+		\end{cases}
+	\]
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+					axis lines = center,
+					xlabel = $t$,
+					ylabel = $\text{tri}\lt(\frac{t}{T}\rt)$,
+					legend pos = north west,
+					xmin = -2,
+					xmax = 2,
+					ymin = -0.5,
+					ymax = 1.25,
+					xtick = {-1,1},
+					xticklabels = {$-T$,$T$},
+					ytick = {0,1},
+				]
+
+				\addplot[domain=-2:2, samples=500, cyan, very thick] {tri(x,1)};
+
+				\draw[dashed, thin, <->] (axis cs:-1,-0.25) -- (axis cs:1,-0.25) node[below right, midway] {$2T$};
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+
+	\ii[Sinc]
+
+	\[
+		\sinc(t) \coloneq \begin{cases}
+			\frac{\sin(\pi t)}{\pi t} & t \neq 0 \\
+			1                         & t = 0
+		\end{cases}
+	\]
+
+	\nt{
+		\[
+			\sinc(x) = \sinc(-x)
+			.\]
+	}
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+					axis lines = center,
+					xlabel = $t$,
+					ylabel = $\sinc(tT)$,
+					legend pos = north west,
+					xmin = -5,
+					xmax = 5,
+					ymin = -0.5,
+					ymax = 1.25,
+					xtick = {-4,-3,-2,-1,1,2,3,4},
+					xticklabels = {$-4T$,$-3T$,$-2T$,$-T$,$T$,$2T$,$3T$,$4T$},
+					ytick = {0,1},
+					width = 0.6\textwidth,
+				]
+
+				\addplot[domain=-5:5, samples=300, cyan, very thick] {sinc(x)};
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+
+	\ii[Sign Function]
+
+	\[
+		\sgn(t) \coloneq \begin{cases}
+			1  & t > 0 \\
+			0  & t = 0 \\
+			-1 & t < 0
+		\end{cases}
+		.\]
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+					axis lines = center,
+					xlabel = $t$,
+					ylabel = $\sgn(t)$,
+					legend pos = north west,
+					xmin = -2,
+					xmax = 2,
+					ymin = -1.5,
+					ymax = 1.25,
+					xtick = {0},
+					ytick = {-1,0,1},
+				]
+
+				\addplot[domain=-2:2, samples=500, cyan, very thick] {sgn(x)};
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+
+	\nt{
+		\begin{align*}
+			\sgn(t) & = \frac{u(t) - u(-t)}{2} \\
+			u(t)    & = \frac{\sgn(t) + 1}{2}  \\
+		\end{align*}
+	}
+
+\end{description}
+
+\section{Other Quantities}
+
+\begin{description}
+	\ii[Mean]
+	\[
+		\bar{x} \coloneq \frac{1}{t_2-t_1}\int_{t_1}^{t_2} x(t) \dd{t}
+		.\]
+
+	Over the entire domain
+	\[
+		\bar{x} \coloneq \lim_{T\to\infty}\int_{-T/2}^{T/2}x(t) \dd{t}
+		.\]
+
+	\ii[Energy]
+	\[
+		E_{(t_1,t_2)} \coloneq \int_{t_1}^{t_2} \abs{x(t)}^2 \dd{t}
+		.\]
+
+	\ii[Power]
+	\[
+		P_{(t_1,t_2)} \coloneq \frac{1}{t_2-t_1} \int_{t_1}^{t_2} \abs{x(t)}^2 \dd{t}
+		.\]
+\end{description}
+
+\ex{}{
+	\begin{enumerate}
+		\ii For $u(t)$
+		\begin{align*}
+			\bar{u} & = \lim_{T\to\infty} \frac{1}{T} \int_{-T/2}^{T/2} u(t) \dd{t} \\
+			        & = \lim_{T\to\infty} \frac{1}{T} \int_{0}^{T/2} 1 \dd{t}       \\
+			        & = \lim_{T\to\infty} \frac{1}{T} \frac{T}{2}                   \\
+			        & = \frac{1}{2}
+		\end{align*}
+
+		\begin{align*}
+			\int_{-T/2}^{T/2} \abs{u(t)}^2 \dd{t} & = \int_{0}^{T/2} 1 \dd{t} = \frac{T}{2} \\
+		\end{align*}
+
+		\begin{align*}
+			E_{(-\infty,\infty)} & = \lim_{T\to\infty} \int_{-T/2}^{T/2} \abs{u(t)}^2 \dd{t} = \lim_{T\to\infty} \frac{T}{2} = \infty                              \\
+			P_{(-\infty,\infty)} & = \lim_{T\to\infty} \frac{1}{T} \int_{-T/2}^{T/2} \abs{u(t)}^2 \dd{t} = \lim_{T\to\infty} \frac{1}{T} \frac{T}{2} = \frac{1}{2}
+		\end{align*}
+
+		\ii For $\sgn(t)$
+		Since the signal is odd, the mean is zero.
+		\begin{align*}
+			E_{(-\infty,\infty)} & = \lim_{T\to\infty} \int_{-T/2}^{T/2} \abs{\sgn(t)}^2 \dd{t}             \\
+			                     & = \lim_{T\to\infty} \int_{-T/2}^{T/2} 1 \dd{t}                           \\
+			                     & = \lim_{T\to\infty} \frac{T}{2}                                          \\
+			                     & = \infty                                                                 \\
+			P_{(-\infty,\infty)} & = \lim_{T\to\infty} \frac{1}{T} \int_{-T/2}^{T/2} \abs{\sgn(t)}^2 \dd{t} \\
+			                     & = \lim_{T\to\infty} \frac{1}{T} \int_{-T/2}^{T/2} 1 \dd{t}               \\
+			                     & = \lim_{T\to\infty} \frac{1}{T} \frac{T}{2}                              \\
+			                     & = \frac{1}{2}
+		\end{align*}
+	\end{enumerate}
+}
+
+\ex{Convolution}{
+	Consider the 2 signals
+	\[
+		x(t) = \rect\lt(t\rt) \quad \text{and} \quad y(t) = \rect\lt(t\rt)
+		.\]
+
+	\[
+		z(t) = x(t) * y(t) = \int_{-\infty}^{\infty} \rect\lt(u\rt)\, \rect\lt(t-u\rt) \dd{u}
+		.\]
+
+	Since the rect function is even
+	\[
+		\int_{-\infty}^{\infty} \rect\lt(u\rt)\, \rect\lt(u-t\rt) \dd{u}
+		.\]
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+					axis lines = center,
+					xlabel = $u$,
+					legend pos = north west,
+					xmin = -3,
+					xmax = 3,
+					ymin = -0.5,
+					ymax = 1.25,
+					xtick = {0},
+					ytick = {0,1},
+				]
+
+				\addplot[domain=-3:3, samples=500, cyan, very thick] {rect(x,2)};
+				\addplot[domain=-3:3, samples=500, blue, thick, densely dashed] {rect(x-1.25,2)};
+
+				\node[anchor=north] at (axis cs:0.25,0) {$t-\sfrac{1}{2}$};
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+	The integral only really takes a value when the two rect functions overlap.\\
+
+	The boundaries of the integral are $t-\sfrac{1}{2}$ and $\sfrac{1}{2}$ when $0\leq t\leq 1$.
+
+	\[
+		z(t)  = \int_{t-1/2}^{1/2} 1 \dd{u} = 1 - t
+		.\]
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+					axis lines = center,
+					xlabel = $u$,
+					legend pos = north west,
+					xmin = -3,
+					xmax = 3,
+					ymin = -0.5,
+					ymax = 1.25,
+					xtick = {0},
+					ytick = {0,1},
+				]
+
+				\addplot[domain=-3:3, samples=500, cyan, very thick] {rect(x,2)};
+				\addplot[domain=-3:3, samples=500, blue, thick, densely dashed] {rect(x+1.25,2)};
+
+				\node[anchor=north] at (axis cs:-0.25,0) {$t+\sfrac{1}{2}$};
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+
+	Similarly, the boundaries of the integral are $t+\sfrac{1}{2}$ and $\sfrac{1}{2}$ when $-1\leq t\leq 0$.
+
+	\[
+		z(t) = \int_{1/2}^{t+1/2} 1 \dd{u} = 1 + t
+		.\]
+
+	Thus
+	\[
+		z(t) = \begin{cases}
+			1-t & 0\leq t\leq 1    \\
+			1+t & -1\leq t\leq 0   \\
+			0   & \text{otherwise}
+		\end{cases}
+		= \tri\lt(t\rt)
+		.\]
+}
+
+\chapter{Deterministic Signals}
+
+\section{Fourier Transform}
+
+Recall that a Fourier series is a representation of a periodic signal as a sum of sines and cosines.
+
+\[
+	x(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty} \underbrace{\lt( a_n\cos\lt(\frac{2\pi nt}{T}\rt) + b_n\sin\lt(\frac{2\pi nt}{T}\rt) \rt)}_{
+		A_n\cos\lt(n\omega_0t + \phi_n\rt)
+	}
+	.\]
+
+\begin{align*}
+	a_n & = \frac{2}{T}\int_{T} x(t)\cos\lt(\frac{2\pi nt}{T}\rt) \dd{t} \\
+	b_n & = \frac{2}{T}\int_{T} x(t)\sin\lt(\frac{2\pi nt}{T}\rt) \dd{t}
+\end{align*}
+
+where $\omega_0 = \frac{2\pi}{T}$.\\
+
+And in complex form
+\[
+	x(t) = \sum_{n=-\infty}^{\infty} \lambda_n e^{jn\omega_0t}
+	.\]
+
+Where
+\[
+	\lambda_n = \frac{1}{T}\int_{T} x(t)e^{-jn\omega_0t} \dd{t}
+	.\]
+
+Consider an interval $[-T,T]$ for the signal $x(t)$. We then assume that the function is periodic with period $2T$ over the rest of the domain (the section $[-T,T]$ will repeat infinitely). Since the signal is periodic we can represent it using a Fourier series $x_\text{rep}(t,T)$.
+As $T$ approaches infinity then we obtain the original signal periodic over it's entire domain
+
+\[
+	\lim_{T\to\infty} x_\text{rep}(t,T) = x(t)
+	.\]
+\[
+	x_\text{rep}(t,T) = \sum_{n=-\infty}^{\infty} \frac{1}{2T} \int_{-T}^{T} x_\text{rep}(t,T)e^{-j\frac{n\pi t}{T}} \dd{t} e^{j\frac{n\pi t}{T}}
+	.\]
+
+Since we have the amplitude if the signal at each frequency, we can represent the signal in the frequency domain (i.e. the sum of frequencies that make up the signal). This is the Fourier transform.
+
+\[
+	\Ft{x(t)} = \hat{x}(f) = X(f) \coloneq \int_{-\infty}^{\infty} x(t)e^{-j2\pi ft} \dd{t}
+	.\]
+
+\[
+	\Fti{X(f)} = x(t) \coloneq \int_{-\infty}^{\infty} X(f)e^{j2\pi ft} \dd{f}
+	.\]
+
+A signal has a Fourier transform if the signal belongs to $\bbL^2$ (i.e. the signal has finite energy).
+\[
+	\bbL^2 = \lt\{ x(t)  \Big/ E \text{ is finite} \rt\}
+	.\]
+
+\ex{}{
+	Consider the signal $x(t) = \rect\lt(t\rt)$.
+
+	\begin{align*}
+		\Ft{x(t)}= \text{Rect}\lt(f\rt) & = \int_{-\infty}^{\infty} \rect\lt(t\rt)e^{-j2\pi ft} \dd{t} \\
+		                                & = \int_{-\sfrac{1}{2}}^{\sfrac{1}{2}} e^{-j2\pi ft} \dd{t}   \\
+		                                & = \frac{e^{-j\pi f} - e^{j\pi f}}{j2\pi f}                   \\
+		                                & = \sinc(f)
+	\end{align*}
+
+	Since we have a division by $f$, we have to take a special case for $f=0$.
+	\begin{align*}
+		\Ft{x(t)} & = \int_{-\infty}^{\infty} \dd{t} \\
+		          & = 1
+	\end{align*}
+
+	The signal is mostly constant so the Fourier transform is highest closest to zero and the farther away from zero the lower the amplitude of the associated frequency.
+}
+
+\subsection{Properties of the Fourier Transform}
+
+Here we assume that the signals $x(t),y(t),\dots\,\in\bbL^2$
+
+\begin{description}
+	\ii[Linearity]
+	\[
+		\Ft{ax(t) + by(t)} = a\hat{x}(f) + b\hat{y}(f) \quad \forall a,b \in \RR
+		.\]
+
+	\ii[Inverse]
+	\[
+		\Ft{x(-t)} = \hat{x}(-f)
+		.\]
+
+	\ii[Time Shift]
+	\[
+		\Ft{x(t-t_0)} = e^{-j2\pi ft_0}\hat{x}(f)
+		.\]
+
+	\ii[Modulation]
+	\[
+		\Ft{e^{j2\pi f_0t}x(t)} = \hat{x}(f-f_0)
+		.\]
+	\ii[Differentiation]
+	\begin{align*}
+		\Ft{\dv{x(t)}{t}}    & = j2\pi f\hat{x}(f)     \\
+		\Ft{\dv[n]{x(t)}{t}} & = (j2\pi f)^n\hat{x}(f)
+	\end{align*}
+	\ii[Symmetry]
+	\[
+		\hat{x}(f) = \abs{\hat{x}(f)} e^{j \varphi(f)}
+		.\]
+	\[
+		\begin{rcases}
+			\text{even: } & \abs{\hat{x}(f)} = \abs{\hat{x}(-f)} \\
+			\text{odd: }  & \varphi(f) = -\varphi(-f)
+		\end{rcases} \implies \underset{\text{Hermitian Symmetry}}{\hat{x}(f) = \hat{x}^*(-f)}
+	\]
+	or
+	\begin{align*}
+		\text{even: } & \Re(f) = \Re(-f)  \\
+		\text{odd: }  & \Im(f) = -\Im(-f)
+	\end{align*}
+	\ii[Convolution]
+	\[
+		\Ft{x(t) * y(t)} = \hat{x}(f)\cdot\hat{y}(f)
+		.\]
+	\ii[Product]
+	\[
+		\Ft{x(t)y(t)} = \hat{x}(f) * \hat{y}(f)
+		.\]
+\end{description}
+
+\thm{Parseval's Theorem}{
+	Given a signal $x(t)$ with Fourier transform $\hat{x}(f)$. The energy of the signal in the time domain is equal to the energy of the signal in the frequency domain.
+	\[
+		E = \int_{-\infty}^{\infty} \abs{x(t)}^2 \dd{t} = \int_{-\infty}^{\infty} \abs{\hat{x}(f)}^2 \dd{f}
+		.\]
+
+	\[
+		\underset{\text{Energy Density}}{\dv{E}{f} = \abs{\hat{x}(f)}^2}
+		.\]
+}
+
+\end{document}
