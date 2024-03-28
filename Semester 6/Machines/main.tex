@@ -1,0 +1,398 @@
+\documentclass{report}
+
+\input{../template/preamble}
+\input{../template/macros}
+\input{../template/letterfonts}
+
+\usetikzlibrary{angles}
+
+\title{\Huge{Electric Machines}\\Semester 6}
+\author{Ahmad Abu Zainab}
+\date{}
+
+\begin{document}
+
+\maketitle
+\newpage% or \cleardoublepage
+% \pdfbookmark[<level>]{<title>}{<dest>}
+\pdfbookmark[section]{\contentsname}{toc}
+\tableofcontents
+\pagebreak
+
+\chapter{Transformers}
+
+\section{Introduction}
+
+\begin{itemize}
+	\ii A transformer is a static device that transfers electrical energy from one circuit to another through inductively coupled conductors.
+	\ii It is used to increase or decrease the voltage level of an AC signal.
+	\ii The transformer is based on the principle of electromagnetic induction.
+	\ii The transformer is a passive device, meaning it does not require any external power source to operate.
+	\ii The transformer is used in power distribution systems to step up or step down the voltage level.
+	\ii The transformer is used in electronic circuits to isolate the input and output signals.
+\end{itemize}
+
+\section{Ideal Transformer}
+
+\begin{itemize}
+	\ii The primary and secondary windings have zero resistance.
+	\[
+		R_1 = R_2 = 0
+		.\]
+	\ii The core has infinite permeability.
+	\[
+		\mu = \infty
+		.\]
+	\ii The transformer has no leakage flux.
+	\ii The transformer has no hysteresis loss.
+	\ii The transformer has no eddy current loss.
+	\begin{align*}
+		\mcR_{P_{\text{core}}} & = 0 \\
+		\Delta P               & = 0 \\
+		\Delta P_j             & = 0
+	\end{align*}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[transformer core] (T) {};
+		\draw (T.A1) -- ++(-0.5,0) node[anchor=east] {1};
+		\draw (T.A2) -- ++(-0.5,0) node[anchor=east] {2};
+		\draw (T.B1) -- ++(0.5,0) node[anchor=west] {3};
+		\draw (T.B2) -- ++(0.5,0) node[anchor=west] {4};
+		\draw (T.base) node[above]{T};
+		\draw (T.outer dot A1) node[circ] {};
+		\draw (T.outer dot B1) node[circ] {};
+		\draw (T.A1) to[american, open, v=$V_1$] (T.A2);
+		\draw (T.B1) to[american, open, v=$V_2$] (T.B2);
+	\end{circuitikz}
+	\caption{Ideal Transformer}
+\end{figure}
+
+\begin{align*}
+	\text{Turns Ratio:} \quad m & = \frac{N_1}{N_2} = \frac{V_1}{V_2} = \frac{I_2}{I_1}
+\end{align*}
+
+\section{Real Transformer}
+
+We define the voltage equations of the transformer as follows:
+
+\begin{align}
+	\dot{V}_1 + \dot{E}_1 & = \dot{I}_1 Z_1 \\
+	\dot{E}_2 - \dot{V}_2 & = \dot{I}_2 Z_2
+\end{align}
+
+\begin{align*}
+	E_1 & = 4.44fN_1\Phi_m \\
+	E_2 & = 4.44fN_2\Phi_m
+\end{align*}
+
+If we consider $\dot{I}_1Z_1\ll\dot{V}_1$ and $\dot{I}_2Z_2\ll\dot{V}_2$, we can simplify the equations as follows:
+
+\begin{align*}
+	\dot{V}_1 & = -\dot{E}_1 \\
+	\dot{V}_2 & = \dot{E}_2
+\end{align*}
+
+We define the magnetization current as the current required to produce the magnetic flux in the core.
+
+\[
+	I_m = \dot{I}_{10} = I_1 + \underbrace{mI_2}_{I_2'}
+	.\]
+
+We define the equivalent circuit of the transformer as follows:
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[R=$R_1$, o-]
+		++(2,0) to[L=$jX_1$]
+		++(2,0) to[short, i=$I_1$]
+		++(0.5,0) coordinate (A) to[short, i=$I_2$]
+		++(0.5,0) to[R=$R_2$]
+		++(2,0) to[L=$jX_2$, -o]
+		++(2,0) to[american, open, invert, v=$\dot{V}_2$]
+		++(0,-3.5) to[short, o-o]
+		++(-9,0);
+		\draw (0,0) to[american, open, v=$\dot{V}_1$] ++(0,-3.5);
+		\draw (A) to[short, *-*,,i=$I_m$] ++(0,-0.75) coordinate(B) to[short] ++(-0.5,0) to[R, l_=$R_f$] ++(0,-2) to[short,-*] ++(0.5,0) to[short,-*] ++(0,-0.75);
+		\draw (B) to[short] ++(0.5,0) to[L=$jX_m$] ++(0,-2) to[short] ++(-0.5,0);
+	\end{circuitikz}
+	\caption{Transformer Equivalent Circuit}
+\end{figure}
+
+\subsection{$\Gamma$ Equivalent Circuit}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[short, o-] ++(1.5,0) coordinate (A) to[R=$R_p$] ++(2,0) to[L=$jX_p$] ++(2,0) to[short, -o] ++(1,0);
+		\draw (A) to[short, *-*] ++(0,-0.75) coordinate(B) to[short] ++(-0.5,0) to[R, l_=$R_f$] ++(0,-2) to[short,-*] ++(0.5,0) to[short,-*] ++(0,-0.75);
+		\draw (B) to[short] ++(0.5,0) to[L=$jX_m$] ++(0,-2) to[short] ++(-0.5,0);
+		\draw (0,-3.5) to[short, o-o] ++(6.5,0);
+	\end{circuitikz}
+	\caption{$\Gamma$ Equivalent Circuit with the Primary Side as the Reference}
+\end{figure}
+
+\begin{align*}
+	R_p & = R_1 + R_2' = R_1 + \frac{R_2}{m^2} \\
+	X_p & = X_1 + X_2' = X_1 + \frac{X_2}{m^2} \\
+	Z_p & = R_p + jX_p
+\end{align*}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[short, o-] ++(1.5,0) coordinate (A) to[R=$R_s$] ++(2,0) to[L=$jX_s$] ++(2,0) to[short, -o] ++(1,0);
+		\draw (A) to[short, *-*] ++(0,-0.75) coordinate(B) to[short] ++(-0.5,0) to[R, l_=$R_f$] ++(0,-2) to[short,-*] ++(0.5,0) to[short,-*] ++(0,-0.75);
+		\draw (B) to[short] ++(0.5,0) to[L=$jX_m$] ++(0,-2) to[short] ++(-0.5,0);
+		\draw (0,-3.5) to[short, o-o] ++(6.5,0);
+	\end{circuitikz}
+	\caption{$\Gamma$ Equivalent Circuit with the Secondary Side as the Reference}
+\end{figure}
+
+\begin{align*}
+	R_s & = m^2R_1 + R_2 = m^2R_1 + R_2 \\
+	X_s & = m^2X_1 + X_2 = m^2X_1 + X_2 \\
+	Z_s & = R_s + jX_s
+\end{align*}
+
+\subsection{$\kappa$ Equivalent Circuit}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[short,o-] ++(1,0) to[R=$R_p$] ++(2,0) to[L=$jX_p$] ++(2,0) to[short,-o] ++(1,0);
+		\draw (0,-2) to[short,o-o] ++(6,0);
+	\end{circuitikz}
+	\caption{$\kappa$ Equivalent Circuit with the Primary Side as the Reference}
+\end{figure}
+
+\section{Transformer Tests}
+
+\subsection{Open Circuit Test}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american]
+		\draw (0,0) node[transformer core] (T) {};
+		\draw (T.base) node{$m$};
+		\draw (T.outer dot A1) node[circ] {};
+		\draw (T.outer dot B1) node[circ] {};
+
+		\draw let \p1=(T.A1), \p2=(T.A2) in (T.A1) to[short] ++(-1,0) to[sV, l_=$V_1$] ++($ (0,\y2) - (0,\y1) $) to[short] (T.A2);
+		\draw let \p1=(T.B1), \p2=(T.B2) in (T.B1) to[short] ++(1,0) to[qvprobe, l={$I_2{=}0$}] ++($ (0,\y2) - (0,\y1) $) to[short] (T.B2);
+	\end{circuitikz}
+	\caption{Open Circuit Test}
+\end{figure}
+
+We measure $V_{10}, I_{10}, P_{10}$ and $V_{20}$.\\
+
+We can calculate the following:
+
+\begin{align*}
+	Q_{10}          & = V_{10}I_{10}\sin\varphi_{o} \\
+	P_{10}          & = V_{10}I_{10}\cos\varphi_{o} \\
+	\cos\varphi_{o} & = \frac{P_{10}}{V_{10}I_{10}} \\
+	S_{10}          & = V_{10}I_{10}                \\
+	R_f             & = \frac{{V_{10}}^2}{P_{10}}   \\
+	X_m             & = \frac{{V_{10}}^2}{Q_{10}}   \\
+\end{align*}
+
+\subsection{Short Circuit Test}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[transformer core] (T) {};
+		\draw (T.base) node{$m$};
+		\draw (T.outer dot A1) node[circ] {};
+		\draw (T.outer dot B1) node[circ] {};
+
+		\draw let \p1=(T.A1), \p2=(T.A2) in (T.A1) to[short] ++(-1,0) to[sI, l=$I_{1c}$] ++($ (0,\y2) - (0,\y1) $) to[short] (T.A2);
+		\draw let \p1=(T.B1), \p2=(T.B2) in (T.B1) to[short] ++(1,0) to[qiprobe, l={$V_2{=}0$}] ++($ (0,\y2) - (0,\y1) $) to[short] (T.B2);
+	\end{circuitikz}
+	\caption{Short Circuit Test}
+\end{figure}
+
+Typically we run the short circuit test at $5-15\%$ of the nominal current.\\
+
+\begin{align*}
+	I_{2c} & \leq I_{2n}      \\
+	V_{1c} & = (5-15)\%V_{1n} \\
+	I_{2c} & \ll I_{2n}       \\
+	I_{1c} & \ll I_{1n}
+\end{align*}
+
+We measure $V_{1c}, I_{1c}, P_{1c}$ and $I_{2c}$.\\
+
+We can calculate the following:
+
+\begin{align*}
+	R_p & = \frac{P_{1c}}{I_{1c}^2} \\
+	X_p & = \frac{Q_{1c}}{I_{1c}^2} \\
+\end{align*}
+
+\section{Variation of the Voltage of Conduction}
+
+\begin{enumerate}
+	\ii \textbf{Exact Calculation:}
+	\begin{align*}
+		V_2                   & < V_{20} \\
+		m_c = \frac{V_2}{V_1} & < m      \\
+	\end{align*}
+
+	\[
+		V_1 = V_2' + \Delta V_p = V_2' + I_2'\lt( R_p + j X_p \rt)
+		.\]
+
+	\ii \textbf{Approximate Calculation (Variation of the Secondary Voltage):}
+	\[
+		\Delta V_s = V_20 - V-2
+		.\]
+
+	\[
+		\Delta V_p = \frac{\Delta V_s}{m}
+		.\]
+
+	\begin{align*}
+		\Delta V_s \% & = \frac{V_{20} - V_2}{V_{20}} \times 100 \\
+		              & = \frac{mV_1 - V_2}{mV_1} \times 100     \\
+		              & = \frac{V_1' - V_2}{V_1'} \times 100
+	\end{align*}
+
+	The KAPP formula states
+
+	\[
+		\Delta V_s = I_2 \lt( R_s \cos \varphi_2 \pm X_s \sin \varphi_2 \rt)
+		.\]
+
+	The $\pm$ sign depends on the nature of the load (inductive or capacitive).
+
+	From the KAPP formula, we define the voltage regulation as
+
+	\[
+		\Sigma = \frac{\Delta V_s}{V_2} \times 100
+		.\]
+
+	\[
+		\Delta V_p = I_1 \lt( R_p \cos \varphi_2 \pm X_p \sin \varphi_2 \rt)
+		.\]
+\end{enumerate}
+
+\section{Vector Diagram of the Transformer}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		% draw grid
+		\draw[step=1cm,gray,thin] (-7,-0.25) grid (6,7);
+		\begin{scope}[xshift=-5cm]
+			\draw[-Stealth, thick] (0,0) coordinate (0) -- (0,4) node[above left]{$V_2$} coordinate(V2);
+			\draw[-Stealth, thick] (V2) -- ++(60:1.5) node[right]{$I_2R_s$};
+			\draw[-Stealth, thick] (V2) ++(60:1.5) -- ++(150:2) node[above]{$I_2X_s$} coordinate(V20);
+			\draw[-Stealth, cyan, thick] (V2) -- (V20) node[midway, right]{$I_2Z_s$};
+			\draw[-Stealth, cyan, thick] (0,0) -- (V20) node[midway, left]{$V_{20}$};
+			\draw[-Stealth, thick] (0,0) -- ++(60:2) node[right]{$I_2$} coordinate(I2);
+			% angle between V2 and I2 without using \pic
+			\draw pic["$\varphi_2$", draw=orange, <->, angle eccentricity=1.5, angle radius=1cm] {angle=I2--0--V2};
+
+			\node at (0,-0.5) [below] {Partly Inductive};
+		\end{scope}
+		\begin{scope}
+			\draw[-Stealth, thick] (0,0) coordinate (0) -- (0,4) node[above right]{$V_2$} coordinate(V2);
+			\draw[-Stealth, thick] (V2) -- ++(90:1.5) node[right]{$I_2R_s$};
+			\draw[-Stealth, thick] (V2) ++(90:1.5) -- ++(180:2) node[above]{$I_2X_s$} coordinate(V20);
+			\draw[-Stealth, cyan, thick] (V2) -- (V20) node[midway, right]{$I_2Z_s$};
+			\draw[-Stealth, cyan, thick] (0,0) -- (V20) node[midway, left]{$V_{20}$};
+			\draw[-Stealth, thick] (0,0) -- ++(90:2) node[right]{$I_2$} coordinate(I2) node[midway, right]{$\varphi_2{=}0$};
+
+			\node at (0,-0.5) [below] {Purely Resistive};
+		\end{scope}
+		\begin{scope}[xshift=5cm]
+			\draw[-Stealth, thick] (0,0) coordinate (0) -- (0,4) node[above right]{$V_2$} coordinate(V2);
+			\draw[-Stealth, thick] (V2) -- ++(120:1.5) node[right]{$I_2R_s$};
+			\draw[-Stealth, thick] (V2) ++(120:1.5) -- ++(210:2) node[above]{$I_2X_s$} coordinate(V20);
+			\draw[-Stealth, cyan, thick] (V2) -- (V20) node[midway, above right]{$I_2Z_s$};
+			\draw[-Stealth, cyan, thick] (0,0) -- (V20) node[midway, left]{$V_{20}$};
+			\draw[-Stealth, thick] (0,0) -- ++(120:2) node[right]{$I_2$} coordinate(I2);
+
+			\draw pic["$\varphi_2$", draw=orange, <->, angle eccentricity=1.5, angle radius=1cm] {angle=V2--0--I2};
+
+			\node at (0,-0.5) [below] {Partly Capacitive};
+		\end{scope}
+	\end{tikzpicture}
+	\caption{Vector Diagram of a Transformer}
+\end{figure}
+
+\[
+	\eta = \frac{P_2}{P_1} = \frac{P_2}{P_2 + \Delta P_{Jt} + \Delta P_{f}}
+	.\]
+
+Where
+
+\begin{align*}
+	\Delta P_{Jt} & = \Delta P_{J1} + \Delta P_{J2} = {I_{11}}^2R_p = {I_{21}}^2R_s \\
+	\Delta P_f    & = P_{10} = P_{20}
+\end{align*}
+
+\ex{}{
+	Given a single phase transformer $200/400 \unit{\volt}$ - $\SI{50}{\hertz}$. By tests, we measure the following:
+	\begin{itemize}
+		\ii Open Circuit Test: $V_{10} = \SI{200}{\volt}$, $I_{10} = \SI{0.7}{\ampere}$, $P_{10} = \SI{70}{\watt}$.
+		\ii Short Circuit Test: $V_{2c} = \SI{15}{\volt}$, $I_{1c} = \SI{10}{\ampere}$, $P_{1c} = \SI{85}{\watt}$.
+	\end{itemize}
+
+	\begin{enumerate}
+		\ii Calculate the equivalent circuit parameters.
+		\ii Calculate $V_2$ if the charge is $\SI{5}{\kilo\watt}$, $\cos\varphi = 0.8$, and $V_1=\SI{200}{\volt}$. Deduce the voltage regulation ($\Sigma$).
+		\ii Deduce the efficiency of the transformer.
+	\end{enumerate}
+
+	\textbf{Solution:}
+	$m=2$
+	\begin{enumerate}
+		\ii
+		\begin{align*}
+			R_f    & = \frac{{V_{10}}^2}{P_{10}} = \frac{{200}^2}{70} = \SI{571.43}{\ohm}         \\
+			S_{10} & = V_{10}I_{10} = 200 \times 0.7 = \SI{140}{\volt\ampere}                     \\
+			Q_{10} & = \sqrt{{S_{10}}^2 - {P_{10}}^2} = \sqrt{{140}^2 - {70}^2} = \SI{121.6}{VAR} \\
+			X_m    & = \frac{{V_{10}}^2}{Q_{10}} = \frac{{200}^2}{121.6} = \SI{328.95}{\ohm}
+		\end{align*}
+		To find $R_p$ and $X_p$, we need to find $R_s$ and $X_s$ first.
+		\begin{align*}
+			R_s    & = \frac{P_{2c}}{I_{1c}^2} = \frac{85}{100} = \SI{0.85}{\ohm}        \\
+			S_{2c} & = V_{2c}I_{1c} = 15 \times 10 = \SI{150}{\volt\ampere}              \\
+			Q_{2c} & = \sqrt{S_{2c}^2 - P_{1c}^2} = \sqrt{150^2 - 85^2} = \SI{12.3}{VAR} \\
+			X_s    & = \frac{Q_{2c}}{I_{1c}^2} = \frac{12.3}{100} = \SI{1.23}{\ohm}      \\
+			R_p    & = \frac{R_s}{m^2} = \frac{0.85}{4} = \SI{0.2125}{\ohm}              \\
+			X_p    & = \frac{X_s}{m^2} = \frac{1.23}{4} = \SI{0.3075}{\ohm}
+		\end{align*}
+
+		\ii
+		\begin{align*}
+			I_2        & = \frac{P_2}{V_2\cos\varphi} = \frac{5000}{400 \times 0.8} = \SI{15.625}{\ampere}                                           \\
+			\Delta V_s & = I_2 \lt( R_s \cos\varphi \pm X_s \sin\varphi \rt) = 15.625 \lt( 0.85 \times 0.8 + 1.23 \times 0.6 \rt) = \SI{22.2}{\volt} \\
+		\end{align*}
+
+		\[
+			\Sigma = \frac{\Delta V_s}{V_2} \times 100 = \frac{22.2}{400} \times 100 = 5.55\% \quad \text{If } V_{20} = \SI{400}{\volt}
+			.\]
+
+		To obtain $V_2=\SI{400}{\volt}$, we need to increase the primary voltage to
+		\begin{align*}
+			\Delta V_p & = \frac{\Delta V_s}{m} = \frac{22.2}{2} = \SI{11.1}{\volt}     \\
+			V_1        & = V_2' + \Delta V_p = \frac{400}{2} + 11.1 = \SI{211.1}{\volt}
+		\end{align*}
+
+		\ii
+		\begin{align*}
+			\Delta P_{Jt} & = I_{11}^2R_p = 15.6^2 \times 0.85 = \SI{206}{\watt} \\
+			\Delta P_f    & = P_{10} = P_{20} = \SI{70}{\watt}                   \\
+			\eta          & = \frac{5000}{5000 + 206 + 70} = 0.947
+		\end{align*}
+	\end{enumerate}
+}
+
+\end{document}
