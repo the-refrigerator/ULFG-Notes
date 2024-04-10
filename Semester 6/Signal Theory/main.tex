@@ -9,8 +9,9 @@
 \date{}
 
 \newcommand{\scalar}[1]{\lt\langle #1 \rt\rangle}
-\newcommand{\Ft}[1]{\SF_f\!\lt\{ #1 \rt\}}
-\newcommand{\Fti}[1]{\SF_f^{-1}\!\lt\{ #1 \rt\}}
+\newcommand{\Ft}[1]{\SF_\omega\!\lt\{ #1 \rt\}}
+\newcommand{\Fti}[1]{\SF_\omega^{-1}\!\lt\{ #1 \rt\}}
+\newcommand{\Ht}[1]{\SH\!\lt\{ #1 \rt\}}
 
 \DeclareMathOperator{\rect}{rect}
 \DeclareMathOperator{\tri}{tri}
@@ -45,6 +46,12 @@
 \pgfmathdeclarefunction{sgn}{1}{
 \pgfmathparse{
     (#1>0)  -  (#1<0)
+}
+}
+
+\pgfmathdeclarefunction{delta}{1}{
+\pgfmathparse{
+    (#1==0) ? 1 : 0
 }
 }
 
@@ -580,17 +587,23 @@ As $T$ approaches infinity then we obtain the original signal periodic over it's
 
 Since we have the amplitude if the signal at each frequency, we can represent the signal in the frequency domain (i.e. the sum of frequencies that make up the signal). This is the Fourier transform.
 
-\[
-	\Ft{x(t)} = \hat{x}(f) = X(f) \coloneq \int_{-\infty}^{\infty} x(t)e^{-j2\pi ft} \dd{t}
-	.\]
+\dfn{Fourier Transform}{
+	The Fourier transform of a signal $x(t)$ is defined as
+	\[
+		\Ft{x(t)} = \hat{x}(f) = X(f) \coloneq \int_{-\infty}^{\infty} x(t)e^{-j2\pi ft} \dd{t}
+		.\]
 
-\[
-	\Fti{X(f)} = x(t) \coloneq \int_{-\infty}^{\infty} X(f)e^{j2\pi ft} \dd{f}
-	.\]
-
+	The inverse Fourier transform is
+	\[
+		\Fti{X(f)} = x(t) \coloneq \int_{-\infty}^{\infty} X(f)e^{j2\pi ft} \dd{f}
+		.\]
+}
 A signal has a Fourier transform if the signal belongs to $\bbL^2$ (i.e. the signal has finite energy).
 \[
-	\bbL^2 = \lt\{ x(t)  \Big/ E \text{ is finite} \rt\}
+	x(t) \in \bbL^2 \qif \begin{cases}
+		E < \infty \\
+		E = \infty \text{ and } P < \infty
+	\end{cases}
 	.\]
 
 \ex{}{
@@ -664,6 +677,10 @@ Here we assume that the signals $x(t),y(t),\dots\,\in\bbL^2$
 	\[
 		\Ft{x(t)y(t)} = \hat{x}(f) * \hat{y}(f)
 		.\]
+	\ii[Scaling]
+	\[
+		\Ft{x(at)} = \frac{1}{\abs{a}}\hat{x}\lt(\frac{f}{a}\rt)
+		.\]
 \end{description}
 
 \thm{Parseval's Theorem}{
@@ -676,5 +693,215 @@ Here we assume that the signals $x(t),y(t),\dots\,\in\bbL^2$
 		\underset{\text{Energy Density}}{\dv{E}{f} = \abs{\hat{x}(f)}^2}
 		.\]
 }
+
+
+\dfn{Dirac Delta Function}{
+	The Dirac delta function is a function that is zero everywhere except at $t=0$. There are two ways to define the Dirac delta function:
+	\begin{enumerate}
+		\ii A method useful for computing integrals
+		\[
+			\delta(t) = \lim_{T\to0} \frac{1}{T}\rect\lt(\frac{t}{T}\rt) = \begin{cases}
+				\infty & t = 0    \\
+				0      & t \neq 0
+			\end{cases}
+			.\]
+		\ii A method useful for general use
+		\[
+			\delta(t) = \lim_{T\to0} \tri\lt(\frac{t}{T}\rt) = \begin{cases}
+				1 & t = 0    \\
+				0 & t \neq 0
+			\end{cases}
+			.\]
+	\end{enumerate}
+}
+
+The Dirac delta function has the following properties:
+
+\begin{enumerate}
+	\ii
+	\[
+		\int_{-\infty}^{\infty} \delta(t) x(t) \dd{t} = x(0)
+		.\]
+	\[
+		\int_a^b \delta(t-t_0) x(t) \dd{t} = \begin{cases}
+			x(t_0) & t_0 \in [a,b]    \\
+			0      & \text{otherwise}
+		\end{cases}
+		.\]
+
+	\[
+		\int_{-\infty}^{\infty} x(t-a)\delta(t-b) \dd{t} = x(b-a)
+		.\]
+
+	\ii
+	\[
+		x(t)\delta(t - t_0) = x(t_0)\delta(t - t_0)
+		.\]
+
+	\ii
+	\[
+		x(t) * \delta(t) = x(t)
+		.\]
+
+	\[
+		x(t - t_0) * \delta(t-t_1) = x(t-t_0-t_1)
+		.\]
+
+	\ii
+	\[
+		\delta(at) = \frac{1}{\abs{a}}\delta(t)
+		.\]
+
+	\ii
+	\[
+		\Ft{\delta(t)} = 1
+		.\]
+
+	\ii
+	\[
+		\Ft{e^{j2\pi f_0t}} = \delta(f-f_0)
+		.\]
+\end{enumerate}
+
+\nt{
+	\[
+		\Ft{x(t)} = \frac{\Ft{x'(t)}}{j\omega} + a\delta(f)
+		.\]
+
+	where
+	\[
+		a = \lim_{T\to\infty} \frac{1}{T} \int_{-T/2}^{T/2} x(t) \dd{t}
+		.\]
+}
+
+\section{Fourier Transform of Periodic Signals}
+
+Consider a signal $x(t)$ that is periodic with period $T$.
+
+\[
+	x(t) = \sum_{n=-\infty}^{\infty} \lambda_n e^{jn\omega_Tt} \quad \omega_T = \frac{2\pi}{T}
+	.\]
+
+The Fourier transform of this signal is
+
+\[
+	\Ft{x(t)} = \sum_{n=-\infty}^{\infty} \lambda_n \delta(f-nf_T)
+	.\]
+
+where
+
+\[
+	\lambda_n = \frac{1}{T}\int_{T} x(t)e^{-jn\omega_Tt} \dd{t}
+	.\]
+
+\section{Temporary and Frequential Duration}
+
+The mean and standard deviation of a signal in the time domain are given by
+
+\begin{align*}
+	t_0        & = \frac{\int_{-\infty}^\infty t \abs{x(t)}^2 \dd{t}}{\int_{-\infty}^\infty \abs{x(t)}^2 \dd{t}} = \frac{\int_{-\infty}^\infty t \abs{x(t)}^2 \dd{t}}{E} \\
+	\sigma_0^2 & = \frac{\int_{-\infty}^\infty (t-t_0)^2 \abs{x(t)}^2 \dd{t}}{E}
+\end{align*}
+
+The mean and standard deviation of a signal in the frequency domain are given by
+
+\begin{align*}
+	f_0        & = \frac{\int_{-\infty}^\infty f \abs{\hat{x}(f)}^2 \dd{f}}{\int_{-\infty}^\infty \abs{\hat{x}(f)}^2 \dd{f}} = \frac{\int_{-\infty}^\infty f \abs{\hat{x}(f)}^2 \dd{f}}{E} \\
+	\sigma_f^2 & = \frac{\int_{-\infty}^\infty (f-f_0)^2 \abs{\hat{x}(f)}^2 \dd{f}}{E}
+\end{align*}
+
+\thm{Heisenberg Uncertainty Principle}{
+	\[
+		\sigma_0\sigma_f \geq \frac{1}{4\pi}
+		.\]
+
+	This means that a compressed signal in the time domain will have a wider frequency domain and vice versa.
+}
+
+\section{Bounded Signals}
+
+A signal is bounded if
+
+\[
+	\abs{x(t)} \neq 0 \quad \forall t \in [a,b]
+	.\]
+
+\thm{Riemann-Lebesgue Lemma}{
+	If $x(t)$ is a bounded signal then
+	\[
+		\lim_{f\to\infty} \hat{x}(f) = 0
+		.\]
+	and
+	\[
+		\lim_{f\to-\infty} \hat{x}(f) = 0
+		.\]
+
+	This means that as the frequency of the signal increases, the signal vanishes.
+}
+
+\section{Energy Spectral Density}
+
+\nt{
+	\[
+		\Ft{\varphi_{xy}} = \Ft{x^*(-\tau) * y(\tau)} = \hat{x}(f)\hat{y}(f) \implies \varphi_{x} = \abs{\hat{x}(f)}^2 = \phi_{x}
+		.\]
+}
+
+The Spectral Energy at finite energy is given by 
+\[
+    \varphi_{x} = \abs{\hat{x}(f)}^2
+    .\]
+
+The Spectral Power at finite power is given by
+\[
+    \varphi_{xy} = \int_{-\infty}^{\infty} x^*(\tau) y(\tau + u) \dd{u}
+    .\]
+
+\[
+    \dv{P}{f} = \phi_x(f)
+    .\]
+
+\section{Hilbert Transform}
+
+\dfn{Hilbert Transform}{
+	The Hilbert transform of a signal $x(t)$ is defined as
+	\[
+		\Ht{x(t)} = \frac{1}{\pi} \pv{\int_{-\infty}^{\infty} \frac{x(\tau)}{t-\tau} \dd{\tau}}
+		.\]
+
+	The Hilbert transform is a result of the convolution of the signal with the function $\frac{1}{\pi t}$.
+	\[
+		\Ht{x(t)} = x(t) * \frac{1}{\pi t}
+		.\]
+}
+
+\thm{Relationship with the Fourier transform}{
+	\[
+		\Ft{\Ht{x(t)}} = -j\sgn(f)\hat{x}(f)
+		.\]
+}
+
+The Hilbert transform has the following properties:
+
+\begin{description}
+	\ii[Linearity]
+	\[
+		\Ht{ax(t) + by(t)} = a\Ht{x(t)} + b\Ht{y(t)}
+		.\]
+
+	\ii[Orthogonality] $x(t)$ and $\Ht{x(t)}$ are orthogonal signals.
+
+	\ii[Analytic Signal]
+	\[
+		z(t) = r(t) e^{j \theta(t)}
+		.\]
+
+	where $r(t)$ is the envelope of the signal and $\theta(t)$ is the phase of the signal. The instantaneous frequency of the signal is given by
+
+	\[
+		\omega(t) = \dv{\theta(t)}{t}
+		.\]
+
+\end{description}
 
 \end{document}
