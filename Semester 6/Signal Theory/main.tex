@@ -710,6 +710,7 @@ Here we assume that the signals $x(t),y(t),\dots\,\in\bbL^2$
 		.\]
 }
 
+\section{Dirac Delta Function}
 
 \dfn{Dirac Delta Function}{
 	The Dirac delta function is a function that is zero everywhere except at $t=0$. There are two ways to define the Dirac delta function:
@@ -789,6 +790,27 @@ The Dirac delta function has the following properties:
 		a = \lim_{T\to\infty} \frac{1}{T} \int_{-T/2}^{T/2} x(t) \dd{t}
 		.\]
 }
+
+\section{Fourier Transform of Some Signals}
+
+\begin{table}
+	\centering
+	{
+		\renewcommand{\arraystretch}{1.2}
+		\begin{tabular}{c|c}
+			\textbf{Signal}            & \textbf{Fourier Transform}                  \\
+			\hline
+			$u(t)$                     & $\frac{1}{2}\delta(f) + \frac{1}{j \omega}$ \\
+			$\delta(t)$                & $1$                                         \\
+			$\rect\lt(\frac{t}{T}\rt)$ & $T\sinc\lt(fT\rt)$                          \\
+			$\tri\lt(\frac{t}{T}\rt)$  & $T\sinc^2\lt(fT\rt)$                        \\
+			$\sinc(t)$                 & $\rect\lt(f\rt)$                            \\
+			$\sgn(t)$                  & $\frac{1}{j\pi f}$                          \\
+			$e^{-j2\pi f_0t}$          & $\delta(f-f_0)$                             \\
+			$e^{j2\pi f_0t}$           & $\delta(f+f_0)$                             \\
+		\end{tabular}
+	}
+\end{table}
 
 \section{Fourier Transform of Periodic Signals}
 
