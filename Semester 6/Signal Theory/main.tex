@@ -9,14 +9,18 @@
 \date{}
 
 \newcommand{\scalar}[1]{\lt\langle #1 \rt\rangle}
-\newcommand{\Ft}[1]{\SF_\omega\!\lt\{ #1 \rt\}}
-\newcommand{\Fti}[1]{\SF_\omega^{-1}\!\lt\{ #1 \rt\}}
+\newcommand{\Ft}[1]{\SF_t\!\lt\{ #1 \rt\}}
+\newcommand{\Fti}[1]{\SF_t^{-1}\!\lt\{ #1 \rt\}}
 \newcommand{\Ht}[1]{\SH\!\lt\{ #1 \rt\}}
 
 \DeclareMathOperator{\rect}{rect}
 \DeclareMathOperator{\tri}{tri}
 \DeclareMathOperator{\sinc}{sinc}
 \DeclareMathOperator{\sgn}{sgn}
+
+\usepgfplotslibrary{fillbetween}
+
+\pgfplotsset{compat=1.18}
 
 \pgfmathdeclarefunction{u}{1}{
 \pgfmathparse{
@@ -486,15 +490,21 @@ Examples of signals include:
 					xmin = -3,
 					xmax = 3,
 					ymin = -0.5,
-					ymax = 1.25,
+					ymax = 1.5,
 					xtick = {0},
 					ytick = {0,1},
 				]
 
-				\addplot[domain=-3:3, samples=500, cyan, very thick] {rect(x,2)};
+				\addplot[domain=-3:3, samples=500, cyan, very thick,name path=A] {rect(x,2)};
 				\addplot[domain=-3:3, samples=500, blue, thick, densely dashed] {rect(x-1.25,2)};
+				\path [name path=B] (\pgfkeysvalueof{/pgfplots/xmin},0) -- (\pgfkeysvalueof{/pgfplots/xmax},0);
 
 				\node[anchor=north] at (axis cs:0.25,0) {$t-\sfrac{1}{2}$};
+				\draw[->] (axis cs:0.25, 1.2) -- (axis cs:1.75, 1.2) node[midway, above] {Increasing $t$};
+				\addplot [orange] fill between [
+						of=A and B,
+						soft clip={domain=0.25:2},
+					];
 			\end{axis}
 		\end{tikzpicture}
 	\end{figure}
@@ -516,23 +526,29 @@ Examples of signals include:
 					xmin = -3,
 					xmax = 3,
 					ymin = -0.5,
-					ymax = 1.25,
+					ymax = 1.5,
 					xtick = {0},
 					ytick = {0,1},
 				]
 
-				\addplot[domain=-3:3, samples=500, cyan, very thick] {rect(x,2)};
+				\addplot[domain=-3:3, samples=500, cyan, very thick, name path=A] {rect(x,2)};
 				\addplot[domain=-3:3, samples=500, blue, thick, densely dashed] {rect(x+1.25,2)};
 
 				\node[anchor=north] at (axis cs:-0.25,0) {$t+\sfrac{1}{2}$};
+				\draw[->] (axis cs:-0.25, 1.2) -- (axis cs:-1.75, 1.2) node[midway, above] {Decreasing $t$};
+				\path [name path=B] (\pgfkeysvalueof{/pgfplots/xmin},0) -- (\pgfkeysvalueof{/pgfplots/xmax},0);
+				\addplot [orange] fill between [
+						of=A and B,
+						soft clip={domain=-2:-0.25},
+					];
 			\end{axis}
 		\end{tikzpicture}
 	\end{figure}
 
-	Similarly, the boundaries of the integral are $t+\sfrac{1}{2}$ and $\sfrac{1}{2}$ when $-1\leq t\leq 0$.
+	Similarly, the boundaries of the integral are $t+\sfrac{1}{2}$ and $-\sfrac{1}{2}$ when $-1\leq t\leq 0$.
 
 	\[
-		z(t) = \int_{1/2}^{t+1/2} 1 \dd{u} = 1 + t
+		z(t) = \int_{-1/2}^{t+1/2} 1 \dd{u} = 1 + t
 		.\]
 
 	Thus
@@ -847,26 +863,26 @@ A signal is bounded if
 		.\]
 }
 
-The Spectral Energy at finite energy is given by 
+The Spectral Energy at finite energy is given by
 \[
-    \varphi_{x} = \abs{\hat{x}(f)}^2
-    .\]
+	\varphi_{x} = \abs{\hat{x}(f)}^2
+	.\]
 
 The Spectral Power at finite power is given by
 \[
-    \varphi_{xy} = \int_{-\infty}^{\infty} x^*(\tau) y(\tau + u) \dd{u}
-    .\]
+	\varphi_{xy} = \int_{-\infty}^{\infty} x^*(\tau) y(\tau + u) \dd{u}
+	.\]
 
 \[
-    \dv{P}{f} = \phi_x(f)
-    .\]
+	\dv{P}{f} = \phi_x(f)
+	.\]
 
 \section{Hilbert Transform}
 
 \dfn{Hilbert Transform}{
 	The Hilbert transform of a signal $x(t)$ is defined as
 	\[
-		\Ht{x(t)} = \frac{1}{\pi} \pv{\int_{-\infty}^{\infty} \frac{x(\tau)}{t-\tau} \dd{\tau}}
+		\Ht{x(t)} = \frac{1}{\pi} \PV{\int_{-\infty}^{\infty} \frac{x(\tau)}{t-\tau} \dd{\tau}}
 		.\]
 
 	The Hilbert transform is a result of the convolution of the signal with the function $\frac{1}{\pi t}$.
