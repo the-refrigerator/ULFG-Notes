@@ -1,0 +1,453 @@
+\documentclass{report}
+
+\input{../template/preamble}
+\input{../template/macros}
+\input{../template/letterfonts}
+
+\title{\Huge{Electronics 2}\\Semester 6}
+\author{Ahmad Abu Zainab}
+\date{}
+
+\ctikzset{tripoles/mos style/arrows}
+\ctikzset{transistors/arrow pos=end}
+\ctikzset{tripoles/.style={scale=2}}
+\ctikzset{tr circle=true}
+
+\begin{document}
+
+\maketitle
+\newpage% or \cleardoublepage
+% \pdfbookmark[<level>]{<title>}{<dest>}
+\pdfbookmark[section]{\contentsname}{toc}
+\tableofcontents
+\pagebreak
+
+\chapter{Differential Amplifiers}
+
+\section{BJT Differential Amplifier}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\begin{circuitikz}
+			% Transistors
+			\draw (0,0) node[npn] (Q1) {};
+			\draw (2,0) node[npn, xscale=-1] (Q2) {};
+
+			% Resistors
+			\draw (Q1.E) to[short, i_=$I_{EE}/2$] ++(0,-0.75) to[short, -*] ++(1,0) coordinate (Vp);
+			\draw (Q2.E) to[short, i=$I_{EE}/2$] ++(0,-0.75) to[short, -*] (Vp);
+
+			\draw (Q1.C) to[R, l=$R_C$] ++(0,1.75) node[vcc] {$V_{CC}$};
+			\draw (Q2.C) to[R, l_=$R_C$] ++(0,1.75) node[vcc] {$V_{CC}$};
+
+			% Input
+			\draw (Q1.B) to[short, -o] ++(-0.5,0) node[left] {$v_{in1}$};
+			\draw (Q2.B) to[short, -o] ++(0.5,0) node[right] {$v_{in2}$};
+
+			% Output
+			\draw (Q1.C) to[short, -o] ++(-0.5,0) node[left] {$v_{out1}$};
+			\draw (Q2.C) to[short, -o] ++(0.5,0) node[right] {$v_{out2}$};
+
+			% Biasing
+			\draw (Vp) to[american, isource, l=$I_{EE}$] ++(0,-1.5) node[vcc, rotate=180] {};
+		\end{circuitikz}
+		\caption{BJT Differential Amplifier}
+		\label{fig:diffamp}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\begin{circuitikz}
+			% Transistors
+			\draw (0,0) node[npn] (Q1) {};
+			\draw (2,0) node[npn, xscale=-1] (Q2) {};
+
+			% Resistors
+			\draw (Q1.E) to[R, l=$R_E$] ++(0,-1.75) to[short, -*] ++(1,0) coordinate (Vp);
+			\draw (Q2.E) to[R, l=$R_E$] ++(0,-1.75) to[short, -*] (Vp);
+
+			\draw (Q1.C) to[R, l=$R_C$] ++(0,1.75) node[vcc] {$V_{CC}$};
+			\draw (Q2.C) to[R, l_=$R_C$] ++(0,1.75) node[vcc] {$V_{CC}$};
+
+			% Input
+			\draw (Q1.B) to[short, -o] ++(-0.5,0) node[left] {$v_{in1}$};
+			\draw (Q2.B) to[short, -o] ++(0.5,0) node[right] {$v_{in2}$};
+
+			% Output
+			\draw (Q1.C) to[short, -o] ++(-0.5,0) node[left] {$v_{out1}$};
+			\draw (Q2.C) to[short, -o] ++(0.5,0) node[right] {$v_{out2}$};
+
+			% Biasing
+			\draw (Vp) to[american, isource, l=$I_{EE}$] ++(0,-1.5) node[vcc, rotate=180] {};
+		\end{circuitikz}
+		\caption{BJT Differential Amplifier with Emitter Resistance}
+	\end{subfigure}
+\end{figure}
+
+The gain of the differential amplifier is given by
+
+\[
+	|A_d| = \begin{cases}
+		\displaystyle \frac{\text{Total resistance in the collectors}}{\text{Total resistance in the emitters}} & \text{with emitter resistance}    \\
+		g_m \cdot R_C                                                                                           & \text{without emitter resistance}
+	\end{cases}
+	.\]
+
+The common mode gain is given by
+
+\[
+	|A_\text{cm}| = \frac{\Delta R_C}{2R_EE} = \frac{\Delta R_C}{2R_E + 2r_e}
+	.\]
+
+The common mode rejection ratio is given by
+
+\[
+	\text{CMRR} = 20 \log \frac{|A_d|}{|A_\text{cm}|}
+	.\]
+
+The minimum and maximum common mode input voltage (to operate the amplifier) is given by
+
+\[
+	V_{CM \max} = V_{CC} - \alpha \frac{1}{2} R_C + \SI{0.4}{\volt} \quad ; \quad V_{CM \min} = -V_{EE} + V_{CS} + V_{EE}
+	.\]
+
+\section{MOSFET Differential Amplifier}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		% Transistors
+		\draw (0,0) node[nmos] (Q1) {};
+		\draw (2,0) node[nmos, xscale=-1] (Q2) {};
+
+		% Resistors
+		\draw (Q1.S) to[short] ++(0,-0.75) to[short, -*] ++(1,0) coordinate (Vp);
+		\draw (Q2.S) to[short] ++(0,-0.75) to[short, -*] (Vp);
+
+		\draw (Q1.D) to[R, l=$R_D$] ++(0,1.75) node[vcc] {$V_{DD}$};
+		\draw (Q2.D) to[R, l_=$R_D$] ++(0,1.75) node[vcc] {$V_{DD}$};
+
+		% Input
+		\draw (Q1.G) to[short, -o] ++(-0.5,0) node[left] {$v_{in1}$};
+		\draw (Q2.G) to[short, -o] ++(0.5,0) node[right] {$v_{in2}$};
+
+		% Output
+		\draw (Q1.D) to[short, -o] ++(-0.5,0) node[left] {$v_{out1}$};
+		\draw (Q2.D) to[short, -o] ++(0.5,0) node[right] {$v_{out2}$};
+
+		% Biasing
+		\draw (Vp) to[american, isource, l=$I_{EE}$] ++(0,-1.5) node[vcc, rotate=180] {};
+	\end{circuitikz}
+	\caption{MOSFET Differential Amplifier}
+	\label{fig:diffampmos}
+\end{figure}
+
+Similarly, the gain of the differential amplifier is given by
+
+\[
+	|A_d| = g_m \cdot R_D
+	.\]
+
+The minimum and maximum common mode input voltage (to operate the amplifier) is given by
+
+\[
+	V_{CM\max} = V_t + V_{DD} - \frac{I}{2}R_{D} \quad ; \quad V_{CM\min} = -V_{SS} + V_{CS} +V_{t}+V_{OV}
+	.\]
+
+\chapter{Current Mirrors}
+
+\section{Current Mirror}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[npn, xscale=-1] (Q1) {};
+		\draw (2,0) node[npn] (Q2) {};
+
+		\draw (Q1.C) -- ++(0,0.1) to[R, l=$R$, f<=$I_\text{Ref}$] ++(0,1.5) node[vcc] {$V_{CC}$};
+		\draw[dotted] (Q2.C) to[short, f_<=$I_o \approx I_\text{Ref}$] ++(0,1);
+
+		\draw (Q1.C) node[circ]{} -| (Q1.B) node[circ]{}  -- (Q2.B);
+
+		\draw (Q1.E) node[ground] {};
+		\draw (Q2.E) node[ground] {};
+	\end{circuitikz}
+	\caption{BJT Current Mirror}
+	\label{fig:bjtcm}
+\end{figure}
+
+\section{Wilson Current Mirror}
+
+A Wilson current mirror is a current mirror that uses two transistors to provide a more accurate current mirror.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[npn, xscale=-1] (Q1) {};
+		\draw (2,0) node[npn] (Q2) {};
+		\draw (2,2) node[npn] (Q3) {};
+
+		\draw (Q2.C) -- (Q3.E);
+
+		\draw[dotted] (Q3.C) to[short, f_<=$I_o \approx I_\text{Ref}$] ++(0,1);
+		\draw (Q1.C) |- (Q3.B);
+		\draw (Q1.C) -- ++(0,1) to[american, isource, l=$I_\text{Ref}$] ++(0,2) node[vcc] {};
+		\draw (Q2.C) node[circ]{} -| (Q2.B) node[circ]{}  -- (Q1.B);
+
+		\draw (Q1.E) node[vcc, rotate=180] {\raisebox{0.5em}{\rotatebox{-180}{$-V_{EE}$}}};
+		\draw (Q2.E) node[vcc, rotate=180] {\raisebox{0.5em}{\rotatebox{-180}{$-V_{EE}$}}};
+	\end{circuitikz}
+	\caption{Wilson Current Mirror}
+	\label{fig:wilsoncm}
+\end{figure}
+
+\section{Widlar Current Source}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[npn, xscale=-1] (Q1) {};
+		\draw (2,0) node[npn] (Q2) {};
+
+		\draw (Q1.C) -- ++(0,0.1) to[R, l=$R$, f<=$I_\text{Ref}$] ++(0,1.5) node[vcc] {$V_{CC}$};
+		\draw[dotted] (Q2.C) to[short, f_<=$I_o \approx I_\text{Ref}$] ++(0,1);
+
+		\draw (Q1.C) node[circ]{} -| (Q1.B) node[circ]{}  -- (Q2.B);
+
+		\draw (Q1.E) -- ++(0,-1.5) node[ground] {};
+		\draw (Q2.E) to[R, l=$R_E \approx \frac{V_T}{I_o} \ln \frac{I_\text{Ref}}{I_o} $] ++(0,-1.5) node[ground] {};
+	\end{circuitikz}
+	\caption{Widlar Current Source}
+	\label{fig:widlarcs}
+\end{figure}
+
+\chapter{Frequency Response}
+
+The amplifier's gain varies with frequency. The response is studied at 3 points:
+\begin{enumerate}
+	\ii Low frequency: Coupling and bypass capacitors are not shorted.
+	\ii Mid frequency: Typical gain, all capacitors are shorted.
+	\ii High frequency: Coupling and bypass capacitors are shorted, but internal capacitances of the transistors are considered.
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	% example bode plot
+	\begin{tikzpicture}
+		\begin{semilogxaxis}[
+				width=0.8\textwidth,
+				height=0.4\textwidth,
+				grid=both,
+				grid style={line width=.1pt, draw=gray!10},
+				major grid style={line width=.2pt,draw=gray!50},
+				xlabel={Frequency (\si{\hertz})},
+				ylabel={Gain (\si{\decibel})},
+				xmin=1, xmax=1e10,
+				ymin=0, ymax=250,
+				xtick={1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000, 10000000000},
+				ytick={0, 141.42, 200},
+				yticklabels={0, $0.707A_{v\text{mid}}$, $A_{v\text{mid}}$},
+				yticklabel style={/pgf/number format/fixed},
+				xticklabel style={/pgf/number format/fixed},
+				legend pos=north west,
+				legend style={at={(0.5,-0.2)},anchor=north},
+				legend cell align={left},
+			]
+
+			\addplot[domain=1:1e10, samples=200, red, thick] {200 * log10(x/5 * 1/((1+x/50)* (1+x/100000000)))};
+			\addplot[domain=1:1e10, samples=200, blue, dashed] {141.42};
+
+			\legend{Gain, -3dB}
+
+			\draw[dashed] (axis cs: 50, 0) -- (axis cs: 50, 250);
+			\draw[dashed] (axis cs: 100000000, 0) -- (axis cs: 100000000, 250);
+			\draw (axis cs: 50, 141.42) node[circ]{} node[above left]{$f_{L}$};
+			\draw (axis cs: 100000000, 141.42) node[circ]{} node[above right]{$f_{H}$};
+		\end{semilogxaxis}
+	\end{tikzpicture}
+\end{figure}
+
+The cutoff frequencies are the frequencies at which the gain is reduced by \SI{3}{\decibel}, and the bandwidth is the difference between the two cutoff frequencies.
+
+\[
+	\text{BW} = f_H - f_L = f_2 - f_1 \quad ; \quad \begin{cases}
+		f_L \text{ determined using the critical frequency of } C_i, C_o, C_E \\
+		f_H \text{ determined using the critical frequency of } C_{\pi}, C_{\mu}, C_{\text{cs}}
+	\end{cases}
+	.\]
+
+\section{Low Frequency Response of Amplifiers}
+
+\subsection{Low Frequency Response of CE Amplifiers}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[npn] (Q) {};
+
+		% Input 
+		\draw (Q.B) ++(-0.5,0) to[C, l=$C_i$] ++(-2,0) to[R, l=$R_s$] ++(0,-2) to[sV, l=$V_{s}$] ++(0,-1.5) coordinate (GND) node[ground] {};
+
+		% Base
+		\draw (Q.B) -- ++(-0.5,0) to[R, l=$R_1$] ++(0,2.5) coordinate (VCC) node[vcc] {$V_{CC}$};
+		\draw let \p1=(GND), \p2=(Q.B) in (Q.B) ++(-0.5,0) to[R, l=$R_2$, *-] ++(0,\y1-\y2) node[ground] {};
+
+		% Emitter
+		\draw let \p1=(GND), \p2=(Q.E) in (Q.E) to[R, l=$R_E$, *-] ++(0,\y1-\y2) node[ground] {};
+		\draw let \p1=(GND), \p2=(Q.E) in (Q.E) -- ++(1.5,0) to[C, l=$C_E$] ++(0,\y1-\y2) node[ground] {};
+
+		% Collector 
+		\draw let \p1=(VCC), \p2=(Q.C) in (Q.C) to[R, l=$R_C$, *-] ++(0,\y1-\y2) node[vcc] {$V_{CC}$};
+		\draw let \p1=(GND), \p2=(Q.C) in (Q.C) to[C, l=$C_o$, *-*] ++(3,0) coordinate (Vo) to[R, l=$R_L$] ++(0,\y1-\y2) node[ground] {};
+		\draw (Vo) to[short, -o] ++(0.5,0) node[right] {$v_{out}$};
+	\end{circuitikz}
+	\caption{CE Amplifier}
+	\label{fig:ceamp}
+\end{figure}
+
+To determine the cutoff frequencies for each capacitor, we short the other capacitors and determine the critical frequency for each capacitor.
+
+\begin{align*}
+	f_{Ci} & = \frac{1}{2 \pi (R_{s} + R_{i}) C_{i}} \quad ; \quad R_{i} = R_{1}\parallel R_{2} \parallel (\beta + 1) r_{e}                                               \\
+	f_{Co} & = \frac{1}{2 \pi (R_{o} + R_{L}) C_{o}} \quad ; \quad R_{o} = R_{C}\parallel r_{o}                                                                           \\
+	f_{CE} & = \frac{1}{2 \pi R_\text{eq} C_{E}} \quad ; \quad R_\text{eq} = R_{E}\parallel \left[ \frac{R_{s}\parallel R_{1} \parallel R_{2}}{\beta + 1} + r_{e} \right]
+\end{align*}
+
+\subsection{Low Frequency Response of CS Amplifiers}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[nmos] (Q) {};
+
+		% Input 
+		\draw (Q.G) -- ++(-0.5,0) to[C, l=$C_i$] ++(-2,0) to[R, l=$R_s$] ++(0,-2) to[sV, l=$V_{s}$] ++(0,-1.5) coordinate (GND) node[ground] {};
+
+		% Gate
+		\draw let \p1=(GND), \p2=(Q.G) in (Q.G) ++(-0.5,0) to[R, l=$R_G$, *-] ++(0,\y1-\y2) node[ground] {};
+
+		% Source
+		\draw let \p1=(GND), \p2=(Q.S) in (Q.S) to[R, l=$R_S$, *-] ++(0,\y1-\y2) node[ground] {};
+		\draw let \p1=(GND), \p2=(Q.S) in (Q.S) -- ++(1.5,0) to[C, l=$C_S$] ++(0,\y1-\y2) node[ground] {};
+
+		% Drain
+		\draw (Q.D) to[R, l=$R_D$, *-] ++(0,2.5) node[vcc] {$V_{CC}$};
+		\draw let \p1=(GND), \p2=(Q.D) in (Q.D) to[C, l=$C_o$, *-*] ++(3,0) coordinate (Vo) to[R, l=$R_L$] ++(0,\y1-\y2) node[ground] {};
+		\draw (Vo) to[short, -o] ++(0.5,0) node[right] {$v_{out}$};
+	\end{circuitikz}
+	\caption{CS Amplifier}
+	\label{fig:csamp}
+\end{figure}
+
+\begin{align*}
+	f_{Ci} & = \frac{1}{2 \pi (R_{s} + R_{G}) C_{i}}                                                       \\
+	f_{Co} & = \frac{1}{2 \pi (R_{L} + R_{o}) C_{L}} \quad ; \quad R_{o} = R_{D}\parallel r_{o}            \\
+	f_{CS} & = \frac{1}{2 \pi R_\text{eq} C_{S}} \quad ; \quad R_\text{eq} = R_{S} \parallel \frac{1}{g_m}
+\end{align*}
+
+\section{High Frequency Response of Amplifiers}
+
+\subsection{High Frequency Response of CE Amplifiers}
+
+We consider the internal capacitances of the transistor, $C_{\pi}$($C_\text{be}$), $C_{\mu}$($C_\text{bc}$), and $C_{\text{ce}}$ as well as the wiring capacitances $C_{wi}$ and $C_{wo}$.
+We say that $C_i$, $C_o$, and $C_E$ are shorted.
+
+\begin{figure}[H]
+	\centering
+	\scalebox{1.5}{
+		\begin{circuitikz}
+			\ctikzset{capacitors/scale=0.45}
+			\draw (0,0) node[npn] (Q) {};
+			\draw let \p1=(Q.B), \p2=(Q.C) in (Q.C) to[C, l_=\scalebox{0.75}{$C_{\mu}$}, *-] (\x1,\y2) -- (Q.B);
+			\draw let \p1=(Q.C), \p2=(Q.E) in (Q.C) -- ++(0.5,0) to[C, l=\scalebox{0.75}{$C_\text{ce}$}] ++(0,\y2-\y1) -- (Q.E) to[short, *-*] (Q.E);
+			\draw let \p1=(Q.B), \p2=(Q.E) in (Q.B) to[C, l_=\scalebox{0.75}{$C_{\pi}$}, *-] (\x1,\y2) -- (Q.E);
+		\end{circuitikz}
+	}
+\end{figure}
+
+\thm{Miller Effect}{
+	The capacitor connected between the input and output is called the feedback capacitor. Miller's theorem states that the feedback capacitor is equivalent to two capacitors at the inout and output.
+	\begin{align*}
+		C_{Mi} & = C_{f} (1 - A_v)                 \\
+		C_{Mo} & = C_{f} \lt(1 - \frac{1}{A_v}\rt)
+	\end{align*}
+}
+
+Using Miller's theorem, we say that
+\begin{align*}
+	C_{Mi} & = (1 - A_v)C_\text{bc} \quad                 & \quad C_{i} & = C_{wi} + C_\text{be} + C_{Mi}   \\
+	C_{Mo} & = \lt(1 - \frac{1}{A_v}\rt)C_\text{bc} \quad & \quad C_{o} & = C_{wo} + C_{\text{ce}} + C_{Mo}
+\end{align*}
+
+The cutoff frequency is given by
+
+\begin{align*}
+	f_{Hi} & = \frac{1}{2 \pi R_{Thi} C_i} \quad & \quad R_{Thi} & = R_s \parallel R_1 \parallel R_2 \parallel r_{\pi} \\
+	f_{Ho} & = \frac{1}{2 \pi R_{Tho} C_o} \quad & \quad R_{Tho} & = R_L \parallel R_C \parallel r_{o}
+\end{align*}
+
+\subsection{High Frequency Response of CS Amplifiers}
+
+\begin{align*}
+	R_{Thi} & = R_s \parallel R_G \quad               & \quad R_{Tho} & = R_D \parallel R_L \parallel r_d      \\
+	C_{Mi}  & = (1 - A_v)C_\text{gd} \quad            & \quad C_{Mo}  & = \lt(1 - \frac{1}{A_v}\rt)C_\text{gd} \\
+	C_i     & = C_{wi} + C_{\text{gs}} + C_{Mi} \quad & \quad C_o     & = C_{wo} + C_{\text{ds}} + C_{Mo}      \\
+	f_{Hi}  & = \frac{1}{2 \pi R_{Thi} C_i} \quad     & \quad f_{Ho}  & = \frac{1}{2 \pi R_{Tho} C_o}
+\end{align*}
+
+\section{Open-Circuit Time Constants}
+
+Open-circuit time constants is a method used to approximate the cutoff frequencies of the amplifier.
+
+\begin{align*}
+	b_1 & = \sum_{i=1}^n C_i R_i^0                  \\
+	b_2 & = \sum_{i=1}^n \sum_j C_i R_i^0 R_j^i C_j
+\end{align*}
+
+Where $R_i^0$ is the resistance seen by the capacitor when all other capacitors are shorted.
+
+\[
+	\omega_H \approx p_1 \approx \frac{1}{b_1} = \frac{1}{\sum_{i=1}^n C_i R_i^0}
+	.\]
+
+\chapter{Negative Feedback}
+
+There are 4 types of negative feedback topologies:
+
+\begin{enumerate}
+	\ii Feedback Voltage Amplifier (Series—Shunt)
+	\ii Feedback Transconductance Amplifier (Series—Series)
+	\ii Feedback Transresistance Amplifier (Shunt—Shunt)
+	\ii Feedback Current Amplifier (Shunt—Series)
+\end{enumerate}
+
+We define
+
+\[
+	\begin{cases} \displaystyle
+		\beta = \frac{x_f}{x_o}    & \text{Feedback factor}  \\
+		A                          & \text{Open-loop gain}   \\
+		A \beta                    & \text{Loop gain}        \\
+		\displaystyle
+		A_f = \frac{A}{1 + A\beta} & \text{Closed-loop gain}
+	\end{cases}
+	.\]
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{2.5}
+	\begin{tabular}[c]{|l|l|l|l|l|}
+		\hline
+		         & Series-Shunt V-V        & Shunt-Shunt I-V         & Series-Series V-I  & Shunt-Series I-I        \\
+		\hline
+		$R_{if}$ & $R_i (1+A\beta)$        & $\dfrac{R_i}{1+A\beta}$ & $R_i (1+A\beta)$   & $\dfrac{R_i}{1+A\beta}$ \\
+		$R_{of}$ & $\dfrac{R_o}{1+A\beta}$ & $\dfrac{R_o}{1+A\beta}$ & $R_o (1+A\beta)$   & $R_o (1+A\beta)$        \\
+		$\beta$  & $\dfrac{V_f}{V_o}$      & $\dfrac{I_f}{V_o}$      & $\dfrac{V_f}{I_o}$ & $\dfrac{I_f}{I_o}$      \\
+		\hline
+	\end{tabular}
+\end{table}
+
+
+\end{document}

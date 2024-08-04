@@ -1,0 +1,166 @@
+\documentclass[a4paper]{article}
+
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usepackage{siunitx}
+\usepackage{amsmath,amsfonts}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage[margin=0.25in]{geometry}
+\usepackage{multicol}
+\usepackage{physics}
+\usepackage{microtype}
+\usepackage{xfrac}
+
+\ctikzset{resistors/scale=0.65}
+\ctikzset{capacitors/scale=0.65}
+
+\ctikzset{tripoles/mos style/arrows}
+\ctikzset{transistors/arrow pos=end}
+\ctikzset{tripoles/.style={scale=2}}
+\ctikzset{tr circle=true}
+
+\pagestyle{empty}
+
+\titlespacing*{\section}{0pt}{0ex}{0em}
+
+\begin{document}
+\section*{Chapter 5: Oscillators}
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{0.3\textwidth}
+		\scalebox{0.8}{
+			\begin{circuitikz}
+				\draw (2,0) node[npn, anchor=B] (npn) {};
+				\draw (npn.B) ++(-1,0) to[R=$R_1$,*-] ++(0,2.25) node[vcc]{$V_{CC}$};
+				\draw (npn.B) ++(-1,0) to[R,l_=$R_2$] ++(0,-2.25) node[ground]{};
+				\draw (npn.C) to[R=$R_C$,*-] ++(0,1.5) node[vcc]{$V_{CC}$};
+				\draw (npn.E) to[R, l_=$R_E$] ++(0,-1.5) node[ground]{};
+				\draw (npn.E) to[short, *-] ++(1,0) to[C=$C_E$] ++(0,-1.5) node[ground]{};
+				\draw (npn.B) -| (-1,-3.75) to[R=$R'$] ++(1.25,0) coordinate(C1) to[C=$C$] ++(1.5,0) coordinate(C2) to[C=$C$,*-] ++(1.5,0) coordinate(C3) to[C=$C$,*-] ++(1.5,0) |- (npn.C);
+				\draw (C2) to[R=$R$] ++(0,-1.5) node[ground]{};
+				\draw (C3) to[R=$R$] ++(0,-1.5) node[ground]{};
+			\end{circuitikz}
+		}
+		\caption*{Phase Shift Oscillator (BJT)\\ $\displaystyle f_0 = \frac{1}{2\pi R C} \frac{1}{\sqrt{6+4R_C/R}}$}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.3\textwidth}
+		\scalebox{0.8}{
+			\begin{circuitikz}
+				\draw (2,0) node[nmos, anchor=B] (nmos) {};
+				\draw (nmos.D) to[R=$R_D$,*-] ++(0,1.5) node[vcc]{$V_{CC}$};
+				\draw (nmos.S) to[R, l_=$R_S$] ++(0,-1.5) node[ground]{};
+				\draw (nmos.S) to[short, *-] ++(1,0) to[C=$C_S$] ++(0,-1.5) node[ground]{};
+				\draw (nmos.G) -| (1,-3.75) coordinate(C1) to[C=$C$] ++(1.5,0) coordinate(C2) to[C=$C$,*-] ++(1.5,0) coordinate(C3) to[C=$C$,*-] ++(1.5,0) |- (nmos.D);
+				\draw (C1) to[R=$R$] ++(0,-1.5) node[ground]{};
+				\draw (C2) to[R=$R$] ++(0,-1.5) node[ground]{};
+				\draw (C3) to[R=$R$] ++(0,-1.5) node[ground]{};
+			\end{circuitikz}
+		}
+		\caption*{Phase Shift Oscillator (MOSFET)\\ $\displaystyle f_0 = \frac{1}{2 \pi RC \sqrt{6}}$ \\ $\displaystyle A = 29$}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.3\textwidth}
+		\scalebox{0.8}{
+			\begin{circuitikz}
+				\draw (0,-2) node[op amp, anchor=-] (opamp) {};
+				\draw (opamp.+) -- ++(-0.5,0) node[ground]{};
+				\draw (opamp.-) to[short,*-] ++(0,0.75) to[R=$R_2$] ++(2.375,0) |-(opamp.out) to[short,*-*] ++(0,0);
+				\draw (opamp.-) to[R,l_=$R_1$] ++(-1.25,0) |- (-1,-4.5) coordinate(C1) to[C=$C$] ++(1.5,0) coordinate(C2) to[C=$C$,*-] ++(1.5,0) coordinate(C3) to[C=$C$,*-] ++(1.5,0) |- (opamp.out);
+				\draw (C2) to[R=$R$] ++(0,-1.5) node[ground]{};
+				\draw (C3) to[R=$R$] ++(0,-1.5) node[ground]{};
+			\end{circuitikz}
+		}
+		\caption*{Phase Shift Oscillator (Op Amp)\\ $\displaystyle f_0 = \frac{1}{2 \pi RC \sqrt{6}}$ \\ $\displaystyle A = 29$}
+	\end{subfigure}
+
+\end{figure}
+
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{0.3\textwidth}
+		\resizebox{\textwidth}{!}{
+			\begin{circuitikz}
+				\draw (0,0) node[op amp, anchor=+] (opamp) {};
+				\draw (opamp.+) -- ++(0,-1) coordinate (RR) -- ++(1,0) coordinate (CC) -- ++(0.5,0) to[R=$R_1$] ++(1.25,0) to[C=$C_1$] ++(1.25,0) |- (opamp.out) to[short,*-*] ++(0,0);
+				\draw (RR) to[R=$R_2$, *-] ++(0,-1.25) node[ground]{};
+				\draw (CC) to[C=$C_2$, *-] ++(0,-1.25) node[ground]{};
+				\draw (opamp.-) to[short,*-] ++(0,0.75) to[R=$R_3$] ++(2.375,0) |-(opamp.out);
+				\draw (opamp.-) to[R=$R_4$] ++(-1.5 ,0) node[ground]{};
+			\end{circuitikz}
+		}
+		\caption*{Wien-Bridge Oscillator\\ $\displaystyle \omega_0 = \frac{1}{\sqrt{R_1 R_2 C_1 C_2}}$}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.3\textwidth}
+		\resizebox{\textwidth}{!}{
+			\begin{circuitikz}
+				\draw (2,0) node[npn, anchor=B] (npn) {};
+				\draw (npn.B) -- ++(-0.5,0) coordinate (BB) to[R=$R_1$,*-] ++(0,2.25) node[vcc]{$V_{CC}$};
+				\draw (npn.B) ++(-0.5,0) to[R,l_=$R_2$] ++(0,-2.25) node[ground]{};
+				\draw (npn.C) to[L, l_={RFC},*-] ++(0,1.5) node[vcc]{$V_{CC}$};
+				\draw (npn.E) to[R, l_=$R_E$] ++(0,-1.5) node[ground]{};
+				\draw (npn.E) to[short, *-] ++(1,0) to[C=$C_E$] ++(0,-1.5) node[ground]{};
+				\draw (npn.C) -- ++(2,0) coordinate (C1) to[L=$L$,*-*] ++ (2,0) coordinate (C2);
+				\draw (C1) to[C=$C_2$] ++(0,-3.025) node[ground]{};
+				\draw (C2) to[C=$C_1$] ++(0,-3.025) node[ground]{};
+				\draw (BB) ++(-1.5,0) coordinate (BB2);
+				\draw (C2) -| ++(1,-4) -- ++(-8,0) |- (BB2) to[C=$C$] (BB);
+			\end{circuitikz}
+		}
+		\caption*{Colpitts Oscillator\\ $\displaystyle \omega_0 = \sqrt{\frac{C_1+C_2}{C_1C_2L}}$ \\ $\displaystyle \beta_f = \frac{C_2}{C_1}$}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.3\textwidth}
+		\resizebox{\textwidth}{!}{
+			\begin{circuitikz}
+				\draw (2,0) node[npn, anchor=B] (npn) {};
+				\draw (npn.B) -- ++(-0.5,0) coordinate (BB) to[R=$R_1$,*-] ++(0,2.25) node[vcc]{$V_{CC}$};
+				\draw (npn.B) ++(-0.5,0) to[R,l_=$R_2$] ++(0,-2.25) node[ground]{};
+				\draw (npn.C) to[R, l_=$R_C$,*-] ++(0,1.5) node[vcc]{$V_{CC}$};
+				\draw (npn.E) to[R, l_=$R_E$] ++(0,-1.5) node[ground]{};
+				\draw (npn.E) to[short, *-] ++(1,0) to[C=$C_E$] ++(0,-1.5) node[ground]{};
+				\draw (npn.C) -- ++(2,0) coordinate (C1) to[C=$C$,*-*] ++ (2,0) coordinate (C2);
+				\draw (C1) to[L=$L_2$] ++(0,-3.025) node[ground]{};
+				\draw (C2) to[L=$L_1$] ++(0,-3.025) node[ground]{};
+				\draw (BB) ++(-1.5,0) coordinate (BB2);
+				\draw (C2) -| ++(1,-4) -- ++(-8,0) |- (BB2) to[C=$C$] (BB);
+			\end{circuitikz}
+		}
+		\caption*{Hartly Oscillator\\ $\displaystyle \omega_0 = \frac{1}{\sqrt{(L_1 + L_2)C}}$ \\ $\displaystyle \beta_f = \frac{L_1}{L_2}$}
+	\end{subfigure}
+
+\end{figure}
+
+\begin{multicols}{2}
+	\section*{Chapter 6: Power Amplifiers}
+	\renewcommand{\arraystretch}{1.7}
+	\begin{tabular}{|l|l|l|}
+		\hline
+		Class A                                               & Class B                                              & Class AB                                  \\
+		\hline
+		$\mu \in [0.25-0.5]$                                  & $\mu \leq 0.785$                                     & $\mu \leq 0.6$                            \\
+		$\displaystyle P_L = \frac{{V_o}^2}{2R_L}$            & $\displaystyle P_L = \frac{{V_o}^2}{2 R_L}$          & $\displaystyle i = I_s e^{V_{BB}/{2V_T}}$ \\
+		$\displaystyle P_{L(\max)} = \frac{{V_{CC}}^2}{8R_L}$ & $\displaystyle I_C = \frac{V_o}{\pi R_L}$            & $\displaystyle i_n i_p = {I_Q}^2$         \\
+		$\displaystyle P_{DC} = \frac{{V_{CC}}^2}{2R_L}$      & $\displaystyle P_{DC} = \frac{2V_{CC} V_o}{\pi R_L}$ & $\displaystyle P_D = V_{CC}I_Q$           \\
+		$\displaystyle P_{D} = \frac{{V_{CC}}^2}{4R_L}$       &                                                      &                                           \\
+		\hline
+	\end{tabular}
+
+	\section*{Chapter 7: Active Filters}
+	\begin{gather*}
+		\varepsilon = \sqrt{10^{\tfrac{A_{\max}}{10}} - 1}
+		\qq{;}
+		N \geq \frac{ \log\left(\dfrac{10^{A_{\min}/10} - 1}{\varepsilon^2}\right) }{ 2\log\left(\dfrac{\omega_s}{\omega_p}\right) } \\
+		A_\text{dB} = 10 \log \left( 1 + \varepsilon^2 \left(\dfrac{\omega}{\omega_p} \right)^{2N} \right) \\
+		p_0 = \omega_0 e^{j \left(\tfrac{\pi}{2N} + \tfrac{\pi}{2}\right)} \qq{;} p_{k+1} = p_k e^{j \tfrac{\pi}{N}} \qq{;} \omega_0 = \omega_p \varepsilon^{-\tfrac{1}{N}} \\
+		T(s) = \frac{K {\omega_0}^N}{\prod_{k=1}^N (s-p_k)}
+	\end{gather*}
+\end{multicols}
+
+\end{document}
