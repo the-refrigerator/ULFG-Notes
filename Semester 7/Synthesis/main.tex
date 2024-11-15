@@ -1,0 +1,577 @@
+\documentclass{report}
+
+\input{../template/preamble}
+\input{../template/macros}
+\input{../template/letterfonts}
+
+\title{\Huge{Circuit Synthesis}\\Semester 7}
+\author{\huge{Ahmad Abu Zainab}}
+\date{}
+
+\newcommand{\Laplace}[1]{\mathcal{L}\left\{#1\right\}}
+
+\newcommand{\lap}[1]{\Laplace{#1}}
+
+
+\begin{document}
+
+\maketitle
+\newpage% or \cleardoublepage
+% \pdfbookmark[<level>]{<title>}{<dest>}
+\pdfbookmark[section]{\contentsname}{toc}
+\tableofcontents
+\pagebreak
+
+\chapter{Introduction and Characteristics of Network Functions}
+
+\section{Network Functions}
+
+\dfn{Network Function}{
+	A network function is a function that describes the relationship between the input and output of a network.
+	It is expressed in terms of the Laplace transform of the input(excitation $E(s)$) and output(response $R(s)$) signals at.
+
+	\[
+		H(s) = \frac{R(s)}{E(s)}
+		.\]
+}
+
+\nt{
+	The Laplace transform of a function $f(t)$ is given by
+	\[
+		F(s) = \lap{f(t)} = \int_{0}^{\infty} f(t) e^{-st} \dd{t}
+		.\]
+
+	with $s = \alpha + j\omega$. Where $\alpha$ is called the Neper frequency and $\omega$ is the angular frequency.
+}
+
+Network functions are divided into two types:
+\begin{enumerate}
+	\ii Driving Point Impedance Function: when the input and output are taken at the same port.
+	\ii Transfer Function: when the input and output are taken at different ports.
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.29\textwidth}
+		\centering
+		\begin{circuitikz}[american voltages]
+			\draw (0,0) to[short, *-, f={$i(t)$}] ++(1.5,0) to[twoport] ++(0,-1.5) to[short, -*] ++(-1.5,0);
+			\draw (0,0) to[open, v^>={$v(t)$}] ++(0,-1.5);
+		\end{circuitikz}
+		\caption{One-port network}
+	\end{subfigure}
+	\begin{subfigure}{0.29\textwidth}
+		\centering
+		\begin{circuitikz}[american voltages]
+			\draw (0,0) node[fourport, scale=1.3] (N) {};
+			\draw (N.port4) to[short, f_<={$i_1(t)$}, -*] ++(-1.5,0) to[open, v^>={$v_1(t)$}] ($ (N.port1) + (-1.5,0) $) to[short, *-] ++(1.5,0);
+			\draw (N.port3) to[short, f^<={$i_2(t)$}, -*] ++(1.5,0) to[open, v^>={$v_2(t)$}] ($ (N.port2) + (1.5,0) $) to[short, *-] ++(-1.5,0);
+		\end{circuitikz}
+		\caption{Two-port network}
+	\end{subfigure}
+	% \begin{subfigure}{0.29\textwidth}
+	% 	\centering
+	% 	\begin{circuitikz}[american voltages]
+	%
+	% 	\end{circuitikz}
+	% 	\caption{Four-port network}
+	% \end{subfigure}
+\end{figure}
+
+
+The driving point impedance function is the ratio of the Laplace transform of the voltage across the network port to the Laplace transform of the current through the port.
+\[
+	Z(s) = \frac{V(s)}{I(s)}
+	.\]
+
+The driving point admittance function is the reciprocal of the driving point impedance function.
+\[
+	Y(s) = \frac{1}{Z(s)} = \frac{I(s)}{V(s)}
+	.\]
+
+For a two-port network, we have four driving point impedance functions and eight transfer functions.\\
+
+\begin{itemize}
+	\ii Driving Point Impedance Functions:
+	\begin{enumerate}
+		\ii $Z_{11}(s) = \dfrac{V_1(s)}{I_1(s)}$
+		\ii $Z_{22}(s) = \dfrac{V_2(s)}{I_2(s)}$
+	\end{enumerate}
+
+	\ii Transfer Functions:
+	\begin{enumerate}
+		\ii Impedance: $Z_{12}(s) = \dfrac{V_1(s)}{I_2(s)} \qq{} Z_{21}(s) = \dfrac{V_2(s)}{I_1(s)}$
+		\ii Admittance: $Y_{12}(s) = \dfrac{I_1(s)}{V_2(s)} \qq{} Y_{21}(s) = \dfrac{I_2(s)}{V_1(s)}$
+		\ii Voltage: $G_{12}(s) = \dfrac{V_1(s)}{V_2(s)} \qq{} G_{21}(s) = \dfrac{V_2(s)}{V_1(s)}$
+		\ii Current: $\alpha_{12}(s) = \dfrac{I_1(s)}{I_2(s)} \qq{} \alpha_{21}(s) = \dfrac{I_2(s)}{I_1(s)}$
+	\end{enumerate}
+\end{itemize}
+
+\subsection{General Properties of Network Functions}
+
+The general form of a network function is given by a rational function of $s$.
+
+\begin{align*}
+	F(s) = \frac{N(s)}{D(s)} & = \frac{a_ns^n + a_{n-1}s^{n-1} + \ldots + a_1s + a_0}{b_ms^m + b_{m-1}s^{m-1} + \ldots + b_1s + b_0} \qquad a_i, b_i \in \mathbb{R} \\
+	                         & = K\frac{\sum_{i=0}^{n} (s-Z_i)}{\sum_{i=0}^{m} (s-P_i)} \qquad K = \frac{a_n}{b_m}
+\end{align*}
+
+A network function satisfies the following properties:
+
+\thm{Cauchy Riemann Conditions}{
+	If a complex function $f(x+iy) = u(x,y) + jv(x,y)$ is differentiable at a point $z = x + iy$, then the following conditions must be satisfied:
+	\[
+		\pdv{u}{x} = \pdv{v}{y} \qq{and} \pdv{u}{y} = -\pdv{v}{x}
+		.\]
+}
+
+\begin{itemize}
+	\ii Complex differentiability: $F(s)$ is differentiable at all points in the complex plane except at the poles of $F(s)$.
+	\ii Reflection symmetry: $F(\bar{s}) = \overline{F(s)}$
+\end{itemize}
+
+\subsubsection{Finding the Real and Imaginary Parts of a Network Function at Real Frequencies $s=j\omega$}
+
+\begin{itemize}
+	\ii \textbf{Method 1}:
+
+	\begin{align*}
+		\Re\{F(j\omega)\} & = U(\omega) = \frac{1}{2} \lt[ F(s) + F(\bar{s}) \rt]  \\
+		\Im\{F(j\omega)\} & = V(\omega) = \frac{1}{2j} \lt[ F(s) - F(\bar{s}) \rt]
+	\end{align*}
+
+	\ii \textbf{Method 2}:
+	\begin{itemize}
+		\ii Arrange the numerator in to the sum of an even polynomial $e_N(s)$ and an odd polynomial $o_N(s)$.
+		,		\ii Arrange the denominator in to the sum of an even polynomial $e_D(s)$ and an odd polynomial $o_D(s)$.
+	\end{itemize}
+	\begin{align*}
+		\Re\{F(s)\} & = \lt.\frac{e_N(s)e_D(s) - o_N(s)o_D(s)}{{e_D}^2(s) - {o_D}^2(s)}\rt|_{s=j\omega}             \\
+		\Im\{F(s)\} & = \lt.\frac{1}{j} \frac{o_N(s)e_D(s) - e_N(s)o_D(s)}{{e_D}^2(s) - {o_D}^2(s)}\rt|_{s=j\omega}
+	\end{align*}
+
+	\ii \textbf{Method 3}:
+
+	\begin{align*}
+		\Re\{F(s)\} & = \frac{1}{2} \lt[ F(s) + F(-s) \rt]  \\
+		\Im\{F(s)\} & = \frac{1}{2j} \lt[ F(s) - F(-s) \rt]
+	\end{align*}
+\end{itemize}
+
+\section{System Realizability and Stability}
+
+% A network function is realizable if it can be implemented using passive elements. % idk if copilot hallucinated this
+A network function is realizable if it satisfies the following conditions:
+\begin{itemize}
+	\ii \textbf{Causality}: the system cannot respond before the input is applied. (i.e. $f(t) = 0$ for $t < 0$)
+	\ii \textbf{Stability}: the system must be stable for bounded input to produce bounded output.
+\end{itemize}
+
+\begin{table}[H]
+	\renewcommand{\arraystretch}{2}
+	\centering
+	\begin{tabular}[c]{ll|ll}
+		$\bm{f(t), t \geq 0}$     & $\bm{\lap{f(t)}}$                  & $\bm{f(t), t \geq 0}$                & $\bm{\lap{f(t)}}$                                         \\
+		\hline
+		$\displaystyle \delta(t)$ & 1                                  & $\displaystyle t^ne^{-at}$           & $\displaystyle \frac{n!}{(s+a)^{n+1}}$                    \\
+		$\displaystyle u(t)$      & $\displaystyle \frac{1}{s}$        & $\displaystyle \sin\omega t$         & $\displaystyle \frac{\omega}{s^2 + \omega^2}$             \\
+		$\displaystyle t$         & $\displaystyle \frac{1}{s^2}$      & $\displaystyle e^{-at}\sin \omega t$ & $\displaystyle \frac{\omega}{(s+a)^2 + \omega^2}$         \\
+		$\displaystyle t^n$       & $\displaystyle \frac{n!}{s^{n+1}}$ & $\displaystyle e^{-at}\cos \omega t$ & $\displaystyle \frac{s+a}{(s+a)^2 + \omega^2}$            \\
+		$\displaystyle e^{-at}$   & $\displaystyle \frac{1}{s+a}$      & $\displaystyle t \sin \omega t$      & $\displaystyle \frac{2\omega s}{(s^2 + \omega^2)^2}$      \\
+		$\displaystyle te^{-at}$  & $\displaystyle \frac{1}{(s+a)^2}$  & $\displaystyle t \cos \omega t$      & $\displaystyle \frac{s^2 - \omega^2}{(s^2 + \omega^2)^2}$ \\
+	\end{tabular}
+\end{table}
+
+The necessary and sufficient conditions for a network function to be stable are:
+\begin{itemize}
+	\ii All poles of the network function must lie in the left half of the complex plane. $\Re\{s\} < 0$.
+	\ii The poles of the network function that lie on the imaginary axis must be simple.
+	\ii The degree of the numerator $n$ must not differ from the degree of the denominator $m$ by more than one. $n-m \leq 1$.
+\end{itemize}
+
+When the poles of a network function are difficult to determine, the system stability can be determined if the denominator is a Hurwitz polynomial.
+
+\dfn{Hurwitz Polynomial}{
+	A polynomial is \emph{strictly} Hurwitz if all the roots of the polynomial have negative real parts $(<0)$.
+}
+
+\thm{Hurwitz Stability Criterion}{
+	A polynomial is Hurwitz (and hence, stable) if it satisfies the \emph{all} of the following conditions:
+
+	\begin{enumerate}
+		\ii All coefficients of the polynomial are positive.
+		\ii All terms between the highest and lowest degree terms should not be missing, unless they are all even or all odd(refer to the note below).
+		\ii The continued fraction should give $n$ quotients before we obtain a zero remainder $(n=\deg(P(s)))$. The continued fraction expansion is obtained as follows:
+		\begin{enumerate}
+			\ii Arrange the polynomial $P(s) = P_e(s) + P_o(s)$ where $P_e(s)$ is the sum of the even powers of $s$ and $P_o(s)$ is the sum of the odd powers of $s$.
+			\ii Evaluate $\begin{cases}
+					\frac{P_e(s)}{P_o(s)} & \text{if } \deg(P(s))\text{ is even} \\
+					\frac{P_o(s)}{P_e(s)} & \text{if } \deg(P(s))\text{ is odd}
+				\end{cases}$
+			\ii Divide the divisor(the denominator of the above expression) by the obtained remainder and repeat the process until the remainder is zero.
+		\end{enumerate}
+		\begin{itemize}
+			\ii If the continued fraction terminates (number of terms is less than $n$), then the last obtained remainder $C(s)$ is a common factor of $P_e(s)$ and $P_o(s)$. $C(s)$ should be Hurwitz.
+		\end{itemize}
+		\ii All coefficients of the obtained quotients should be positive.
+	\end{enumerate}
+
+	If any of the above conditions are not satisfied, then the polynomial is not Hurwitz.
+}
+
+\nt{
+	If the polynomial is entirely even or odd, we can evaluate the continued fraction expansion using the ratio of the polynomial and it's derivative.
+}
+
+Some special polynomial forms are:
+
+\begin{enumerate}
+	\ii \textbf{All pass function}: An all pass function is a function whose poles and zeros are symmetric about the imaginary axis, and the poles are strictly on the left half of the $s$-plane. If the function doesn't have nay poles or zeros on the imaginary axis then the function is strictly Hurwitz.
+
+	\ii \textbf{Minimum phase function}: A minimum phase function is a function whose poles and zeros all located on the left half of the $s$-plane or at the imaginary axis.
+\end{enumerate}
+
+A stable network function $F(s)$ can be written as product of a minimum phase function $H(s)$ and an all pass function $P(s)$.
+
+\[
+	F(s) = H(s)P(s)
+	.\]
+
+To obtain this factorization, we assume that the set $Z$ is the set of zeros of $F(s)$ located on the right half of the $s$-plane.
+
+\begin{align*}
+	P(s) & = \frac{\prod_{\zeta \in Z} (s-\zeta)}{\prod_{\zeta \in Z} (s+\zeta)} \\
+	H(s) & = \frac{F(s)}{P(s)}
+\end{align*}
+
+\section{Realization of Network Functions}
+
+\subsection{Given its Real Part $U(s)$}
+
+\begin{enumerate}
+	\ii We find the even part of the function using $F_e(s) = U(s/j)$.
+	\ii Decompose $F_e(s)$ into partial fractions
+	\begin{align*}
+		F_e(s) & = \frac{A_i}{a-P_i}\quad \text{obtained from poles with } \Re\{P_i\} < 0            \\
+		       & + \frac{B_i}{a-Q_i}\quad \text{obtained from poles with } \Re\{Q_i\} > 0            \\
+		       & + \frac{C_i}{s^2 + {\omega_i}^2}\quad \text{obtained from poles with no real parts} \\
+		       & + K\;\lt(=\lim_{s \to \infty} F_e(s)\rt)
+	\end{align*}
+	\ii Finally evaluate
+	\[
+		F(s) = 2 \sum_{i} \frac{A_i}{s-P_i} + \sum_{i} \frac{C_i}{s^2 + {\omega_i}^2} + K
+		.\]
+\end{enumerate}
+
+\subsection{Given its Imaginary Part $V(s)$}
+
+\begin{enumerate}
+	\ii We find the odd part of the function using $F_o(s) = jV(s/j)$.
+	\ii Decompose $F_o(s)$ into partial fractions
+	\begin{align*}
+		F_o(s) & = \frac{A_i}{a-P_i}\quad \text{obtained from poles with } \Re\{P_i\} < 0              \\
+		       & + \frac{B_i}{a-Q_i}\quad \text{obtained from poles with } \Re\{Q_i\} > 0              \\
+		       & + \frac{C_i s}{s^2 + {\omega_i}^2}\quad \text{obtained from poles with no real parts} \\
+		       & + K_\infty s\;\lt(K_\infty=\lim_{s \to \infty} \frac{F_o(s)}{s}\rt)
+	\end{align*}
+	\ii Finally evaluate
+	\[
+		F(s) = 2 \sum_{i} \frac{A_i}{s-P_i} + \sum_{i} \frac{C_i s}{s^2 + {\omega_i}^2} + K_\infty s
+		.\]
+\end{enumerate}
+
+\subsection{Given its Magnitude $A(\omega) = |F(s)|_{s=j\omega}$}
+
+\begin{enumerate}
+	\ii Find $A^2(s/j) = F(s)F(-s)$
+	\ii Find the poles and zeros of $A^2(s/j)$
+	\begin{itemize}
+		\ii Poles with $\Re\{P_i\} < 0$ are the poles of $F(s)$.
+		\ii Poles with $\Re\{Q_i\} > 0$ are the poles of $F(-s)$.
+		\ii Poles with no real parts are the poles of $F(s)$ and $F(-s)$. They should appear as poles of order 2, and should appear as poles of order 1 in $F(s)$ and $F(-s)$.
+		\ii Poles at infinity are the poles of $F(s)$ and $F(-s)$. They should appear as poles of order 2, and should appear as poles of order 1 in $F(s)$ and $F(-s)$.
+		\ii Zeros with $\Re\{P_i\} < 0$ are the zeros of $F(s)$ \emph{or} $F(-s)$.
+		\ii Zeros with no real parts are the poles of $F(s)$ \emph{and} $F(-s)$. They should appear as zeros of an even order $m$, and should appear as poles of order $m/2$ in $F(s)$ and $F(-s)$.
+	\end{itemize}
+\end{enumerate}
+
+\chapter{Positive Real Functions}
+
+\dfn{Positive Real Function}{
+	A network function $F(s)$ is said to be positive real if it satisfies the following conditions:
+	\begin{enumerate}
+		\ii $F(s)$ is real for all real values of $s=\alpha$.
+		\ii $F(s)$ is positive real for all real values of $s$. (i.e. $\Re\{F(s)\}\geq 0$ for $\Re\{s\}\geq 0$)
+	\end{enumerate}
+}
+
+Some properties of positive real functions are:
+
+\begin{enumerate}
+	\ii If $F(s)$ is positive real, then $1/F(s)$ is also positive real.
+	\ii If $F(s)$ and $G(s)$ are positive real, then any linear combination of $F(s)$ and $G(s)$ is also positive real. ($aF(s) + bG(s)$ where $a,b \geq 0$).
+	\ii If $F(s)$ is positive real, then the poles and zeros of $F(s)$ are located in the left half of the $s$-plane, and are real or occur in conjugate pairs.
+	\ii If $F(s)$ is positive real, then its imaginary poles should be simple and their residues should be real positive.
+	\begin{itemize}
+		\ii A residue is the coefficient of the term $(s-P_i)^{-1}$ in the partial fraction expansion of $F(s)$.
+	\end{itemize}
+	\ii If $F(s)$ is positive real rational function $= \frac{N(s)}{D(s)}$, then
+	\begin{itemize}
+		\ii The degrees of both polynomials should not differ by more than one. $\abs{\deg N(s) - \deg D(s)} \leq 1$.
+		\ii The lowest degree terms of both polynomials should not differ by more than one. $\abs{\deg_{\min} N(s) - \deg_{\min} D(s)} \leq 1$.
+	\end{itemize}
+\end{enumerate}
+
+\thm{Necessary and Sufficient Conditions for a Rational Function to be Positive Real}{
+	A rational function $F(s) = \frac{N(s)}{D(s)}$ is positive real if and only if the following conditions are satisfied:
+	\begin{enumerate}
+		\ii All terms of $N(s)$ and $D(s)$ are positive real.
+		\ii $\abs{\deg N(s) - \deg D(s)} \leq 1$.
+		\ii $\abs{\deg_{\min} N(s) - \deg_{\min} D(s)} \leq 1$.
+		\ii $N(s)$ and $D(s)$ are Hurwitz polynomials.
+		\ii The residues of the imaginary poles of $F(s)$ are real and positive.
+		\ii $\Re\{F(s)_{s=\pm j\omega}\} \geq 0$ for all $\omega$.
+	\end{enumerate}
+}
+
+\chapter{Elementary Synthesis Concepts of Driving Point Functions}
+
+The basic principle of network synthesis(positive real function) is to realize a given network function using a combination of passive elements, which can be represented as a sum of simpler positive real functions which can be more easily synthesized.
+
+\[
+	\underbrace{Z(s) = Z_1(s) + Z_2(s) + \ldots + Z_n(s)}_{\text{Elements in series}} \quad \quad \underbrace{Y(s) = Y_1(s) + Y_2(s) + \ldots + Y_n(s)}_{\text{Elements in parallel}}
+\]
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\begin{circuitikz}[american voltages]
+			\tikzset{circuitikz/resistors/scale=0.7}
+			\draw (0,0) node[fourport, scale=1.3, t={\scalebox{0.76}{$Z_2(s)$}}] (N) {};
+			\draw (N.port4) to[generic=$Z_1(s)$, -*] ++(-2.5,0) ($ (N.port1) + (-2.5,0) $) to[short, *-] (N.port1);
+			\node (b) at ($($ (N.port4) + (-2.5,0) $)!0.5!($ (N.port1) + (-2.5,0) $)$) {$Z(s)$};
+		\end{circuitikz}
+		\caption{Elements in series}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\begin{circuitikz}[american voltages]
+			\tikzset{circuitikz/resistors/scale=0.7}
+			\draw (0,0) node[fourport, scale=1.3, t={\scalebox{0.76}{$Y_2(s)$}}] (N) {};
+			\draw (N.port4) to[short, -*] ++(-2.5,0) ($ (N.port1) + (-2.5,0) $) to[short, *-] (N.port1);
+			\node (b) at ($($ (N.port4) + (-2.5,0) $)!0.5!($ (N.port1) + (-2.5,0) $)$) {$Y(s)$};
+			\draw (N.port4) ++(-1.25,0) to[generic=$Y_1(s)$] ($ (N.port1) + (-1.25,0) $);
+		\end{circuitikz}
+		\caption{Elements in parallel}
+	\end{subfigure}
+\end{figure}
+
+% Some basic removal operations are:
+%
+% \begin{enumerate}
+% 	\ii Removal of a pole at infinity ($F_i(s)=K_\infty s$):
+% 	\[
+% 		\underbrace{F_i(s) = sL}_{\text{if } F(s) = Z(s)} \quad \quad \underbrace{F_i(s) = sC}_{\text{if } F(s) = Y(s)}
+% 	\]
+%
+% 	\ii Removal of a pole at the origin ($F_i(s)=\frac{K_0}{s}$):
+% 	\[
+% 		\underbrace{F_i(s) = \frac{1}{sC} = \frac{K_0}{s}}_{\text{if } F(s) = Z(s)} \quad \quad \underbrace{F_i(s) = \frac{1}{sL} = \frac{K_0}{sC}}_{\text{if } F(s) = Y(s)}
+% 	\]
+%
+% 	\ii Removal of conjugate imaginary poles ($F_i(s)=\frac{As}{s^2 + \omega^2}$):
+% 	\[
+% 		\underbrace{capacitance and an inductance in parallel}_{\text{if } F(s) = Z(s)} \quad \quad \underbrace{capacitance and an inductance in series}_{\text{if } F(s) = Y(s)}
+% 	\]
+%
+% 	\ii Removal of a constant term ($F_i(s)=K$):
+% 	\[
+% 		\underbrace{F_i(s) = R = K}_{\text{if } F(s) = Z(s)} \quad \quad \underbrace{F_i(s) = G = \frac{1}{K}}_{\text{if } F(s) = Y(s)}
+% 	\]
+% \end{enumerate}
+
+\section{Basic Removal Operations}
+
+\subsection{Removal of a Pole at Infinity}
+
+\[
+	F(s) = \frac{\sum_{i=0}^{n} a_is^i}{\sum_{i=0}^{m} b_is^i}
+	.\]
+
+If $m-n=1$, then we have a pole at infinity.
+
+\[
+	F(s) = K_\infty s + F_1(s) \qq{with} K_\infty = \lim_{s \to \infty} \frac{F(s)}{s} = \frac{a_n}{b_m}
+	.\]
+
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\begin{circuitikz}[american voltages]
+			\tikzset{circuitikz/resistors/scale=0.7}
+			\tikzset{circuitikz/inductors/scale=0.7}
+			\tikzset{circuitikz/capacitors/scale=0.7}
+			\draw (0,0) node[fourport, scale=1.3] (N) {};
+			\draw (N.port4) to[L=$L$,mirror, -*] ++(-2.5,0) ($ (N.port1) + (-2.5,0) $) to[short, *-] (N.port1);
+			\node (b) at ($($ (N.port4) + (-2.5,0) $)!0.5!($ (N.port1) + (-2.5,0) $)$) {$Z(s)$};
+		\end{circuitikz}
+		\caption{Impedance Network}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\begin{circuitikz}[american voltages]
+			\tikzset{circuitikz/resistors/scale=0.7}
+			\tikzset{circuitikz/inductors/scale=0.7}
+			\tikzset{circuitikz/capacitors/scale=0.7}
+			\draw (0,0) node[fourport, scale=1.3] (N) {};
+			\draw (N.port4) to[short, -*] ++(-2.5,0) ($ (N.port1) + (-2.5,0) $) to[short, *-] (N.port1);
+			\node (b) at ($($ (N.port4) + (-2.5,0) $)!0.5!($ (N.port1) + (-2.5,0) $)$) {$Y(s)$};
+			\draw (N.port4) ++(-1.25,0) to[C=$C$] ($ (N.port1) + (-1.25,0) $);
+		\end{circuitikz}
+		\caption{Admittance Network}
+	\end{subfigure}
+	\caption*{Removal of a pole at infinity $\displaystyle L=C=K_\infty=\frac{a_n}{b_m}$}
+\end{figure}
+
+\subsection{Removal of a Pole at the Origin}
+
+\[
+	F(s) = \frac{\sum_{i=0}^{n} a_is^i}{\sum_{i=1}^{m} b_is^i}
+	.\]
+
+If we are able to factor out an $s$ from the denominator ($b_0=0$) then we have a pole at the origin.
+
+\[
+	F(s) = \frac{K_0}{s}  + F_1(s) \qq{with} K_0 = \lim_{s \to 0} sF(s) = \frac{a_0}{b_1}
+	.\]
+
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\begin{circuitikz}[american voltages]
+			\tikzset{circuitikz/resistors/scale=0.7}
+			\tikzset{circuitikz/inductors/scale=0.7}
+			\tikzset{circuitikz/capacitors/scale=0.7}
+			\draw (0,0) node[fourport, scale=1.3] (N) {};
+			\draw (N.port4) to[C=$C$,mirror, -*] ++(-2.5,0) ($ (N.port1) + (-2.5,0) $) to[short, *-] (N.port1);
+			\node (b) at ($($ (N.port4) + (-2.5,0) $)!0.5!($ (N.port1) + (-2.5,0) $)$) {$Z(s)$};
+		\end{circuitikz}
+		\caption{Impedance Network}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\begin{circuitikz}[american voltages]
+			\tikzset{circuitikz/resistors/scale=0.7}
+			\tikzset{circuitikz/inductors/scale=0.7}
+			\tikzset{circuitikz/capacitors/scale=0.7}
+			\draw (0,0) node[fourport, scale=1.3] (N) {};
+			\draw (N.port4) to[short, -*] ++(-2.5,0) ($ (N.port1) + (-2.5,0) $) to[short, *-] (N.port1);
+			\node (b) at ($($ (N.port4) + (-2.5,0) $)!0.5!($ (N.port1) + (-2.5,0) $)$) {$Y(s)$};
+			\draw (N.port4) ++(-1.25,0) to[L=$L$] ($ (N.port1) + (-1.25,0) $);
+		\end{circuitikz}
+		\caption{Admittance Network}
+	\end{subfigure}
+	\caption*{Removal of a pole at the origin $\displaystyle \frac{1}{L}=\frac{1}{C}=K_0 = \frac{a_0}{b_1}$}
+\end{figure}
+
+\subsection{Removal of Conjugate Imaginary Poles}
+
+\[
+	F(s) = \frac{N(s)}{(s^2 + {\omega_p}^2) D'(s)}
+	.\]
+
+If we can factor out $(s^2 + {\omega_p}^2)$ from the denominator, then we have conjugate imaginary poles.
+
+\[
+	F(s) = \frac{K_p}{s-j\omega_p} + \frac{K_p}{s+j\omega_p} + F_1(s) = \frac{2K_ps}{s^2 + {\omega_p}^2} + F_1(s) \qq{with} K_p = \lim_{s\to j\omega_p} F(s)
+	.\]
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\begin{circuitikz}[american voltages]
+			\tikzset{circuitikz/resistors/scale=0.7}
+			\tikzset{circuitikz/inductors/scale=0.7}
+			\tikzset{circuitikz/capacitors/scale=0.7}
+			\draw (0,0) node[fourport, scale=1.3] (N) {};
+			\draw (N.port4) -- ++(-0.5,0) coordinate (A) ++(-1.5,0) coordinate (B) to[short, -*] ++(-0.5,0) ($ (N.port1) + (-2.5,0) $) to[short, *-] (N.port1);
+			\node (b) at ($($ (N.port4) + (-2.5,0) $)!0.5!($ (N.port1) + (-2.5,0) $)$) {$Z(s)$};
+
+			\draw (A) -- ++(0,0.4) to[L,l_=$L$, mirror] ++(-1.5,0) -- (B);
+			\draw (A) -- ++(0,-0.4) to[C=$C$] ++(-1.5,0) -- (B);
+		\end{circuitikz}
+		\caption{Impedance Network\\
+			$\displaystyle L = \frac{2K}{{\omega_p}^2} \qq{and} C = \frac{1}{2K}$}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\begin{circuitikz}[american voltages]
+			\tikzset{circuitikz/resistors/scale=0.5}
+			\tikzset{circuitikz/inductors/scale=0.5}
+			\tikzset{circuitikz/capacitors/scale=0.5}
+			\draw (0,0) node[fourport, scale=1.3] (N) {};
+			\draw (N.port4) to[short, -*] ++(-2.5,0) ($ (N.port1) + (-2.5,0) $) to[short, *-] (N.port1);
+
+			\node (b) at ($($ (N.port4) + (-2.5,0) $)!0.5!($ (N.port1) + (-2.5,0) $)$) {$Y(s)$};
+
+			\coordinate (M) at ($($ (N.port4) + (-1.25,0) $)!0.5!($ (N.port1) + (-1.25,0) $)$);
+
+			\draw (N.port4) ++(-1.25,0) to[L=$L$] (M) to[C=$C$] ($ (N.port1) + (-1.25,0) $);
+		\end{circuitikz}
+		\caption{Admittance Network\\
+			$\displaystyle C = \frac{2K}{{\omega_p}^2} \qq{and} L = \frac{1}{2K}$}
+	\end{subfigure}
+	\caption*{Removal of Conjugate Imaginary Poles}
+\end{figure}
+
+\subsection{Removal of a Constant}
+
+\[
+	F(j\omega) = U(\omega) + jV(\omega)
+	.\]
+
+If $U(\omega)$ is minimal at some $\omega_r$, then we can remove a constant $K\leq K_r$ from $U(\omega)$ so that the remainder is still positive real.
+
+\[
+	F(s) = K_r + F_1(s) \qq{with} K_r = U(\omega_r) \qq{such that} \lt.\dv{U(\omega)}{\omega}\rt|_{\omega=\omega_r} = 0
+	.\]
+
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\begin{circuitikz}[american voltages]
+			\tikzset{circuitikz/resistors/scale=0.7}
+			\tikzset{circuitikz/inductors/scale=0.7}
+			\tikzset{circuitikz/capacitors/scale=0.7}
+			\draw (0,0) node[fourport, scale=1.3] (N) {};
+			\draw (N.port4) to[R=$R$,mirror, -*] ++(-2.5,0) ($ (N.port1) + (-2.5,0) $) to[short, *-] (N.port1);
+			\node (b) at ($($ (N.port4) + (-2.5,0) $)!0.5!($ (N.port1) + (-2.5,0) $)$) {$Z(s)$};
+		\end{circuitikz}
+		\caption{Impedance Network}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\begin{circuitikz}[american voltages]
+			\tikzset{circuitikz/resistors/scale=0.7}
+			\tikzset{circuitikz/inductors/scale=0.7}
+			\tikzset{circuitikz/capacitors/scale=0.7}
+			\draw (0,0) node[fourport, scale=1.3] (N) {};
+			\draw (N.port4) to[short, -*] ++(-2.5,0) ($ (N.port1) + (-2.5,0) $) to[short, *-] (N.port1);
+			\node (b) at ($($ (N.port4) + (-2.5,0) $)!0.5!($ (N.port1) + (-2.5,0) $)$) {$Y(s)$};
+			\draw (N.port4) ++(-1.25,0) to[R=$G$] ($ (N.port1) + (-1.25,0) $);
+		\end{circuitikz}
+		\caption{Admittance Network}
+	\end{subfigure}
+	\caption*{Removal of a pole at the origin $\displaystyle R=K\quad G=\frac{1}{K}$}
+\end{figure}
+
+
+\end{document}
