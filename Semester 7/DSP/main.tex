@@ -1,0 +1,449 @@
+\documentclass{report}
+
+\input{../template/preamble}
+\input{../template/macros}
+\input{../template/letterfonts}
+
+\title{\Huge{Digital Signal Processing}\\Semester 7}
+\author{\huge{Ahmad Abu Zainab}}
+\date{}
+
+\newcommand{\scalar}[1]{\lt\langle #1 \rt\rangle}
+\newcommand{\Ft}[1]{\SF_t\!\lt\{ #1 \rt\}}
+\newcommand{\Fti}[1]{\SF_t^{-1}\!\lt\{ #1 \rt\}}
+\newcommand{\Ht}[1]{\SH\!\lt\{ #1 \rt\}}
+
+\renewcommand{\EE}[1]{\mathbb{E}\lt[ #1 \rt]}
+
+\DeclareMathOperator{\rect}{rect}
+\DeclareMathOperator{\tri}{tri}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\sgn}{sgn}
+
+\usepgfplotslibrary{fillbetween}
+
+\pgfplotsset{compat=1.18}
+
+\pgfmathdeclarefunction{u}{1}{
+\pgfmathparse{
+((#1<0)  * 0 )  +
+((#1>=0) * 1 )
+}
+}
+
+\pgfmathdeclarefunction{rect}{2}{
+\pgfmathparse{
+((#1>= -#2/2) * (#1<=#2/2) * 1 )
+}
+}
+
+\pgfmathdeclarefunction{tri}{2}{
+\pgfmathparse{
+((#1>= -#2) * (#1<=#2) * (1-abs(#1)/#2) ) 
+}
+}
+
+\pgfmathdeclarefunction{sinc}{1}{
+\pgfmathparse{
+    sin(deg(pi*#1))/(pi*#1)
+}
+}
+
+\pgfmathdeclarefunction{sgn}{1}{
+\pgfmathparse{
+    (#1>0)  -  (#1<0)
+}
+}
+
+\pgfmathdeclarefunction{delta}{1}{
+\pgfmathparse{
+    (#1==0) ? 1 : 0
+}
+}
+
+
+\begin{document}
+
+\maketitle
+\newpage% or \cleardoublepage
+% \pdfbookmark[<level>]{<title>}{<dest>}
+\pdfbookmark[section]{\contentsname}{toc}
+\tableofcontents
+\pagebreak
+
+\chapter{General Definitions for Digital Signals}
+
+\dfn{Digital Signal}{
+	A digital signal is a sequence of numbers $x[n]$ where $n\in\ZZ$. The signal is said to be discrete in time.
+	The signal can be represented as a function of time $x(t)$ where $t=nT_s$ and $T_s$ is the sampling period $x[n]=x(nT_s)$.
+
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{axis}[
+					% axis lines = middle,
+					xlabel = {$t$},
+					ylabel = {$x[n]$},
+					% xmin = -5,
+					% xmax = 5,
+					% ymin = 0,
+					% ymax = 1,
+					% xtick = {-4,-3,-2,-1,0,1,2,3,4},
+					% ytick = {-1,0,1},
+				]
+
+				% add sine wave
+				\addplot[domain=-5:5, samples=100, red, dashed] {sin(deg(pi*x))};
+
+				% add dots on the same sine wave
+				\addplot[domain=-5:5, samples=22, only marks, mark=*, mark size=2pt, blue] {sin(deg(pi*x))};
+
+				\addlegendentry{$x(t)$};
+				\addlegendentry{$x[n]$};
+			\end{axis}
+		\end{tikzpicture}
+	\end{center}
+}
+
+\subsubsection{Power and Energy}
+
+The energy of a signal is defined as
+
+\[
+	E_x = \sum_{n = -\infty}^{\infty} \abs{x[n]}^2
+	.\]
+
+And the power as
+
+\[
+	P_x = \lim_{N\to\infty} \frac{\sum_{n = -N}^{N} \abs{x[n]}^2}{2N+1}
+	.\]
+
+\subsubsection{Periodic Signal}
+
+A digital periodic signal is a signal $x[n]$ with a period $N\in\ZZ$ such that $\forall n\in\ZZ x(n+N)=x[n]$.
+
+\ex{}{
+	For a periodic signal $\cos(\pi n_0 n)$ the condition for periodicity becomes
+
+	\[
+		\cos(\pi n_0 n) = \cos(\pi n_0 (n+N))
+		.\]
+
+	\begin{align*}
+		\pi n_0 N & = 2k\pi          \\
+		N         & = \frac{2k}{n_0}
+	\end{align*}
+
+	We choose the smallest possible $k\in\ZZ$ to obtain an $N\in\ZZ$.
+}
+
+\subsubsection{Even and Odd}
+
+\begin{align*}
+	x[n] & = x[-n] \quad \text{Even} \\
+	x[n] & = -x[-n] \quad \text{Odd}
+\end{align*}
+
+\[
+	x[n] = \underbrace{\frac{x[n] + x[-n]}{2}}_{\text{Even}} + \underbrace{\frac{x[n] - x[-n]}{2}}_{\text{Odd}}
+	.\]
+
+\subsubsection{Usually Used Signals}
+
+\[
+	\delta[n] = \begin{cases}
+		1 & n = 0    \\
+		0 & n \neq 0
+	\end{cases}      \qq{;}
+	u[n] = \begin{cases}
+		1 & n \geq 0 \\
+		0 & n < 0
+	\end{cases}   \qq{;}
+	\sgn[n] = \begin{cases}
+		1  & n \geq 0 \\
+		-1 & n < 0
+	\end{cases}     \qq{;}
+	x[n] = a^n \quad a\in\CC
+\]
+
+\section{Linear Time Invariant Systems}
+
+For a LTI system, an input $x[n]$ will produce an output $y[n]$ such that the relation can be expressed as
+
+\begin{enumerate}
+	\ii Analytically: E.g. $y[n] = x[n] - 2x[n-1]$.
+	\ii As a function of the impulse response $h[n]$: $y[n] = f\lt( x[n], x[n-1],\ldots,h[n], h[n-1], \ldots \rt)$.
+\end{enumerate}
+
+\nt{
+	A system is said to be relaxed if the output is zero for zero input. (i.e. the only energy source is the input)
+}
+
+An input $x[n]$ can be decomposed into a sum of shifted impulses
+
+\[
+	x[n] = \sum_{k=-\infty}^{\infty} x[k]\delta[n-k]
+	.\]
+
+If a system is linear, then the output of the system to the input $x[n]$ can be expressed as a sum of the outputs to the shifted impulses
+
+\[
+	y[n] = \sum_{k=-\infty}^{\infty} x[k]h[n-k] = \underbrace{x[n]*h[n]}_{\text{Convolution}}
+	.\]
+
+\nt{
+The convolution of two signals $x[n]$ and $h[n]$ is commutative
+\[
+	x[n]*h[n] = h[n]*x[n]
+	.\]
+}
+
+If the system is causal, then the impulse response $h[n]$ is zero for $n<0$. The output of the system can be expressed as
+
+\[
+	y[n] = \sum_{k=0}^{\infty} h[k]x[n-k] = \sum_{k=-\infty}^{n} x[k]h[n-k]
+	.\]
+
+If both the input and the impulse response are causal, then the output can be expressed as
+
+\[
+	y[n] = \sum_{k=0}^{n} x[k]h[n-k] = \sum_{k=0}^{n} h[k]x[n-k]
+	.\]
+
+\subsection{Stability}
+
+A system is said to be stable if the output is bounded for a bounded input.
+
+\[
+	\abs{x[n]} \leq \alpha \quad \forall n \implies \abs{y[n]} \leq \beta
+	.\]
+
+\[
+	\abs{y[n]} \leq \sum_{k=-\infty}^{\infty} \alpha\abs{h[n-k]}
+	.\]
+
+So a system is stable if it satisfies the sufficient condition
+
+\[
+	\sum_{n=-\infty}^{\infty} \abs{h[n]} \leq \gamma
+	.\]
+
+\dfn{Difference Equation}{
+	A difference equation is a relation between the input $x[n]$, the output $y[n]$ and the impulse response $h[n]$ of a system. The relation can be expressed as
+
+	\[
+		y[n] = - \sum_{k=0}^{N} a_k y[n-k] + \sum_{k=0}^{M} b_k x[n-k]
+		.\]
+
+	where $a_k$ and $b_k$ are constants $\in\CC$.
+
+	\begin{itemize}
+		\ii If $N=0$, the system is said to be a moving average system.
+		\ii If $M=0$, the system is said to be an autoregressive system.
+	\end{itemize}
+}
+
+\section{Response of LTI Systems to an input $x[n]$}
+
+There are three methods to find the output of an LTI system to an input $x[n]$.
+
+\begin{enumerate}
+	\ii Integration (point by point)
+	\ii Convolution (using the impulse response)
+	\[
+		y[n] = \sum_{k=-\infty}^{\infty} x[k]h[n-k]
+		.\]
+	\ii Finding the analytical expression for the output
+\end{enumerate}
+
+\subsection{Analytical Expression}
+
+The analytical expression of $y[n]$ is the sum of the terms
+
+\[
+	y[n] = y_\text{ZI}[n] + y_\text{ZS}[n]
+	.\]
+
+Where $y_\text{ZI}[n]$ is the zero input response (the response of the system to the input $x[n]=0$) and $y_\text{ZS}[n]$ is the zero state response (the response of the system to the input $x[n]$ when the system is relaxed).
+
+\subsubsection{Zero Input Response}
+
+It is the solution to the equation
+
+\[
+	y_\text{ZI}[n] = - \sum_{k=1}^{N} a_k y[n-k]
+	.\]
+
+If the zero input response is non-zero, then the zero state response is 0.
+
+\subsubsection{Zero State Response}
+
+It is the solution to the equation
+
+\[
+	y_\text{ZS}[n] = - \sum_{k=1}^{N} a_k y[n-k] + \sum_{k=0}^{M} b_k x[n-k]
+	.\]
+
+The $N$ initial conditions become 0 if the system is relaxed. \\
+
+The zero state response is comprised of the homogenous response and the forced response.
+
+\[
+	y_\text{ZS}[n] = y_h[n] + y_f[n]
+	.\]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In other words, consider the following difference equation
+
+\[
+	y[n] = \underbrace{0.2y[n-1] - 0.1y[n-2]}_{y_\text{ZI}[n]} + \underbrace{x[n] - x[n-1]}_{y_\text{ZS}[n]}
+	.\]
+
+\subsubsection{Characteristic Equation}
+
+The characteristic equation of a difference equation is the equation obtained by setting the output to zero and substituting $y[n] = \lambda^n$.
+
+\[
+	\lambda^n = \sum_{k=1}^{N} a_k \lambda^{n-k}
+	.\]
+
+The roots of the characteristic equation are the poles of the system, and the system can be expressed as the sum of the roots
+
+\[
+	y_h[n] = \sum_{i=1}^{N} C_i{\lambda_i}^n \qq{where} C_i \text{ is a $i$-th order polynomial } = \sum_{j=0}^{i} c_{j}n^j
+	.\]
+
+The constants $c_i$ can be found by substituting the initial conditions.
+
+To find the forced response $y_f[n]$ we substitute it (along with $x[n]$) with $k u[n]$ where $k$ is a constant. Then we find the value of $k$ that satisfies the difference equation.
+
+Finally, $y_\text{ZS}$ is the sum of the homogenous and forced responses (when the system is relaxed).
+
+\[
+	y_\text{ZS}[n] = \sum_{i=1}^{N} C_i{\lambda_i}^n + k u[n] \qq{where} n \geq 0
+	.\]
+
+And $y_\text{ZI}$ is the solution to the difference equation with $x[n]=0$.
+
+\[
+	y_\text{ZI}[n] = \sum_{i=1}^{N} C_i{\lambda_i}^n
+	.\]
+
+\nt{
+	The terms $\lambda_i$ are different in $y_\text{ZI}$ and $y_\text{ZS}$.
+}
+
+\section{Multiple LTI Systems}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[twoport,>,t=\shortstack{$S_1$\\$h_1$}] (2,0) to[twoport,>,t=\shortstack{$S_2$\\$h_2$}] (4,0);
+		\node at (5,0) {$\equiv$};
+		\node[below] at (5,0) {Series};
+		\draw (6,0) to[twoport,>,t=\shortstack{$S$\\$h_1\!*\!h_2$}] (8,0);
+
+		\begin{scope}[yshift=-3cm]
+			\draw (0,0) -| (0.5,1) to[twoport, >,t=\shortstack{$S_1$\\$h_1$}] (3,1) |- (4,0);
+			\draw (0,0) -| (0.5,-1) to[twoport, >,t=\shortstack{$S_2$\\$h_2$}] (3,-1) |- (4,0);
+
+			\node[adder, fill=white, scale=0.7] at (3,0) (m) {};
+			\draw (m.n) node[inputarrow, rotate=-90] {};
+			\draw (m.s) node[inputarrow, rotate=90] {};
+
+			\node at (5,0) {$\equiv$};
+			\node[below] at (5,0) {Parallel};
+
+			\draw (6,0) to[twoport,>,t=\shortstack{$S$\\$h_1\!\!+\!h_2$}] (8,0);
+		\end{scope}
+	\end{circuitikz}
+\end{figure}
+
+\subsubsection{Types of systems}
+
+Denote by $\mathcal{S}$ a system with impulse response $h[n]$. Then
+
+\begin{itemize}
+	\ii $\mathcal{S}$ is said to be \emph{causal} if $h[n]=0$ for $n<0$.
+	\ii $\mathcal{S}$ is said to be \emph{stable} if $|x[n]| \leq \alpha \implies \abs{\mathcal{S}\lt\{ x[n] \rt\}} \leq \beta$.
+	\ii $\mathcal{S}$ is said to be \emph{invertible} if there exists a system $\mathcal{S}^{-1}$ such that $\mathcal{S}^{-1}\mathcal{S} = \delta[n]$.
+	\ii $\mathcal{S}$ is said to be \emph{linear} if $\mathcal{S}\lt\{ a_1x_1[n] + a_2x_2[n] \rt\} = a_1\mathcal{S}\lt\{ x_1[n] \rt\} + a_2\mathcal{S}\lt\{ x_2[n] \rt\}$.
+	\ii $\mathcal{S}$ is said to be \emph{time invariant} if $\mathcal{S}\lt\{ x[n] \rt\} = y[n] \implies \mathcal{S}\lt\{ x[n-k] \rt\} = y[n-k]$.
+\end{itemize}
+
+\chapter{Frequency Analysis of Signals}
+
+\section{Fourier Transform}
+
+\dfn{Discrete Fourier Transform}{
+The Fourier Transform of a signal $x[n]$ is defined as
+
+\[
+	X(f) = \Ft{x[n]} = \sum_{n=-\infty}^{\infty} x[n]e^{-j\omega n}
+	.\]
+}
+
+The Fourier Transform of a signal $x[n]$ exists if the signal is absolutely summable. I.e.
+\[
+	\sum_{n=-\infty}^{\infty} \abs{x[n]} < \infty
+	.\]
+
+\subsubsection{Properties}
+
+\begin{itemize}
+	\ii Linearity: $\SF\lt\{ a_1x_1[n] + a_2x_2[n] \rt\} = a_1X_1(f) + a_2X_2(f)$.
+	\ii Time Shifting: $\SF\lt\{ x[n-k] \rt\} = e^{-j\omega k}X(f)$.
+	\ii Inversion: $\SF\lt\{ x[-n] \rt\} = X(-f)$.
+	\ii Frequency Shifting: $\SF\lt\{ e^{j\omega_0 n}x[n] \rt\} = X(f-f_0)$.
+	\ii Convolution: $\SF\lt\{ x[n]*h[n] \rt\} = X(f)\cdot H(f)$.
+	\ii Multiplication: $\SF\lt\{ x[n]\cdot h[n] \rt\} = X(f)*H(f)$.
+	\ii Derivative: $\displaystyle\SF\lt\{ nx[n] \rt\} = \frac{j}{2\pi}\dv{X(f)}{f}$.
+\end{itemize}
+
+\subsubsection{Power Spectral Density}
+
+The power spectral density of a signal $x[n]$ is defined as
+
+\[
+	S_x(f) = \abs{X(f)}^2 = \dv{E}{f}
+	.\]
+
+\section{System Response}
+
+Let $H(f)$ be the Transfer Function of a system.
+
+\[
+	H(f) = \frac{Y(f)}{X(f)} = \frac{\SF\lt\{ y[n] \rt\}}{\SF\lt\{ x[n] \rt\}}
+	.\]
+
+Take for example the difference equation
+
+\begin{align*}
+	y[n]              & = - \sum_{k=1}^{N} a_k y[n-k] + \sum_{k=0}^{M} b_k x[n-k]                         \\
+	Y(f)              & = - \sum_{k=1}^{N} a_k e^{-j\omega k}Y(f) + \sum_{k=0}^{M} b_k e^{-j\omega k}X(f) \\
+	\frac{Y(f)}{X(f)} & = \frac{\sum_{k=0}^{M} b_k e^{-j\omega k}}{1 + \sum_{k=1}^{N} a_k e^{-j\omega k}}
+\end{align*}
+
+\subsection{Frequency Response}
+
+The frequency response of a system to an input $x[n]$ is defined as
+
+\[
+	|y[n]| = |x[n]| \cdot |H(f_0)| \qand \arg\lt\{ y[n] \rt\} = \arg\lt\{ x[n] \rt\} + \arg\lt\{ H(f_0) \rt\}
+	.\]
+
+Where $f_0$ is the frequency of the input signal.\\
+
+For example, if $x[n] = 3 \sin(\frac{\pi}{5}n + \frac{2\pi}3)$ and $H(f)|_{s=\frac{1}{10}} = 2e^{j\frac{\pi}{3}}$, then the output will be
+
+\[
+	y[n] = 6 \sin\lt( \frac{\pi}{5}n + \frac{2\pi}{3} + \frac{\pi}{3} \rt)
+	.\]
+
+\nt{
+	The frequency of a constant signal is $0$.
+}
+
+
+\end{document}
