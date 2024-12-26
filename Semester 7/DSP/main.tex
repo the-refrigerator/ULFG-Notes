@@ -365,7 +365,7 @@ And $y_\text{ZI}$ is the solution to the difference equation with $x[n]=0$.
 Denote by $\mathcal{S}$ a system with impulse response $h[n]$. Then
 
 \begin{itemize}
-	\ii $\mathcal{S}$ is said to be \emph{causal} if $h[n]=0$ for $n<0$.
+	\ii $\mathcal{S}$ is said to be \emph{causal} if $h[n]=0$ for $n<0$ or if $y[n] = f\lt\{ x[k], x[k-1], \ldots \rt\}$ where $n\geq k$.
 	\ii $\mathcal{S}$ is said to be \emph{stable} if $|x[n]| \leq \alpha \implies \abs{\mathcal{S}\lt\{ x[n] \rt\}} \leq \beta$.
 	\ii $\mathcal{S}$ is said to be \emph{invertible} if there exists a system $\mathcal{S}^{-1}$ such that $\mathcal{S}^{-1}\mathcal{S} = \delta[n]$.
 	\ii $\mathcal{S}$ is said to be \emph{linear} if $\mathcal{S}\lt\{ a_1x_1[n] + a_2x_2[n] \rt\} = a_1\mathcal{S}\lt\{ x_1[n] \rt\} + a_2\mathcal{S}\lt\{ x_2[n] \rt\}$.
