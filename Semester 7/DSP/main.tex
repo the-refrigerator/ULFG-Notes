@@ -266,72 +266,140 @@ The analytical expression of $y[n]$ is the sum of the terms
 
 Where $y_\text{ZI}[n]$ is the zero input response (the response of the system to the input $x[n]=0$) and $y_\text{ZS}[n]$ is the zero state response (the response of the system to the input $x[n]$ when the system is relaxed).
 
-\subsubsection{Zero Input Response}
-
-It is the solution to the equation
-
-\[
-	y_\text{ZI}[n] = - \sum_{k=1}^{N} a_k y[n-k]
-	.\]
-
-If the zero input response is non-zero, then the zero state response is 0.
-
-\subsubsection{Zero State Response}
-
-It is the solution to the equation
-
-\[
-	y_\text{ZS}[n] = - \sum_{k=1}^{N} a_k y[n-k] + \sum_{k=0}^{M} b_k x[n-k]
-	.\]
-
-The $N$ initial conditions become 0 if the system is relaxed. \\
-
-The zero state response is comprised of the homogenous response and the forced response.
-
-\[
-	y_\text{ZS}[n] = y_h[n] + y_f[n]
-	.\]
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-In other words, consider the following difference equation
-
-\[
-	y[n] = \underbrace{0.2y[n-1] - 0.1y[n-2]}_{y_\text{ZI}[n]} + \underbrace{x[n] - x[n-1]}_{y_\text{ZS}[n]}
-	.\]
-
 \subsubsection{Characteristic Equation}
 
 The characteristic equation of a difference equation is the equation obtained by setting the output to zero and substituting $y[n] = \lambda^n$.
+The roots $\{\lambda_1, \lambda_2, \ldots, \lambda_N\}$ of the characteristic equation are the poles of the system, and are useful for computing the ZIR and ZSR.
 
 \[
 	\lambda^n = \sum_{k=1}^{N} a_k \lambda^{n-k}
 	.\]
 
-The roots of the characteristic equation are the poles of the system, and the system can be expressed as the sum of the roots
+\subsubsection{Zero Input Response}
+
+The zero input response is the response to the system when the input is zero.
+Due to the superposition principle, the zero input response is always present in the output of the system regardless of the input.
+To find the zero input response, we set $x[n]=0$ in the difference equation.
 
 \[
-	y_h[n] = \sum_{i=1}^{N} C_i{\lambda_i}^n \qq{where} C_i \text{ is a $i$-th order polynomial } = \sum_{j=0}^{i} c_{j}n^j
+	y_\text{ZI}[n] = \sum_{k=1}^{N} C_k \lambda_k^n \qq{where} C_k \text{ is a $k$-th order polynomial} = c_0 + c_1n + \cdots + c_k n^k = \sum_{j=0}^{k} c_jn^j
 	.\]
 
-The constants $c_i$ can be found by substituting the initial conditions.
+The coefficients $c_j$ can be found by substituting the initial conditions $y[0], y[1], \ldots, y[N-1]$ into the difference equation.
 
-To find the forced response $y_f[n]$ we substitute it (along with $x[n]$) with $k u[n]$ where $k$ is a constant. Then we find the value of $k$ that satisfies the difference equation.
+\subsubsection{Zero State Response}
 
-Finally, $y_\text{ZS}$ is the sum of the homogenous and forced responses (when the system is relaxed).
+The zero state response is the response of the system to the input $x[n]$ when the system is relaxed. I.E. initial conditions are zero.
 
 \[
-	y_\text{ZS}[n] = \sum_{i=1}^{N} C_i{\lambda_i}^n + k u[n] \qq{where} n \geq 0
+	y_\text{ZS}[n] = y_h[n] + y_p[n]
 	.\]
 
-And $y_\text{ZI}$ is the solution to the difference equation with $x[n]=0$.
+Where $y_h[n]$ shares the same form as the zero input response, and $y_p[n]$ is the particular solution to the difference equation for the input $x[n]$.
 
 \[
-	y_\text{ZI}[n] = \sum_{i=1}^{N} C_i{\lambda_i}^n
+	y_h[n] = \sum_{k=1}^{N} C_k \lambda_k^n
 	.\]
 
-\nt{
-	The terms $C_i$ are different in $y_\text{ZI}$ and $y_\text{ZS}$, but the terms $\lambda_i$ are the same.
+The coefficients $C_k$ can be found by substituting $n$ into the difference equation and solving the system of equations.\\
+
+The zero state response can be found by solving the difference equation with the input $x[n]$ and substituting $y[n] = kx[n]$.
+
+\[
+	y_p[n] = kx[n] = -k \sum_{k=1}^{N} a_k x[n-k] + \sum_{k=0}^{M} b_k x[n-k]
+	.\]
+
+Finding $k$ is done by substituting $n$ and solving for $k$.
+
+\subsubsection{Multiple Inputs}
+
+If the input is a sum of signals $x[n] = \sum_{i=1}^{N} x_i[n]$, then the output can be expressed as
+
+\[
+	y[n] = y_\text{ZI}[n] + \sum_{i=1}^{N} y_{\text{ZS}_i}[n]
+	.\]
+
+
+\ex{}{
+	Consider a system with initial conditions $y[-1] = 1$ and $y[-2] = -1$, an input $x[n] = (0.2)^n$, and a difference equation
+
+	\[
+		y[n] = 0.6y[n-1] - 0.09y[n-2] + x[n]
+		.\]
+
+	Find the output $y[n]$.\\
+
+	\textbf{Solution:}
+	\begin{enumerate}
+		\ii Find the characteristic equation and $\lambda_1$ and $\lambda_2$.
+
+		\begin{align*}
+			\lambda^n & = 0.6\lambda^{n-1} - 0.09\lambda^{n-2} \\
+			\lambda^2 & = 0.6\lambda - 0.09
+		\end{align*}
+		\[
+			\therefore \lambda_1 = \lambda_2 = 0.3
+			.\]
+
+		\ii Find the zero input response $y_\text{ZI}[n]$.
+
+		\[
+			y_\text{ZI}[n] = (C_1 + C_2n)0.3^n
+			.\]
+		Substituting the initial conditions
+
+		\begin{align*}
+			y[-1] & : (C_1 - C_2)0.3^{-1} = 1    \\
+			y[-1] & : (C_1 - 2 C_2)0.3^{-2} = -1
+		\end{align*}
+
+		Solving the system of equations we obtain
+
+		\[
+			\therefore y_\text{ZI}[n] = (0.69 + 0.39n)0.3^n
+			.\]
+
+		\ii Find the zero state response $y_\text{ZS}[n]$.
+		\begin{enumerate}
+			\ii Find the particular solution $y_h[n]$.
+			\[
+				y_h[n] = (C_1 + C_2n)0.3^n
+				.\]
+
+			\begin{align*}
+				y_h[0] & : C_1 = 0.6(0) - 0.09(0) + (0.2)^0            \\
+				y_h[1] & : (C_1 + C_2)0.3 = 0.6(1) - 0.09(0) + (0.2)^1
+			\end{align*}
+
+			\[
+				\therefore y_h[n] = \lt(1 + \frac{5}{3}n\rt)0.3^n
+				.\]
+
+			\ii Find the particular solution $y_p[n]$.
+			\[
+				y_p[n] = k(0.2)^n
+				.\]
+
+			\begin{align*}
+				k(0.2)^n & = 0.6k(0.2)^{n-1} - 0.09k(0.2)^{n-2} + (0.2)^n     \\
+				k        & = 0.6k(0.2)^{-1} - 0.09k(0.2)^{-2} + 1  \qq{;} n=0 \\
+				k        & = 4
+			\end{align*}
+
+			\[
+				\therefore y_p[n] = 4(0.2)^n
+				.\]
+		\end{enumerate}
+
+		\[
+			\therefore y_\text{ZS}[n] = \lt(1 + \frac{5}{3}n\rt)0.3^n + 4(0.2)^n
+			.\]
+	\end{enumerate}
+
+	Finally, the output is
+	\[
+		y[n] = (0.69 + 0.39n)0.3^n + \lt(1 + \frac{5}{3}n\rt)0.3^n + 4(0.2)^n
+		.\]
 }
 
 \section{Multiple LTI Systems}
