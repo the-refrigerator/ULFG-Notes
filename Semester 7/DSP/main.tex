@@ -282,8 +282,10 @@ Due to the superposition principle, the zero input response is always present in
 To find the zero input response, we set $x[n]=0$ in the difference equation.
 
 \[
-	y_\text{ZI}[n] = \sum_{k=1}^{N} C_k \lambda_k^n \qq{where} C_k \text{ is a $k$-th order polynomial} = c_0 + c_1n + \cdots + c_k n^k = \sum_{j=0}^{k} c_jn^j
+	y_\text{ZI}[n] = \sum_{k=1}^{N} C_{\alpha_k} \lambda_k^n \qq{where} C_k \text{ is a $\alpha_k$-th order polynomial} = c_0 + c_1n + \cdots + c_{\alpha_k} n^{\alpha_k} = \sum_{j=0}^{\alpha_k} c_jn^j
 	.\]
+
+Where $\alpha_k$ is the multiplicity of the root $\lambda_k$.\\
 
 The coefficients $c_j$ can be found by substituting the initial conditions $y[0], y[1], \ldots, y[N-1]$ into the difference equation.
 
@@ -310,6 +312,10 @@ The zero state response can be found by solving the difference equation with the
 	.\]
 
 Finding $k$ is done by substituting $n$ and solving for $k$.
+
+\nt{
+	$h[n]$ is the impulse response of the system, and is the output of the system $y[n] = y_\text{ZI}[n] + y_\text{ZS}[n]$ to the input $x[n] = \delta[n]$.
+}
 
 \subsubsection{Multiple Inputs}
 
@@ -338,7 +344,7 @@ If the input is a sum of signals $x[n] = \sum_{i=1}^{N} x_i[n]$, then the output
 			\lambda^2 & = 0.6\lambda - 0.09
 		\end{align*}
 		\[
-			\therefore \lambda_1 = \lambda_2 = 0.3
+			\therefore \lambda_1 = \lambda_2 = 0.3 \quad \text{double root}
 			.\]
 
 		\ii Find the zero input response $y_\text{ZI}[n]$.
