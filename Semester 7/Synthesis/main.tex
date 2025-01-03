@@ -196,7 +196,7 @@ When the poles of a network function are difficult to determine, the system stab
 }
 
 \thm{Hurwitz Stability Criterion}{
-	A polynomial is Hurwitz (and hence, stable) if it satisfies the \emph{all} of the following conditions:
+	A polynomial is Hurwitz (and hence, stable) if it satisfies \emph{all} of the following conditions:
 
 	\begin{enumerate}
 		\ii All coefficients of the polynomial are positive.
@@ -399,7 +399,7 @@ The basic principle of network synthesis(positive real function) is to realize a
 	F(s) = \frac{\sum_{i=0}^{n} a_is^i}{\sum_{i=0}^{m} b_is^i}
 	.\]
 
-If $m-n=1$, then we have a pole at infinity.
+If $n-m=1$, then we have a pole at infinity.
 
 \[
 	F(s) = K_\infty s + F_1(s) \qq{with} K_\infty = \lim_{s \to \infty} \frac{F(s)}{s} = \frac{a_n}{b_m}
@@ -573,5 +573,377 @@ If $U(\omega)$ is minimal at some $\omega_r$, then we can remove a constant $K\l
 	\caption*{Removal of a pole at the origin $\displaystyle R=K\quad G=\frac{1}{K}$}
 \end{figure}
 
+\chapter{Synthesis of Driving Point Functions with Two Types of Elements}
+
+\section{Foster Forms}
+
+The Foster forms are a set of positive real functions that can be easily synthesized using passive elements. The Foster forms are:
+
+\begin{enumerate}
+	\ii \textbf{First Foster Form}: $Z(s) = Z_1(s) + Z_2(s)+\cdots+Z_n(s)$.
+
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) to[generic=$Z_1(s)$] ++(2,0) to[generic=$Z_2(s)$] ++(2,0) to[generic=$Z_3(s)$] ++(2,0);
+			\draw (0,-2) to[short] ++(6,0);
+		\end{circuitikz}
+	\end{figure}
+
+	\ii \textbf{Second Foster Form}: $Y(s) = Y_1(s) + Y_2(s)+\cdots+Y_n(s)$.
+
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) to[short] ++(6,0);
+			\draw (0,-2) to[short] ++(6,0);
+
+			\draw (1,0) to[*-*, generic=$Y_1(s)$] ++(0,-2);
+			\draw (3,0) to[*-*, generic=$Y_2(s)$] ++(0,-2);
+			\draw (5,0) to[*-*, generic=$Y_3(s)$] ++(0,-2);
+		\end{circuitikz}
+	\end{figure}
+\end{enumerate}
+
+\section{Cauer Forms}
+
+The Cauer forms are:
+
+\begin{enumerate}
+	\ii \textbf{First Cauer Form}:
+
+	\[
+		Z(s) = Z_1(s) + \dfrac{1}{Y_1(s) + \dfrac{1}{Z_2(s) + \dfrac{1}{Y_2(s) + \cdots }}}
+		.\]
+
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) to[generic=$Z_1(s)$] ++(2,0) to[generic=$Z_2(s)$] ++(2,0) to[generic=$Z_3(s)$] ++(2,0) -- ++(1,0);
+			\draw (0,-2) to[short] ++(7,0);
+
+			\draw (2,0) to[*-*, generic=$Y_1(s)$] ++(0,-2);
+			\draw (4,0) to[*-*, generic=$Y_2(s)$] ++(0,-2);
+			\draw (6,0) to[*-*, generic=$Y_3(s)$] ++(0,-2);
+		\end{circuitikz}
+	\end{figure}
+
+	\ii \textbf{Second Cauer Form}:
+
+	\[
+		Y(s) = Y_1(s) + \dfrac{1}{Z_1(s) + \dfrac{1}{Y_2(s) + \dfrac{1}{Z_2(s) + \cdots }}}
+		.\]
+
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) to[generic=$Z_1(s)$] ++(2,0) to[generic=$Z_2(s)$] ++(2,0) to[generic=$Z_3(s)$] ++(2,0) -- ++(1,0);
+			\draw (0,-2) to[short] ++(7,0);
+
+			\draw (-1,0) -- (0,0);
+			\draw (-1,-2) -- (0,-2);
+
+			\draw (0,0) to[*-*, generic=$Y_1(s)$] ++(0,-2);
+			\draw (2,0) to[*-*, generic=$Y_2(s)$] ++(0,-2);
+			\draw (4,0) to[*-*, generic=$Y_3(s)$] ++(0,-2);
+			\draw (6,0) to[*-*, generic=$Y_4(s)$] ++(0,-2);
+		\end{circuitikz}
+	\end{figure}
+\end{enumerate}
+
+\section{LC-Immittance Functions}
+
+The LC-Immittance functions have the following properties:
+
+\begin{enumerate}
+	\ii Positive real function.
+	\ii Odd function (Ratio of odd and even functions).
+	\ii The poles and zeros are simple, pure imaginary, and alternate (i.e. the no consecutive poles or zeros).
+	\ii There must be a zero or a pole at the origin \emph{and} a zero or a pole at infinity.
+\end{enumerate}
+
+\subsection{First Foster Form}
+
+We decompose the given function in to:
+
+\[
+	F(s) = K_\infty s + \frac{K_0}{s} + \sum_{i} \frac{2K_is}{s^2 + {\omega_i}^2} \qq{where} \begin{cases}
+		K_\infty = \lim_{s \to \infty} \frac{F(s)}{s} \\
+		K_0 = \lim_{s \to 0} sF(s)                    \\
+		K_i = \lim_{s \to j\omega_i} (s-j\omega_i)F(s)
+	\end{cases}
+	.\]
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american inductors]
+		\draw (0,0) to[C={$C_0=\frac{1}{K_0}$}, o-o] (2,0);
+		\draw (3,0) to[short, o-] ++(1,0) coordinate (A) -- ++(0,1) to[L,l_={$L_i=\dfrac{2K_i}{\omega_i^2}$}] ++(2,0) -- ++(0,-1) coordinate (B) to[short, -o] ++(1,0);
+		\draw (A) to[short, *-] ++(0,-1) to[C,l_={$C_i=\dfrac{1}{2K_i}$}] ++(2,0) to[short, -*] (B);
+
+		\draw (8,0) to[L={$L_\infty=K_\infty$}, o-o] (10,0);
+	\end{circuitikz}
+\end{figure}
+
+\subsection{Second Foster Form}
+
+We decompose the given function in to:
+
+\[
+	F(s) = K_\infty s + \frac{K_0}{s} + \sum_{i} \frac{2K_is}{s^2 + {\omega_i}^2} \qq{where} \begin{cases}
+		K_\infty = \lim_{s \to \infty} \frac{F(s)}{s} \\
+		K_0 = \lim_{s \to 0} sF(s)                    \\
+		K_i = \lim_{s \to j\omega_i} (s-j\omega_i)F(s)
+	\end{cases}
+	.\]
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american inductors]
+		\draw (0,0) to[L, l_={$L_0=\frac{1}{K_0}$}, o-o] (2,0);
+		\draw (3,0) to[L, l_={$L_i=\dfrac{1}{2K_i}$}, o-] ++(2,0) to[C,l_={$C_i=\dfrac{2K_i}{\omega_i^2}$}, -o] ++(2,0);
+		\draw (8,0) to[C={$C_\infty=K_\infty$}, o-o] (10,0);
+	\end{circuitikz}
+\end{figure}
+
+\subsection{First Cauer Form}
+
+\begin{itemize}
+	\ii If $F(s)$ has a pole at infinity:
+	\begin{enumerate}
+		\ii Remove the pole at infinity from $F_1(s)=F(s)$.
+		\ii Let $F_2(s) = F_1(s) - K_\infty s$.
+		\ii Repeat steps 1-3 for $F_3(s) = \frac{1}{F_2(s)}$.
+	\end{enumerate}
+	\ii If $F(s)$ has a zero at infinity:
+	\begin{enumerate}
+		\ii Remove the pole at infinity from $F_1(s)=\frac{1}{F(s)}$.
+		\ii Let $F_2(s) = F_1(s) - K_\infty s$.
+		\ii Repeat steps 1-3 for $F_3(s) = \frac{1}{F_2(s)}$.
+	\end{enumerate}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american inductors]
+		\draw (0,0) to[L] ++(2,0) to[L] ++(2,0) to[L] ++(2,0) -- ++(1,0);
+		\draw (0,-2) to[short] ++(7,0);
+
+		\draw (2,0) to[C, *-*] ++(0,-2);
+		\draw (4,0) to[C, *-*] ++(0,-2);
+		\draw (6,0) to[C, *-*] ++(0,-2);
+	\end{circuitikz}
+\end{figure}
+
+\subsection{Second Cauer Form}
+
+\begin{itemize}
+	\ii If $F(s)$ has a pole at infinity:
+	\begin{enumerate}
+		\ii Remove the pole at infinity from $F_1(s)=F(s)$.
+		\ii Let $F_2(s) = F_1(s) - \frac{K_0}{s}$.
+		\ii Repeat steps 1-3 for $F_3(s) = \frac{1}{F_2(s)}$.
+	\end{enumerate}
+	\ii If $F(s)$ has a zero at infinity:
+	\begin{enumerate}
+		\ii Remove the pole at infinity from $F_1(s)=\frac{1}{F(s)}$.
+		\ii Let $F_2(s) = F_1(s) - \frac{K_0}{s}$.
+		\ii Repeat steps 1-3 for $F_3(s) = \frac{1}{F_2(s)}$.
+	\end{enumerate}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american inductors]
+		\draw (0,0) to[C] ++(2,0) to[C] ++(2,0) to[C] ++(2,0) -- ++(1,0);
+		\draw (0,-2) to[short] ++(7,0);
+
+		\draw (2,0) to[L, *-*] ++(0,-2);
+		\draw (4,0) to[L, *-*] ++(0,-2);
+		\draw (6,0) to[L, *-*] ++(0,-2);
+	\end{circuitikz}
+\end{figure}
+
+\section{RC-Immittance Functions}
+
+The RC-Immittance functions have the following properties:
+
+\begin{itemize}
+	\ii Impedance function $Z_{RC}(s)$:
+	\begin{enumerate}
+		\ii The poles and zeros are simple and are located on the negative real axis.
+		\ii The poles and zeros are alternate.
+		\ii The critical frequency nearest to the origin is a pole.
+		\ii The critical frequency farthest to the origin is a zero.
+		\ii Residues evaluated at the poles are positive and real.
+	\end{enumerate}
+
+	\ii Admittance function $Y_{RC}(s)$:
+	\begin{enumerate}
+		\ii The poles and zeros are simple and are located on the negative real axis.
+		\ii The poles and zeros are alternate.
+		\ii The critical frequency nearest to the origin is a zero.
+		\ii The critical frequency farthest to the origin is a pole.
+		\ii Residues evaluated at the poles are negative and real.
+	\end{enumerate}
+\end{itemize}
+
+\subsection{First Foster Form}
+
+\[
+	F(s) = K_\infty + \frac{K_0}{s} + \sum_i \frac{K_i}{s + \omega_i} \qq{where} \begin{cases}
+		K_\infty = \text{ quotient of diving the numerator by the denominator} \\
+		K_0 = \lim_{s \to 0} sF(s)                                             \\
+		K_i = \lim_{s \to -\omega_i} (s+\omega_i)F(s)
+	\end{cases}
+	.\]
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american inductors]
+		\draw (0,0) to[C={$C_0=\frac{1}{K_0}$}, o-o] (2,0);
+		\draw (3,0) to[short, o-] ++(1,0) coordinate (A) -- ++(0,1) to[R,l_={$R_i=\dfrac{K_i}{\omega_i}$}] ++(2,0) -- ++(0,-1) coordinate (B) to[short, -o] ++(1,0);
+		\draw (A) to[short, *-] ++(0,-1) to[C,l_={$C_i=\dfrac{1}{K_i}$}] ++(2,0) to[short, -*] (B);
+
+		\draw (8,0) to[R={$R_\infty=K_\infty$}, o-o] (10,0);
+	\end{circuitikz}
+\end{figure}
+
+
+\subsection{Second Foster Form}
+
+\[
+	\frac{F(s)}{s} = K_\infty + \frac{K_0}{s} + \sum_i \frac{K_i}{s + \omega_i} \qq{where} \begin{cases}
+		K_\infty = \text{ quotient of diving the numerator by the denominator} \\
+		K_0 = \lim_{s \to 0} F(s)                                              \\
+		K_i = \lim_{s \to -\omega_i} (s+\omega_i)\frac{F(s)}{s}
+	\end{cases}
+	.\]
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american inductors]
+		\draw (0,0) to[R, l_={$R_0=\frac{1}{K_0}$}, o-o] (2,0);
+		\draw (3,0) to[R, l_={$R_i=\dfrac{1}{K_i}$}, o-] ++(2,0) to[C,l_={$C_i=\dfrac{K_i}{\omega_i}$}, -o] ++(2,0);
+		\draw (8,0) to[C={$C_\infty=K_\infty$}, o-o] (10,0);
+	\end{circuitikz}
+\end{figure}
+
+
+\subsection{First Cauer Form}
+
+We obtain this form by successively removing poles at infinity, i.e. continued fraction expansion when the numerator and denominator are arranged in descending order of powers of $s$.
+
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american inductors]
+		\draw (0,0) to[R] ++(2,0) to[R] ++(2,0) to[R] ++(2,0) -- ++(1,0);
+		\draw (0,-2) to[short] ++(7,0);
+
+		\draw (2,0) to[C, *-*] ++(0,-2);
+		\draw (4,0) to[C, *-*] ++(0,-2);
+		\draw (6,0) to[C, *-*] ++(0,-2);
+	\end{circuitikz}
+\end{figure}
+
+\subsection{Second Cauer Form}
+
+We obtain this form by successively removing terms at zero, i.e. continued fraction expansion when the numerator and denominator are arranged in ascending order of powers of $s$.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american inductors]
+		\draw (0,0) to[C] ++(2,0) to[C] ++(2,0) to[C] ++(2,0) -- ++(1,0);
+		\draw (0,-2) to[short] ++(7,0);
+
+		\draw (2,0) to[R, *-*] ++(0,-2);
+		\draw (4,0) to[R, *-*] ++(0,-2);
+		\draw (6,0) to[R, *-*] ++(0,-2);
+	\end{circuitikz}
+\end{figure}
+
+\section{RL-Immittance Functions}
+
+The properties of RL-Immittance functions are nearly identical to those of RC-Immittance functions
+
+
+\begin{align*}
+	Z_{RL} & = Y_{RC} \\
+	Y_{RL} & = Z_{RC}
+\end{align*}
+
+\subsection{First Foster Form}
+
+\[
+	\frac{F(s)}{s} = K_\infty + \frac{K_0}{s} + \sum_i \frac{K_i}{s + \omega_i} \qq{where} \begin{cases}
+		K_\infty = \text{ quotient of diving the numerator by the denominator} \\
+		K_0 = \lim_{s \to 0} F(s)                                              \\
+		K_i = \lim_{s \to -\omega_i} (s+\omega_i)\frac{F(s)}{s}
+	\end{cases}
+	.\]
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american inductors]
+		\draw (0,0) to[R={$R_0=K_0$}, o-o] (2,0);
+		\draw (3,0) to[short, o-] ++(1,0) coordinate (A) -- ++(0,1) to[L,l_={$L_i=\dfrac{R_i}{\omega_i}$}] ++(2,0) -- ++(0,-1) coordinate (B) to[short, -o] ++(1,0);
+		\draw (A) to[short, *-] ++(0,-1) to[R,l_={$R_i=K_i$}] ++(2,0) to[short, -*] (B);
+
+		\draw (8,0) to[L={$L_\infty=K_\infty$}, o-o] (10,0);
+	\end{circuitikz}
+\end{figure}
+
+\subsection{Second Foster Form}
+
+\[
+	F(s) = K_\infty + \frac{K_0}{s} + \sum_i \frac{K_i}{s + \omega_i} \qq{where} \begin{cases}
+		K_\infty = \text{ quotient of diving the numerator by the denominator} \\
+		K_0 = \lim_{s \to 0} sF(s)                                             \\
+		K_i = \lim_{s \to -\omega_i} (s+\omega_i)F(s)
+	\end{cases}
+	.\]
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american inductors]
+		\draw (0,0) to[L={$L_0=\frac{1}{K_0}$}, o-o] (2,0);
+		\draw (3,0) to[R, l_={$R_i=L_i \omega_i$}, o-] ++(2,0) to[L,l_={$L_i=\dfrac{1}{K_i}$}] ++(2,0);
+		\draw (8,0) to[R={$R_\infty=\frac{1}{K_\infty}$}, o-o] (10,0);
+	\end{circuitikz}
+\end{figure}
+
+\subsection{First Cauer Form}
+
+We obtain this form by successively removing poles at infinity, i.e. continued fraction expansion when the numerator and denominator are arranged in descending order of powers of $s$.
+
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american inductors]
+		\draw (0,0) to[L] ++(2,0) to[L] ++(2,0) to[L] ++(2,0) -- ++(1,0);
+		\draw (0,-2) to[short] ++(7,0);
+
+		\draw (2,0) to[R, *-*] ++(0,-2);
+		\draw (4,0) to[R, *-*] ++(0,-2);
+		\draw (6,0) to[R, *-*] ++(0,-2);
+	\end{circuitikz}
+\end{figure}
+
+\subsection{Second Cauer Form}
+
+We obtain this form by successively removing terms at zero, i.e. continued fraction expansion when the numerator and denominator are arranged in ascending order of powers of $s$.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[american inductors]
+		\draw (0,0) to[R] ++(2,0) to[R] ++(2,0) to[R] ++(2,0) -- ++(1,0);
+		\draw (0,-2) to[short] ++(7,0);
+
+		\draw (2,0) to[L, *-*] ++(0,-2);
+		\draw (4,0) to[L, *-*] ++(0,-2);
+		\draw (6,0) to[L, *-*] ++(0,-2);
+	\end{circuitikz}
+\end{figure}
 
 \end{document}
