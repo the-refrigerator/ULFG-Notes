@@ -364,10 +364,10 @@ The variance of a set of measurements is given by:
 
 The standard deviation is the square root of the variance. $\sigma = \sqrt{V}$.\\
 
-Usually, measurement errors are assumed to be normally distributed. The error limita for a confidence level of the boundaries $c$:
+Usually, measurement errors are assumed to be normally distributed. The error limits for a confidence level $c$:
 
 \[
-	\pm e = \pm c \lt( \frac{\sigma }{\sqrt{n}} + \sigma \rt) \rightarrow x = y \pm e
+	\pm e = \pm (1+c) \lt( \frac{\sigma }{\sqrt{n}} + \sigma \rt) \rightarrow x = y \pm e
 	.\]
 
 \section{Aggregate Error}
@@ -385,7 +385,7 @@ Aggregate errors from separate measurements:
 	\ii Error in a sum and difference in terms of given absolute errors:
 	\begin{itemize}
 		\ii Boundaries error: $\pm e = \pm (y_1e_{r_1} + y_2e_{r_2})$
-		\ii Most probable error: $\pm e = \pm \sqrt{{e_{r_1}}^2 + {e_{r_2}}^2}$
+		\ii Most probable error: $\pm e = \pm \sqrt{{e_{1}}^2 + {e_{2}}^2}$
 		\begin{align*}
 			x_1 + x_2 & = (y_1 + y_2) \pm e_0 = (y_1 + y_2)(1\pm e_r) = (y_1 + y_2) \pm \% e_0 \qq{with} e_r = \frac{e_0}{y_1+y_2} \qand \% e_0 = e_r \times 100 \\
 			x_1 - x_2 & = (y_1 - y_2) \pm e_0 = (y_1 - y_2)(1\pm e_r) = (y_1 - y_2) \pm \% e_0 \qq{with} e_r = \frac{e_0}{y_1-y_2} \qand \% e_0 = e_r \times 100
